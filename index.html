@@ -7,10 +7,10 @@
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
-      --bg: #0d0f12;
-      --surface: #16191f;
-      --surface-2: #1f242d;
-      --border: #2a303c;
+      --bg: #0c0e11;
+      --surface: #14181f;
+      --surface-2: #1c222b;
+      --border: #28303d;
       --text: #f3f4f6;
       --muted: #9ca3af;
       --accent: #38bdf8;
@@ -34,14 +34,14 @@
       background-color: var(--bg);
       color: var(--text);
       line-height: 1.45;
-      padding-bottom: 84px;
+      padding-bottom: 86px;
     }
 
     header {
       position: sticky;
       top: 0;
       z-index: 30;
-      background: rgba(13, 15, 18, 0.92);
+      background: rgba(12, 14, 17, 0.94);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
       padding: 14px 16px 12px;
@@ -76,7 +76,6 @@
     }
 
     .search-box {
-      position: relative;
       margin-bottom: 10px;
     }
 
@@ -132,7 +131,7 @@
       gap: 14px;
     }
 
-    /* Topo Preview Card */
+    /* Topo Card */
     .topo-card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -141,50 +140,123 @@
     }
 
     .topo-header {
-      padding: 12px 14px;
+      padding: 11px 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 8px;
       border-bottom: 1px solid var(--border);
+      font-size: 12px;
     }
 
-    .topo-header span {
-      font-size: 13px;
-      font-weight: 600;
+    .topo-title {
       color: var(--muted);
+      font-weight: 600;
+    }
+
+    .topo-active {
+      color: var(--accent);
+      font-weight: 700;
+      text-align: right;
     }
 
     .topo-svg-wrap {
-      background: #111419;
-      padding: 8px;
-      display: flex;
-      justify-content: center;
+      background: #0e1116;
+      padding: 6px 4px 4px;
     }
 
     svg.topo-scheme {
       width: 100%;
-      max-height: 210px;
+      height: auto;
       display: block;
+      user-select: none;
     }
 
-    .route-line {
+    .rock-mass {
+      fill: #171c24;
+      stroke: #3b4659;
+      stroke-width: 1.8;
+      stroke-linejoin: round;
+    }
+
+    .rock-feature {
       fill: none;
-      stroke-width: 2.5;
+      stroke: #262e3c;
+      stroke-width: 1.2;
+      stroke-dasharray: 3 2;
+    }
+
+    .rock-ledge {
+      stroke: #2c3647;
+      stroke-width: 1.4;
+    }
+
+    .route-path {
+      fill: none;
+      stroke-width: 2.3;
       stroke-linecap: round;
-      opacity: 0.55;
-      transition: 0.2s;
+      stroke-linejoin: round;
+      opacity: 0.65;
+      cursor: pointer;
+      transition: opacity 0.15s, stroke-width 0.15s;
+    }
+
+    .route-path.dimmed {
+      opacity: 0.2;
+    }
+
+    .route-path.selected {
+      stroke-width: 3.6;
+      opacity: 1;
+      filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.35));
+    }
+
+    .bolt-dot {
+      fill: #0e1116;
+      stroke-width: 1.4;
+      pointer-events: none;
+    }
+
+    .anchor-top {
+      fill: #f9fafb;
+      stroke: #0e1116;
+      stroke-width: 1;
+      pointer-events: none;
+    }
+
+    .start-num {
+      font-size: 9px;
+      font-weight: 800;
+      text-anchor: middle;
       cursor: pointer;
     }
 
-    .route-line.selected {
-      stroke-width: 4;
-      opacity: 1;
-      filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.8));
+    .topo-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 14px;
+      padding: 9px 14px;
+      border-top: 1px solid var(--border);
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .dot-swatch {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
     }
 
     /* Route Cards */
     .sector-title {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.06em;
@@ -205,6 +277,7 @@
 
     .route-card.highlighted {
       border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.25);
     }
 
     .route-top {
@@ -212,20 +285,23 @@
       justify-content: space-between;
       align-items: flex-start;
       gap: 10px;
+      cursor: pointer;
     }
 
     .route-num {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 22px;
+      min-width: 22px;
       height: 22px;
+      padding: 0 5px;
       border-radius: 6px;
       background: var(--surface-2);
+      border: 1px solid var(--border);
       font-size: 12px;
       font-weight: 700;
-      color: var(--muted);
-      margin-right: 6px;
+      color: var(--text);
+      margin-right: 7px;
     }
 
     .route-name {
@@ -237,7 +313,7 @@
     .route-sub {
       font-size: 12px;
       color: var(--muted);
-      margin-top: 2px;
+      margin-top: 3px;
     }
 
     .grade-badge {
@@ -245,14 +321,12 @@
       border-radius: 8px;
       font-size: 13px;
       font-weight: 800;
-      letter-spacing: 0.02em;
       white-space: nowrap;
     }
 
     .g-easy { background: rgba(34, 197, 94, 0.15); color: var(--green); border: 1px solid rgba(34, 197, 94, 0.35); }
     .g-mid  { background: rgba(234, 179, 8, 0.15); color: var(--yellow); border: 1px solid rgba(234, 179, 8, 0.35); }
     .g-hard { background: rgba(249, 115, 22, 0.15); color: var(--orange); border: 1px solid rgba(249, 115, 22, 0.35); }
-    .g-pro  { background: rgba(239, 68, 68, 0.15); color: var(--red); border: 1px solid rgba(239, 68, 68, 0.35); }
 
     .route-desc {
       font-size: 13px;
@@ -262,7 +336,7 @@
     .route-meta {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 7px;
       font-size: 12px;
       color: var(--muted);
     }
@@ -271,12 +345,19 @@
       background: var(--surface-2);
       padding: 4px 8px;
       border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .meta-gear {
+      color: #e5e7eb;
+      background: rgba(56, 189, 248, 0.08);
+      border-color: rgba(56, 189, 248, 0.22);
     }
 
     .route-actions {
       display: flex;
       gap: 8px;
-      padding-top: 4px;
+      padding-top: 6px;
       border-top: 1px solid var(--border);
     }
 
@@ -331,7 +412,7 @@
       color: #d1d5db;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 7px;
     }
 
     /* Bottom Nav */
@@ -340,7 +421,7 @@
       bottom: 0;
       left: 0;
       right: 0;
-      background: rgba(22, 25, 31, 0.95);
+      background: rgba(20, 24, 31, 0.96);
       backdrop-filter: blur(12px);
       border-top: 1px solid var(--border);
       display: flex;
@@ -377,59 +458,66 @@
     <div class="header-top">
       <div class="title-group">
         <h1>Скалы Лесничества</h1>
-        <p>Заилийский Алатау • Алматы</p>
+        <p>Окрестности Медео • Трэд / Верхняя</p>
       </div>
-      <div class="stats-pill" id="progressPill">Пройдено: 0/12</div>
+      <div class="stats-pill" id="progressPill">Пройдено: 0/10</div>
     </div>
 
     <div id="routesControls">
       <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Поиск маршрута или сектора..." />
+        <input type="text" id="searchInput" placeholder="Поиск по названию, камалотам или категории..." />
       </div>
       <div class="filters" id="gradeFilters">
-        <button class="chip active" data-filter="all">Все трассы</button>
+        <button class="chip active" data-filter="all">Все (10)</button>
         <button class="chip" data-filter="4-5">4 – 5c</button>
-        <button class="chip" data-filter="6">6a – 6c+</button>
-        <button class="chip" data-filter="7">7a+</button>
+        <button class="chip" data-filter="6">6a – 6b+</button>
         <button class="chip" data-filter="done">Пройденные</button>
       </div>
     </div>
   </header>
 
   <main id="tabRoutes">
-    <!-- Интерактивная схема сектора -->
+    <!-- Схема рельефа и трасс массива Лесничества -->
     <div class="topo-card">
       <div class="topo-header">
-        <span>Схема линий • Основной массив</span>
-        <span id="selectedRouteLabel" style="color: var(--accent);">Нажми на линию</span>
+        <span class="topo-title">Рельеф и линии • 1–10</span>
+        <span class="topo-active" id="selectedRouteLabel">Нажми на линию или карточку</span>
       </div>
       <div class="topo-svg-wrap">
-        <svg class="topo-scheme" viewBox="0 0 360 180">
-          <!-- Силуэт скального массива -->
-          <polygon points="10,170 35,95 75,45 130,22 200,18 265,35 320,80 350,170" fill="#1b2028" stroke="#2f3746" stroke-width="2" />
-          <polyline points="75,45 95,110 85,170" fill="none" stroke="#252c38" stroke-width="1.5" />
-          <polyline points="200,18 190,95 210,170" fill="none" stroke="#252c38" stroke-width="1.5" />
+        <svg class="topo-scheme" id="topoSvg" viewBox="0 0 380 215">
+          <!-- Ломаный силуэт скального массива с полками, углами и карнизами -->
+          <polygon class="rock-mass" points="
+            10,192
+            24,142 38,136 46,96 62,88 74,56 96,48
+            116,34 142,38 164,24 192,28 214,18
+            244,26 266,36 292,32 314,52 336,92
+            354,112 368,192
+          " />
 
-          <!-- Линии маршрутов -->
-          <path id="line-1" class="route-line" stroke="#22c55e" d="M 55,168 Q 62,125 78,75" onclick="focusRoute(1)" />
-          <path id="line-2" class="route-line" stroke="#22c55e" d="M 88,168 Q 92,115 108,52" onclick="focusRoute(2)" />
-          <path id="line-3" class="route-line" stroke="#eab308" d="M 122,168 Q 118,105 135,34" onclick="focusRoute(3)" />
-          <path id="line-4" class="route-line" stroke="#eab308" d="M 155,168 Q 162,98 165,28" onclick="focusRoute(4)" />
-          <path id="line-5" class="route-line" stroke="#f97316" d="M 192,168 Q 186,95 198,25" onclick="focusRoute(5)" />
-          <path id="line-6" class="route-line" stroke="#ef4444" d="M 228,168 Q 238,100 232,36" onclick="focusRoute(6)" />
-          <path id="line-7" class="route-line" stroke="#f97316" d="M 265,168 Q 260,115 272,58" onclick="focusRoute(7)" />
-          <path id="line-8" class="route-line" stroke="#eab308" d="M 302,168 Q 298,125 308,88" onclick="focusRoute(8)" />
+          <!-- Внутренние линии рельефа: трещины, полки, внутренние углы и утюги -->
+          <line class="rock-ledge" x1="22" y1="146" x2="112" y2="132" />
+          <line class="rock-ledge" x1="44" y1="98" x2="152" y2="86" />
+          <line class="rock-ledge" x1="148" y1="118" x2="288" y2="104" />
+          <line class="rock-ledge" x1="176" y1="74" x2="318" y2="66" />
 
-          <!-- Станции -->
-          <circle cx="78" cy="75" r="3" fill="#fff" />
-          <circle cx="108" cy="52" r="3" fill="#fff" />
-          <circle cx="135" cy="34" r="3" fill="#fff" />
-          <circle cx="165" cy="28" r="3" fill="#fff" />
-          <circle cx="198" cy="25" r="3" fill="#fff" />
-          <circle cx="232" cy="36" r="3" fill="#fff" />
-          <circle cx="272" cy="58" r="3" fill="#fff" />
-          <circle cx="308" cy="88" r="3" fill="#fff" />
+          <!-- Внутренний угол (№6 Щель) и жёлоб (№9 Жёлоб справа) -->
+          <polyline class="rock-feature" points="196,192 204,116 198,27" />
+          <polyline class="rock-feature" points="316,192 310,124 314,52" />
+
+          <!-- Утюги (№7) -->
+          <polygon points="222,192 236,154 252,162 240,192" fill="#1e2531" stroke="#2c3647" stroke-width="1" />
+          <polygon points="238,146 254,108 270,118 254,154" fill="#1e2531" stroke="#2c3647" stroke-width="1" />
+          <polygon points="256,100 272,62 288,74 272,108" fill="#1e2531" stroke="#2c3647" stroke-width="1" />
+
+          <!-- Динамический слой трасс и точек рендерится скриптом -->
+          <g id="routesLayer"></g>
         </svg>
+      </div>
+      <div class="topo-legend">
+        <span class="legend-item"><i class="dot-swatch" style="background: var(--green);"></i>Fr4–5c</span>
+        <span class="legend-item"><i class="dot-swatch" style="background: var(--yellow);"></i>6a–6b+</span>
+        <span class="legend-item"><i class="dot-swatch" style="background: var(--orange);"></i>Трэд / карнизы</span>
+        <span class="legend-item">● Точка / штырь</span>
       </div>
     </div>
 
@@ -440,35 +528,25 @@
     <div class="info-block">
       <h3>Подход и локация</h3>
       <ul>
-        <li><strong>Район:</strong> Ущелье Малое Алматинское, район Лесничества (выше экопоста / поворот на Просвещенец).</li>
-        <li><strong>Порода:</strong> Гранит / гранодиорит — хорошее трение, острые мизера, трещины и положительные плиты.</li>
-        <li><strong>Сезон:</strong> Апрель — Ноябрь. После дождя северные и затенённые плиты сохнут 3–5 часов.</li>
+        <li><strong>Проезд:</strong> Удобно добираться на городском автобусе №12 (окрестности Медео).</li>
+        <li><strong>Экспозиция и сезон:</strong> Скала смотрит на юг — летом бывает жарко, зато в межсезонье и прохладные дни отлично. Весной по выходным много людей.</li>
+        <li><strong>Лагерь и вода:</strong> Справа от скал есть места под палатки; чуть выше озерца находится труба с питьевой водой.</li>
       </ul>
     </div>
 
     <div class="info-block">
-      <h3>Снаряжение и безопасность</h3>
+      <h3>Страховка и снаряжение</h3>
       <ul>
-        <li><strong>Верёвка:</strong> Одинарная динамика 60–70 м (узел на конце обязателен!).</li>
-        <li><strong>Оттяжки:</strong> 10–12 штук (плюс 2 удлинённые для уменьшения трения на перегибах).</li>
-        <li><strong>Станции:</strong> Оборудованы шлямбурами с кольцами / рапидами. Для верхней страховки встёгивайте свои карабины, не протирайте стационарные кольца.</li>
-        <li><strong>Каска:</strong> Обязательна страхующему у подножия — возможен сход мелких камней с полок.</li>
-      </ul>
-    </div>
-
-    <div class="info-block">
-      <h3>Памятка по узлам</h3>
-      <ul>
-        <li><strong>Привязывание:</strong> Восьмёрка с контрольным узлом (хвост не менее 10 см).</li>
-        <li><strong>Станция / самостраховка:</strong> Стремя или восьмёрка на петле, муфтованные карабины.</li>
-        <li><strong>Спуск:</strong> Через восьмёрку/корзинку со схватывающим узлом (Прусик) или гри-гри.</li>
+        <li><strong>Формат лазания:</strong> Верхняя страховка (в скалу забиты металлические штыри для навески) либо трэд со своими точками.</li>
+        <li><strong>Камалоты:</strong> Базово понадобятся камалоты до #3, а на отдельных трассах — до #4 (№6 «Щель», №10 «Щель справа»).</li>
+        <li><strong>Нюансы маршрутов:</strong> На №4 («Орлиное гнездо») в верхней четверти шевелится крупная ручка — держит; на №7 («Утюги») пригодится длинная оттяжка на верхнем ребре.</li>
       </ul>
     </div>
   </main>
 
   <nav class="bottom-nav">
     <button class="nav-item active" id="navRoutes" onclick="switchTab('routes')">Маршруты и Топо</button>
-    <button class="nav-item" id="navInfo" onclick="switchTab('info')">Подход и Снаряжение</button>
+    <button class="nav-item" id="navInfo" onclick="switchTab('info')">Подход и Трэд</button>
   </nav>
 
   <script>
@@ -476,34 +554,185 @@
     if (tg) {
       tg.ready();
       tg.expand();
-      tg.setHeaderColor('#0d0f12');
-      tg.setBackgroundColor('#0d0f12');
+      tg.setHeaderColor('#0c0e11');
+      tg.setBackgroundColor('#0c0e11');
     }
 
+    // Координаты линий на viewBox="0 0 380 215":
+    // d — траектория от низа скалы (y=192) к станции/штырю
+    // bolts — точки страховки / штыри [x, y]
+    // anchor — верхняя точка / станция [x, y]
+    // start — позиция номера маршрута у основания [x, y]
     const ROUTES = [
-      { id: 1, sector: "Учебный сектор", name: "Разминочный угол", grade: "4c", level: "4-5", height: "14 м", draws: "6 оттяжек", style: "Внутренний угол, крупные ручки", desc: "Идеальная первая трасса для разминки и отработки постановки ног на гранитных полках." },
-      { id: 2, sector: "Учебный сектор", name: "Лесная тропа", grade: "5b", level: "4-5", height: "16 м", draws: "7 оттяжек", style: "Положительная плита", desc: "Плавное лазание на равновесие. Ключ перед предпоследним шлямбуром — переход на высокий мизер." },
-      { id: 3, sector: "Центральный бастион", name: "Гранитный гребень", grade: "6a", level: "6", height: "20 м", draws: "8 оттяжек", style: "Ребро и откидки", desc: "Классическая линия по ярко выраженному ребру. Хорошие места для отдыха в средней части." },
-      { id: 4, sector: "Центральный бастион", name: "Солнечное зеркало", grade: "6b", level: "6", height: "22 м", draws: "9 оттяжек", style: "Техничная плита, мизера", desc: "Требует точной работы ног на трении и аккуратных перехватов по мелким гранитным кристаллам." },
-      { id: 5, sector: "Центральный бастион", name: "Карниз Лесничества", grade: "6c+", level: "6", height: "24 м", draws: "10 оттяжек", style: "Вертикаль с выходом через карниз", desc: "Динамичный выход из-под небольшого нависания на хорошую полку. Рекомендуется удлинить оттяжку под карнизом." },
-      { id: 6, sector: "Центральный бастион", name: "Тень Барса", grade: "7a+", level: "7", height: "25 м", draws: "11 оттяжек", style: "Нависание, силовые перехваты", desc: "Самый требовательный маршрут массива: серия длинных перехватов по пассивам с жёстким финишным боулдерингом." },
-      { id: 7, sector: "Восточная стена", name: "Щель Памяти", grade: "6a+", level: "6", height: "19 м", draws: "8 оттяжек", style: "Тред / спорт, заклинки", desc: "Линия вдоль вертикальной щели с подхватами. Отлично тренирует работу в распор." },
-      { id: 8, sector: "Восточная стена", name: "Вечерний бриз", grade: "5c", level: "4-5", height: "17 м", draws: "7 оттяжек", style: "Ступенчатый рельеф", desc: "Приятный маршрут с хорошими зацепами и удобной станцией для спуска." },
-      { id: 9, sector: "Дальний камень", name: "Траверс Егеря", grade: "6b+", level: "6", height: "18 м", draws: "8 оттяжек", style: "Косой траверс вправо", desc: "Необычная траектория с переходом между двумя плитами. Внимательно следите за маятником второго номера." },
-      { id: 10, sector: "Дальний камень", name: "Вертикаль Алатау", grade: "7a", level: "7", height: "23 м", draws: "10 оттяжек", style: "Строгая вертикаль, щипки", desc: "Ровная силовая выносливость без явных мест отдыха до самой станции." },
-      { id: 11, sector: "Дальний камень", name: "Первый шаг", grade: "4b", level: "4-5", height: "12 м", draws: "5 оттяжек", style: "Пологий рельеф", desc: "Подходит для обучения страховке и спуска дюльфером." },
-      { id: 12, sector: "Восточная стена", name: "Гранит и Сталь", grade: "6c", level: "6", height: "21 м", draws: "9 оттяжек", style: "Техничный микс", desc: "Комбинация плиты внизу и боулдерингового ключа на последних трёх оттяжках." }
+      {
+        id: 1,
+        sector: "Левый склон и центральный массив",
+        name: "Разминочная",
+        grade: "Fr4",
+        level: "4-5",
+        color: "#22c55e",
+        height: "15 м",
+        gear: "Штыри / лёгкий трэд",
+        style: "Пологая скала",
+        desc: "Пологая скала с удобными зацепками. Хороший старт для разминки и работы ног.",
+        d: "M 32,190 L 42,158 L 56,126 L 68,94 L 78,62",
+        bolts: [[42, 158], [56, 126], [68, 94]],
+        anchor: [78, 62],
+        start: [32, 204]
+      },
+      {
+        id: 2,
+        sector: "Левый склон и центральный массив",
+        name: "Жёлтые пятна",
+        grade: "6b",
+        level: "6",
+        color: "#eab308",
+        height: "17 м",
+        gear: "Камалот #0.5",
+        style: "Трещина, горизонтальная щель",
+        desc: "Для спокойного старта первую точку удобно положить в трещину справа, затем уйти влево-вверх к горизонтальной щели и вверх до следующей под камалот #0,5; выше — по рельефу.",
+        d: "M 60,190 L 76,162 L 58,134 L 74,104 L 92,76 L 98,52",
+        bolts: [[76, 162], [58, 134], [74, 104], [92, 76]],
+        anchor: [98, 52],
+        start: [60, 204]
+      },
+      {
+        id: 3,
+        sector: "Левый склон и центральный массив",
+        name: "Беговая",
+        grade: "6a",
+        level: "6",
+        color: "#eab308",
+        height: "23 м",
+        gear: "Трэд / верхняя",
+        style: "Стенка, выход левее карниза",
+        desc: "Нижнюю половину можно пройти по выбору, нацеливаясь во второй угол слева от карниза.",
+        d: "M 88,190 L 94,152 L 106,116 L 112,78 L 118,40",
+        bolts: [[94, 152], [106, 116], [112, 78]],
+        anchor: [118, 40],
+        start: [88, 204]
+      },
+      {
+        id: 4,
+        sector: "Левый склон и центральный массив",
+        name: "Орлиное гнездо",
+        grade: "6a",
+        level: "6",
+        color: "#eab308",
+        height: "23 м",
+        gear: "Трэд / верхняя",
+        style: "Стенка, ручка в верхней четверти",
+        desc: "В верхней четверти в углублении много лет шевелится хорошая ручка — не пугайтесь, она держит.",
+        d: "M 116,190 L 122,150 L 130,110 L 138,72 L 144,41",
+        bolts: [[122, 150], [130, 110], [138, 72]],
+        anchor: [144, 41],
+        start: [116, 204]
+      },
+      {
+        id: 5,
+        sector: "Левый склон и центральный массив",
+        name: "Три карниза",
+        grade: "6b",
+        level: "6",
+        color: "#f97316",
+        height: "25 м",
+        gear: "Камалот в щели справа",
+        style: "Карнизы, угол справа",
+        desc: "Непростое лазанье через карнизы. Через верхний карниз в лоб лезут самые сильные и отважные (страховка — камалот в щели справа), более благоразумные уходят в угол справа.",
+        d: "M 144,190 L 152,154 L 146,124 L 162,92 L 156,62 L 170,32",
+        bolts: [[152, 154], [146, 124], [162, 92], [156, 62]],
+        anchor: [170, 32],
+        start: [144, 204]
+      },
+      {
+        id: 6,
+        sector: "Угол, утюги и правая часть",
+        name: "Щель",
+        grade: "6a+",
+        level: "6",
+        color: "#f97316",
+        height: "25 м",
+        gear: "Камалоты #3–4",
+        style: "Внутренний угол до верха",
+        desc: "Подлаз к углу — как удобнее, дальше очевидный угол до самого верха. В верхней части пригодятся крупные камалоты #3–4.",
+        d: "M 174,190 L 194,158 L 202,118 L 200,72 L 198,32",
+        bolts: [[194, 158], [202, 118], [200, 72]],
+        anchor: [198, 32],
+        start: [174, 204]
+      },
+      {
+        id: 7,
+        sector: "Угол, утюги и правая часть",
+        name: "Утюги",
+        grade: "6b+",
+        level: "6",
+        color: "#f97316",
+        height: "25 м",
+        gear: "Камалоты #0.3, #3 + длинная оттяжка",
+        style: "Стенки, полки, нависающее ребро",
+        desc: "Несколько крутых стенок с полками. Камалот #0,3 — в основание первого утюга и вверх по ребру; перед финальным нависающим ребром — камалот #3 с длинной оттяжкой в щель слева.",
+        d: "M 228,190 L 242,158 L 256,124 L 266,84 L 262,42",
+        bolts: [[242, 158], [256, 124], [266, 84]],
+        anchor: [262, 42],
+        start: [228, 204]
+      },
+      {
+        id: 8,
+        sector: "Угол, утюги и правая часть",
+        name: "Справа от утюгов",
+        grade: "6a+",
+        level: "6",
+        color: "#eab308",
+        height: "25 м",
+        gear: "Малый камалот",
+        style: "Стенка, угол справа от утюга",
+        desc: "Подход под первый утюг, маленький камалот в горизонтальную щель в двух метрах справа от ребра. Выше — не уходя вправо в жёлоб, выход наверх по углу справа от последнего утюга.",
+        d: "M 258,190 L 278,156 L 284,118 L 292,78 L 288,40",
+        bolts: [[278, 156], [284, 118], [292, 78]],
+        anchor: [288, 40],
+        start: [258, 204]
+      },
+      {
+        id: 9,
+        sector: "Угол, утюги и правая часть",
+        name: "Жёлоб справа",
+        grade: "Fr4",
+        level: "4-5",
+        color: "#22c55e",
+        height: "25 м",
+        gear: "Трэд / верхняя",
+        style: "Пологий жёлоб между массивами",
+        desc: "Пологий жёлоб, разделяющий два скальных массива.",
+        d: "M 314,190 L 310,152 L 312,114 L 314,78 L 314,54",
+        bolts: [[310, 152], [312, 114], [314, 78]],
+        anchor: [314, 54],
+        start: [314, 204]
+      },
+      {
+        id: 10,
+        sector: "Угол, утюги и правая часть",
+        name: "Щель справа",
+        grade: "6a",
+        level: "6",
+        color: "#f97316",
+        height: "15 м",
+        gear: "Камалот #4",
+        style: "Широкая нависающая щель",
+        desc: "Широкая нависающая щель с обилием зацепок. Технически несложная, но для страховки нужен камалот #4.",
+        d: "M 344,190 L 338,162 L 336,134 L 334,108",
+        bolts: [[338, 162], [336, 134]],
+        anchor: [334, 108],
+        start: [344, 204]
+      }
     ];
 
-    let userLog = JSON.parse(localStorage.getItem('lesnichestvo_log') || '{}');
+    let userLog = JSON.parse(localStorage.getItem('lesnichestvo_log_v2') || '{}');
     let currentFilter = 'all';
     let searchQuery = '';
     let selectedId = null;
 
     function getGradeClass(level) {
-      if (level === '4-5') return 'g-easy';
-      if (level === '6') return 'g-mid';
-      return 'g-pro';
+      return level === '4-5' ? 'g-easy' : 'g-mid';
     }
 
     function updateProgress() {
@@ -517,7 +746,7 @@
       } else {
         userLog[id] = status;
       }
-      localStorage.setItem('lesnichestvo_log', JSON.stringify(userLog));
+      localStorage.setItem('lesnichestvo_log_v2', JSON.stringify(userLog));
       if (tg && tg.HapticFeedback) {
         tg.HapticFeedback.impactOccurred('light');
       }
@@ -525,21 +754,82 @@
       renderRoutes();
     }
 
-    function focusRoute(id) {
-      selectedId = id;
-      document.querySelectorAll('.route-line').forEach(el => el.classList.remove('selected'));
-      const line = document.getElementById(`line-${id}`);
-      if (line) line.classList.add('selected');
+    function getFilteredRoutes() {
+      return ROUTES.filter(r => {
+        const hay = `${r.id} ${r.name} ${r.grade} ${r.sector} ${r.gear} ${r.style} ${r.desc}`.toLowerCase();
+        const matchesSearch = !searchQuery || hay.includes(searchQuery);
+        if (!matchesSearch) return false;
 
-      const r = ROUTES.find(item => item.id === id);
-      if (r) {
-        document.getElementById('selectedRouteLabel').textContent = `#${r.id} ${r.name} (${r.grade})`;
-      }
+        if (currentFilter === 'all') return true;
+        if (currentFilter === 'done') return userLog[r.id] === 'rp' || userLog[r.id] === 'os';
+        return r.level === currentFilter;
+      });
+    }
+
+    function renderTopoSvg(visibleIdsSet) {
+      const layer = document.getElementById('routesLayer');
+      layer.innerHTML = '';
+
+      ROUTES.forEach(r => {
+        const isVisible = visibleIdsSet.has(r.id);
+        const isSelected = selectedId === r.id;
+
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', r.d);
+        path.setAttribute('stroke', r.color);
+        path.setAttribute(
+          'class',
+          `route-path ${isSelected ? 'selected' : ''} ${!isVisible ? 'dimmed' : ''}`
+        );
+        path.addEventListener('click', () => focusRoute(r.id, false));
+        layer.appendChild(path);
+
+        r.bolts.forEach(([bx, by]) => {
+          const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          dot.setAttribute('cx', bx);
+          dot.setAttribute('cy', by);
+          dot.setAttribute('r', isSelected ? '2.8' : '2.1');
+          dot.setAttribute('stroke', r.color);
+          dot.setAttribute('class', 'bolt-dot');
+          if (!isVisible) dot.setAttribute('opacity', '0.25');
+          layer.appendChild(dot);
+        });
+
+        const [ax, ay] = r.anchor;
+        const anchor = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        anchor.setAttribute('cx', ax);
+        anchor.setAttribute('cy', ay);
+        anchor.setAttribute('r', '2.8');
+        anchor.setAttribute('class', 'anchor-top');
+        if (!isVisible) anchor.setAttribute('opacity', '0.25');
+        layer.appendChild(anchor);
+
+        const [sx, sy] = r.start;
+        const num = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        num.setAttribute('x', sx);
+        num.setAttribute('y', sy);
+        num.setAttribute('fill', isSelected ? '#ffffff' : r.color);
+        num.setAttribute('class', 'start-num');
+        if (!isVisible) num.setAttribute('opacity', '0.3');
+        num.textContent = r.id;
+        num.addEventListener('click', () => focusRoute(r.id, false));
+        layer.appendChild(num);
+      });
+    }
+
+    function focusRoute(id, shouldScroll = false) {
+      selectedId = selectedId === id && !shouldScroll ? null : id;
+      const r = ROUTES.find(item => item.id === selectedId);
+      const label = document.getElementById('selectedRouteLabel');
+      label.textContent = r ? `#${r.id} ${r.name} • ${r.grade} (${r.height})` : 'Нажми на линию или карточку';
 
       renderRoutes();
-      const card = document.getElementById(`card-${id}`);
-      if (card) {
-        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      if (shouldScroll && selectedId) {
+        const card = document.getElementById(`card-${selectedId}`);
+        if (card) {
+          card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
       }
     }
 
@@ -547,16 +837,9 @@
       const container = document.getElementById('routesContainer');
       container.innerHTML = '';
 
-      const filtered = ROUTES.filter(r => {
-        const matchesSearch = r.name.toLowerCase().includes(searchQuery) ||
-                              r.sector.toLowerCase().includes(searchQuery) ||
-                              r.grade.toLowerCase().includes(searchQuery);
-        if (!matchesSearch) return false;
-
-        if (currentFilter === 'all') return true;
-        if (currentFilter === 'done') return userLog[r.id] === 'rp' || userLog[r.id] === 'os';
-        return r.level === currentFilter;
-      });
+      const filtered = getFilteredRoutes();
+      const visibleSet = new Set(filtered.map(r => r.id));
+      renderTopoSvg(visibleSet);
 
       let lastSector = '';
       filtered.forEach(r => {
@@ -573,7 +856,7 @@
         card.id = `card-${r.id}`;
         card.className = `route-card ${selectedId === r.id ? 'highlighted' : ''}`;
         card.innerHTML = `
-          <div class="route-top" onclick="focusRoute(${r.id})">
+          <div class="route-top" onclick="focusRoute(${r.id}, false)">
             <div>
               <div class="route-name"><span class="route-num">${r.id}</span>${r.name}</div>
               <div class="route-sub">${r.style}</div>
@@ -582,8 +865,8 @@
           </div>
           <div class="route-desc">${r.desc}</div>
           <div class="route-meta">
-            <span class="meta-tag">Высота: ${r.height}</span>
-            <span class="meta-tag">${r.draws}</span>
+            <span class="meta-tag">${r.height}</span>
+            <span class="meta-tag meta-gear">${r.gear}</span>
           </div>
           <div class="route-actions">
             <button class="btn-status ${status === 'os' ? 'done-os' : ''}" onclick="toggleStatus(${r.id}, 'os')">Onsight</button>
@@ -595,7 +878,7 @@
       });
 
       if (filtered.length === 0) {
-        container.innerHTML = '<p style="color: var(--muted); text-align: center; padding: 24px 0;">Маршруты по такому фильтру не найдены</p>';
+        container.innerHTML = '<p style="color: var(--muted); text-align: center; padding: 24px 0;">По этому фильтру маршрутов нет</p>';
       }
     }
 
