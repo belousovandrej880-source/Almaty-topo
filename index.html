@@ -18,7 +18,6 @@
       --green: #22c55e;
       --yellow: #eab308;
       --orange: #f97316;
-      --red: #ef4444;
       --radius: 14px;
     }
 
@@ -37,7 +36,6 @@
       padding-bottom: 84px;
     }
 
-    /* Верхняя панель выбора района (Лесничество / Туюк-Су и др.) */
     header {
       position: sticky;
       top: 0;
@@ -127,7 +125,7 @@
     }
 
     .topo-header {
-      padding: 11px 14px;
+      padding: 10px 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -141,15 +139,34 @@
       font-weight: 600;
     }
 
+    .topo-controls-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
     .topo-active {
       color: var(--accent);
       font-weight: 700;
       text-align: right;
     }
 
+    .reset-zoom-btn {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 7px;
+      cursor: pointer;
+    }
+
     .topo-svg-wrap {
       background: #0e1116;
       padding: 6px 4px 4px;
+      overflow: hidden;
+      position: relative;
     }
 
     svg.topo-scheme {
@@ -157,6 +174,11 @@
       height: auto;
       display: block;
       user-select: none;
+    }
+
+    #zoomGroup {
+      transform-origin: center center;
+      transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     .rock-mass {
@@ -185,26 +207,32 @@
       stroke-linejoin: round;
       opacity: 0.68;
       cursor: pointer;
-      transition: opacity 0.15s, stroke-width 0.15s;
+      transition: opacity 0.25s ease, stroke-width 0.25s ease;
+    }
+
+    .route-path.dimmed {
+      opacity: 0.16;
     }
 
     .route-path.selected {
-      stroke-width: 3.8;
+      stroke-width: 3.4;
       opacity: 1;
-      filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.35));
+      filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.35));
     }
 
     .bolt-dot {
       fill: #0e1116;
-      stroke-width: 1.4;
+      stroke-width: 1.3;
       pointer-events: none;
+      transition: opacity 0.25s ease;
     }
 
     .anchor-top {
       fill: #f9fafb;
       stroke: #0e1116;
-      stroke-width: 1;
+      stroke-width: 0.9;
       pointer-events: none;
+      transition: opacity 0.25s ease;
     }
 
     .start-num {
@@ -212,6 +240,35 @@
       font-weight: 800;
       text-anchor: middle;
       cursor: pointer;
+      transition: opacity 0.25s ease;
+    }
+
+    .zoom-callout {
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .callout-pill {
+      fill: rgba(12, 14, 17, 0.92);
+      stroke: #38bdf8;
+      stroke-width: 0.9;
+      rx: 3;
+    }
+
+    .callout-label {
+      font-size: 6.2px;
+      font-weight: 700;
+      fill: #f3f4f6;
+      text-anchor: middle;
+      dominant-baseline: central;
+    }
+
+    .callout-sub {
+      font-size: 5.2px;
+      font-weight: 600;
+      fill: #38bdf8;
+      text-anchor: middle;
+      dominant-baseline: central;
     }
 
     .topo-legend {
@@ -273,87 +330,10 @@
       gap: 7px;
     }
 
-    /* Compact Overview Route List */
-    .overview-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .overview-item {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 11px 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-    }
-
-    .overview-item.selected {
-      border-color: var(--accent);
-      background: #171e28;
-    }
-
-    .ov-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-width: 0;
-    }
-
-    .route-num {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 24px;
-      height: 24px;
-      padding: 0 5px;
-      border-radius: 7px;
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--text);
-      flex-shrink: 0;
-    }
-
-    .ov-title {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--text);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .ov-sub {
-      font-size: 12px;
-      color: var(--muted);
-    }
-
-    .ov-right {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-shrink: 0;
-    }
-
-    .status-dot {
-      font-size: 11px;
-      font-weight: 700;
-      padding: 2px 6px;
-      border-radius: 6px;
-      background: rgba(34, 197, 94, 0.16);
-      color: var(--green);
-    }
-
     .grade-badge {
-      padding: 4px 9px;
+      padding: 4px 10px;
       border-radius: 8px;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 800;
       white-space: nowrap;
     }
@@ -470,6 +450,22 @@
       gap: 8px;
     }
 
+    .route-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 24px;
+      height: 24px;
+      padding: 0 5px;
+      border-radius: 7px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+      margin-right: 7px;
+    }
+
     .route-actions {
       display: flex;
       gap: 6px;
@@ -544,7 +540,6 @@
       border-color: var(--accent);
     }
 
-    /* Bottom Navigation (4 вкладки внутри выбранного района) */
     nav.bottom-nav {
       position: fixed;
       bottom: 0;
@@ -585,7 +580,6 @@
 <body>
 
   <header>
-    <!-- Переключатель скальных массивов (готов к расширению под Туюк-Су и др.) -->
     <div class="crag-switcher">
       <button class="crag-tab active" onclick="selectCrag('lesnichestvo')">Лесничество</button>
       <button class="crag-tab soon" onclick="selectCrag('tuyuksu')">Туюк-Су (скоро)</button>
@@ -594,43 +588,23 @@
 
     <div class="header-top">
       <div class="title-group">
-        <h1 id="cragTitle">Скалы Лесничества</h1>
-        <p id="cragSubtitle">Окрестности Медео • Трэд и верхняя страховка</p>
+        <h1>Скалы Лесничества</h1>
+        <p>Окрестности Медео • Трэд и верхняя страховка</p>
       </div>
       <div class="stats-pill" id="progressPill">Пройдено: 0/10</div>
     </div>
   </header>
 
-  <!-- ВКЛАДКА 1: НАЧАЛЬНАЯ СТРАНИЦА (Схема + все маршруты + история + как доехать) -->
+  <!-- ВКЛАДКА 1: ОБЗОР (Только скала + история + как доехать) -->
   <main id="view-overview">
     <div class="topo-card">
       <div class="topo-header">
-        <span class="topo-title">Рельеф и линии • 1–10</span>
-        <span class="topo-active" id="selectedRouteLabel">Нажми на линию или маршрут</span>
+        <span class="topo-title">Массив Лесничества • 1–10</span>
+        <span class="topo-active" id="overviewSelectedLabel">Нажми на линию для перехода</span>
       </div>
       <div class="topo-svg-wrap">
         <svg class="topo-scheme" viewBox="0 0 380 215">
-          <!-- Силуэт скального массива с полками, углами и карнизами -->
-          <polygon class="rock-mass" points="
-            10,192
-            24,142 38,136 46,96 62,88 74,56 96,48
-            116,34 142,38 164,24 192,28 214,18
-            244,26 266,36 292,32 314,52 336,92
-            354,112 368,192
-          " />
-          <!-- Полки -->
-          <line class="rock-ledge" x1="22" y1="146" x2="112" y2="132" />
-          <line class="rock-ledge" x1="44" y1="98" x2="152" y2="86" />
-          <line class="rock-ledge" x1="148" y1="118" x2="288" y2="104" />
-          <line class="rock-ledge" x1="176" y1="74" x2="318" y2="66" />
-          <!-- Внутренний угол (№6) и жёлоб (№9) -->
-          <polyline class="rock-feature" points="196,192 204,116 198,27" />
-          <polyline class="rock-feature" points="316,192 310,124 314,52" />
-          <!-- Утюги (№7) -->
-          <polygon points="222,192 236,154 252,162 240,192" fill="#1e2531" stroke="#2c3647" stroke-width="1" />
-          <polygon points="238,146 254,108 270,118 254,154" fill="#1e2531" stroke="#2c3647" stroke-width="1" />
-          <polygon points="256,100 272,62 288,74 272,108" fill="#1e2531" stroke="#2c3647" stroke-width="1" />
-          <g id="routesLayer"></g>
+          <g id="overviewRockGroup"></g>
         </svg>
       </div>
       <div class="topo-legend">
@@ -640,9 +614,6 @@
         <span class="legend-item">● Точка / штырь</span>
       </div>
     </div>
-
-    <div class="section-label">Все маршруты массива (нажми для разбора)</div>
-    <div class="overview-list" id="overviewRoutesList"></div>
 
     <div class="section-label">История скалы</div>
     <div class="card">
@@ -665,10 +636,25 @@
     </div>
   </main>
 
-  <!-- ВКЛАДКА 2: МАРШРУТЫ (Категория, старт, прохождение, финиш) -->
+  <!-- ВКЛАДКА 2: МАРШРУТЫ (Гора с плавным зумом, подписями старта/финиша/особенностей + разбор) -->
   <main id="view-routes" class="hidden">
     <div class="section-label">Выбери трассу (1–10)</div>
     <div class="route-pills" id="detailPills"></div>
+
+    <div class="topo-card">
+      <div class="topo-header">
+        <span class="topo-title" id="detailZoomTitle">Плавный зум на маршрут</span>
+        <div class="topo-controls-right">
+          <span class="topo-active" id="detailZoomBadge">#1 Разминочная • Fr4</span>
+          <button class="reset-zoom-btn" onclick="resetZoom()">Вся скала</button>
+        </div>
+      </div>
+      <div class="topo-svg-wrap">
+        <svg class="topo-scheme" id="detailSvg" viewBox="0 0 380 215">
+          <g id="zoomGroup"></g>
+        </svg>
+      </div>
+    </div>
 
     <div class="card" id="routeDetailCard"></div>
   </main>
@@ -726,7 +712,6 @@
     <div id="notesList" style="display: flex; flex-direction: column; gap: 12px;"></div>
   </main>
 
-  <!-- Единая нижняя навигация внутри раздела «Лесничество» -->
   <nav class="bottom-nav">
     <button class="nav-item active" id="nav-overview" onclick="switchTab('overview')">Обзор</button>
     <button class="nav-item" id="nav-routes" onclick="switchTab('routes')">Маршруты</button>
@@ -758,7 +743,10 @@
         d: "M 32,190 L 42,158 L 56,126 L 68,94 L 78,62",
         bolts: [[42, 158], [56, 126], [68, 94]],
         anchor: [78, 62],
-        start: [32, 204]
+        start: [32, 204],
+        keyPoint: [56, 126],
+        keyLabel: "Пологая плита, ручки",
+        zoom: { scale: 2.35, tx: 105, ty: 28 }
       },
       {
         id: 2,
@@ -774,7 +762,10 @@
         d: "M 60,190 L 76,162 L 58,134 L 74,104 L 92,76 L 98,52",
         bolts: [[76, 162], [58, 134], [74, 104], [92, 76]],
         anchor: [98, 52],
-        start: [60, 204]
+        start: [60, 204],
+        keyPoint: [74, 104],
+        keyLabel: "Щель под #0.5",
+        zoom: { scale: 2.35, tx: 90, ty: 32 }
       },
       {
         id: 3,
@@ -790,7 +781,10 @@
         d: "M 88,190 L 94,152 L 106,116 L 112,78 L 118,40",
         bolts: [[94, 152], [106, 116], [112, 78]],
         anchor: [118, 40],
-        start: [88, 204]
+        start: [88, 204],
+        keyPoint: [112, 78],
+        keyLabel: "2-й угол слева от карниза",
+        zoom: { scale: 2.35, tx: 65, ty: 36 }
       },
       {
         id: 4,
@@ -806,7 +800,10 @@
         d: "M 116,190 L 122,150 L 130,110 L 138,72 L 144,41",
         bolts: [[122, 150], [130, 110], [138, 72]],
         anchor: [144, 41],
-        start: [116, 204]
+        start: [116, 204],
+        keyPoint: [138, 72],
+        keyLabel: "Ручка шевелится (держит)",
+        zoom: { scale: 2.35, tx: 35, ty: 36 }
       },
       {
         id: 5,
@@ -822,7 +819,10 @@
         d: "M 144,190 L 152,154 L 146,124 L 162,92 L 156,62 L 170,32",
         bolts: [[152, 154], [146, 124], [162, 92], [156, 62]],
         anchor: [170, 32],
-        start: [144, 204]
+        start: [144, 204],
+        keyPoint: [156, 62],
+        keyLabel: "Карниз / угол справа",
+        zoom: { scale: 2.35, tx: 8, ty: 38 }
       },
       {
         id: 6,
@@ -838,7 +838,10 @@
         d: "M 174,190 L 194,158 L 202,118 L 200,72 L 198,32",
         bolts: [[194, 158], [202, 118], [200, 72]],
         anchor: [198, 32],
-        start: [174, 204]
+        start: [174, 204],
+        keyPoint: [200, 72],
+        keyLabel: "Угол, камалоты #3–4",
+        zoom: { scale: 2.35, tx: -18, ty: 38 }
       },
       {
         id: 7,
@@ -854,7 +857,10 @@
         d: "M 228,190 L 242,158 L 256,124 L 266,84 L 262,42",
         bolts: [[242, 158], [256, 124], [266, 84]],
         anchor: [262, 42],
-        start: [228, 204]
+        start: [228, 204],
+        keyPoint: [266, 84],
+        keyLabel: "#3 с длинной оттяжкой",
+        zoom: { scale: 2.35, tx: -76, ty: 36 }
       },
       {
         id: 8,
@@ -870,7 +876,10 @@
         d: "M 258,190 L 278,156 L 284,118 L 292,78 L 288,40",
         bolts: [[278, 156], [284, 118], [292, 78]],
         anchor: [288, 40],
-        start: [258, 204]
+        start: [258, 204],
+        keyPoint: [284, 118],
+        keyLabel: "Не уйти в жёлоб",
+        zoom: { scale: 2.35, tx: -104, ty: 36 }
       },
       {
         id: 9,
@@ -886,7 +895,10 @@
         d: "M 314,190 L 310,152 L 312,114 L 314,78 L 314,54",
         bolts: [[310, 152], [312, 114], [314, 78]],
         anchor: [314, 54],
-        start: [314, 204]
+        start: [314, 204],
+        keyPoint: [312, 114],
+        keyLabel: "Пологий жёлоб",
+        zoom: { scale: 2.35, tx: -134, ty: 32 }
       },
       {
         id: 10,
@@ -902,14 +914,199 @@
         d: "M 344,190 L 338,162 L 336,134 L 334,108",
         bolts: [[338, 162], [336, 134]],
         anchor: [334, 108],
-        start: [344, 204]
+        start: [344, 204],
+        keyPoint: [336, 134],
+        keyLabel: "Щель, нужен #4",
+        zoom: { scale: 2.45, tx: -156, ty: 10 }
       }
     ];
 
-    // Хранилище: { [id]: { status: 'os'|'rp'|'proj', rating: 1..5, note: '...' } }
     let userData = JSON.parse(localStorage.getItem('lesnichestvo_journal_v3') || '{}');
     let activeRouteId = 1;
-    let highlightedOverviewId = null;
+    let isZoomed = true;
+
+    function createSvgEl(tag, attrs = {}) {
+      const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+      Object.entries(attrs).forEach(([k, v]) => el.setAttribute(k, v));
+      return el;
+    }
+
+    function drawRockBase(parent) {
+      parent.appendChild(createSvgEl('polygon', {
+        class: 'rock-mass',
+        points: '10,192 24,142 38,136 46,96 62,88 74,56 96,48 116,34 142,38 164,24 192,28 214,18 244,26 266,36 292,32 314,52 336,92 354,112 368,192'
+      }));
+      const ledges = [
+        [22, 146, 112, 132],
+        [44, 98, 152, 86],
+        [148, 118, 288, 104],
+        [176, 74, 318, 66]
+      ];
+      ledges.forEach(([x1, y1, x2, y2]) => {
+        parent.appendChild(createSvgEl('line', { class: 'rock-ledge', x1, y1, x2, y2 }));
+      });
+      parent.appendChild(createSvgEl('polyline', { class: 'rock-feature', points: '196,192 204,116 198,27' }));
+      parent.appendChild(createSvgEl('polyline', { class: 'rock-feature', points: '316,192 310,124 314,52' }));
+
+      const irons = [
+        '222,192 236,154 252,162 240,192',
+        '238,146 254,108 270,118 254,154',
+        '256,100 272,62 288,74 272,108'
+      ];
+      irons.forEach(pts => {
+        parent.appendChild(createSvgEl('polygon', {
+          points: pts,
+          fill: '#1e2531',
+          stroke: '#2c3647',
+          'stroke-width': '1'
+        }));
+      });
+    }
+
+    function renderOverviewSvg() {
+      const group = document.getElementById('overviewRockGroup');
+      group.innerHTML = '';
+      drawRockBase(group);
+
+      LESNICHESTVO_ROUTES.forEach(r => {
+        const path = createSvgEl('path', {
+          d: r.d,
+          stroke: r.color,
+          class: 'route-path'
+        });
+        path.addEventListener('click', () => {
+          document.getElementById('overviewSelectedLabel').textContent = `#${r.id} ${r.name} (${r.grade})`;
+          openRouteDetails(r.id);
+        });
+        group.appendChild(path);
+
+        r.bolts.forEach(([bx, by]) => {
+          group.appendChild(createSvgEl('circle', {
+            cx: bx, cy: by, r: '2.1', stroke: r.color, class: 'bolt-dot'
+          }));
+        });
+
+        const [ax, ay] = r.anchor;
+        group.appendChild(createSvgEl('circle', { cx: ax, cy: ay, r: '2.7', class: 'anchor-top' }));
+
+        const [sx, sy] = r.start;
+        const num = createSvgEl('text', {
+          x: sx, y: sy, fill: r.color, class: 'start-num'
+        });
+        num.textContent = r.id;
+        num.addEventListener('click', () => openRouteDetails(r.id));
+        group.appendChild(num);
+      });
+    }
+
+    function addCallout(parent, x, y, sub, label) {
+      const g = createSvgEl('g', { class: 'zoom-callout' });
+      const pillW = Math.max(label.length * 3.4 + 10, 34);
+      const clampX = Math.max(pillW / 2 + 4, Math.min(380 - pillW / 2 - 4, x));
+      const clampY = Math.max(12, Math.min(198, y));
+
+      g.appendChild(createSvgEl('rect', {
+        x: clampX - pillW / 2,
+        y: clampY - 7.5,
+        width: pillW,
+        height: 15,
+        class: 'callout-pill'
+      }));
+
+      const t1 = createSvgEl('text', {
+        x: clampX,
+        y: clampY - 2.6,
+        class: 'callout-sub'
+      });
+      t1.textContent = sub;
+
+      const t2 = createSvgEl('text', {
+        x: clampX,
+        y: clampY + 3.4,
+        class: 'callout-label'
+      });
+      t2.textContent = label;
+
+      g.appendChild(t1);
+      g.appendChild(t2);
+      parent.appendChild(g);
+    }
+
+    function renderDetailSvg() {
+      const zoomGroup = document.getElementById('zoomGroup');
+      zoomGroup.innerHTML = '';
+      drawRockBase(zoomGroup);
+
+      const selected = LESNICHESTVO_ROUTES.find(r => r.id === activeRouteId) || LESNICHESTVO_ROUTES[0];
+
+      LESNICHESTVO_ROUTES.forEach(r => {
+        const isSel = r.id === selected.id;
+        const path = createSvgEl('path', {
+          d: r.d,
+          stroke: r.color,
+          class: `route-path ${isSel ? 'selected' : 'dimmed'}`
+        });
+        path.addEventListener('click', () => {
+          activeRouteId = r.id;
+          isZoomed = true;
+          renderDetailTab();
+        });
+        zoomGroup.appendChild(path);
+
+        r.bolts.forEach(([bx, by]) => {
+          zoomGroup.appendChild(createSvgEl('circle', {
+            cx: bx,
+            cy: by,
+            r: isSel ? '2.5' : '1.9',
+            stroke: r.color,
+            class: 'bolt-dot',
+            opacity: isSel ? '1' : '0.2'
+          }));
+        });
+
+        const [ax, ay] = r.anchor;
+        zoomGroup.appendChild(createSvgEl('circle', {
+          cx: ax,
+          cy: ay,
+          r: isSel ? '2.8' : '2.2',
+          class: 'anchor-top',
+          opacity: isSel ? '1' : '0.2'
+        }));
+
+        const [sx, sy] = r.start;
+        const num = createSvgEl('text', {
+          x: sx,
+          y: sy,
+          fill: isSel ? '#ffffff' : r.color,
+          class: 'start-num',
+          opacity: isSel ? '1' : '0.25'
+        });
+        num.textContent = r.id;
+        zoomGroup.appendChild(num);
+      });
+
+      // Подписи старта, ключевого места и финиша выбранного маршрута
+      const [sx, sy] = selected.start;
+      const [kx, ky] = selected.keyPoint;
+      const [ax, ay] = selected.anchor;
+
+      addCallout(zoomGroup, sx, sy - 11, 'СТАРТ', `#${selected.id} ${selected.name}`);
+      addCallout(zoomGroup, kx + (kx > 240 ? -24 : 24), ky, 'КЛЮЧ / РЕЛЬЕФ', selected.keyLabel);
+      addCallout(zoomGroup, ax, ay - 11, 'ФИНИШ', `Станция (${selected.height})`);
+
+      if (isZoomed && selected.zoom) {
+        const { scale, tx, ty } = selected.zoom;
+        zoomGroup.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+      } else {
+        zoomGroup.style.transform = 'translate(0px, 0px) scale(1)';
+      }
+    }
+
+    function resetZoom() {
+      isZoomed = false;
+      document.getElementById('detailZoomTitle').textContent = 'Общий план массива';
+      renderDetailSvg();
+    }
 
     function saveUserData() {
       localStorage.setItem('lesnichestvo_journal_v3', JSON.stringify(userData));
@@ -942,92 +1139,17 @@
         document.getElementById(`view-${t}`).classList.toggle('hidden', t !== tabName);
         document.getElementById(`nav-${t}`).classList.toggle('active', t === tabName);
       });
+      if (tabName === 'routes') {
+        isZoomed = true;
+        renderDetailTab();
+      }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function openRouteDetails(id) {
       activeRouteId = id;
-      renderDetailTab();
+      isZoomed = true;
       switchTab('routes');
-    }
-
-    function renderTopoSvg() {
-      const layer = document.getElementById('routesLayer');
-      layer.innerHTML = '';
-
-      LESNICHESTVO_ROUTES.forEach(r => {
-        const isSelected = highlightedOverviewId === r.id;
-
-        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        path.setAttribute('d', r.d);
-        path.setAttribute('stroke', r.color);
-        path.setAttribute('class', `route-path ${isSelected ? 'selected' : ''}`);
-        path.addEventListener('click', () => {
-          highlightedOverviewId = r.id;
-          activeRouteId = r.id;
-          document.getElementById('selectedRouteLabel').textContent = `#${r.id} ${r.name} (${r.grade})`;
-          renderTopoSvg();
-          renderOverviewList();
-        });
-        layer.appendChild(path);
-
-        r.bolts.forEach(([bx, by]) => {
-          const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-          dot.setAttribute('cx', bx);
-          dot.setAttribute('cy', by);
-          dot.setAttribute('r', isSelected ? '2.8' : '2.1');
-          dot.setAttribute('stroke', r.color);
-          dot.setAttribute('class', 'bolt-dot');
-          layer.appendChild(dot);
-        });
-
-        const [ax, ay] = r.anchor;
-        const anchor = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-        anchor.setAttribute('cx', ax);
-        anchor.setAttribute('cy', ay);
-        anchor.setAttribute('r', '2.8');
-        anchor.setAttribute('class', 'anchor-top');
-        layer.appendChild(anchor);
-
-        const [sx, sy] = r.start;
-        const num = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        num.setAttribute('x', sx);
-        num.setAttribute('y', sy);
-        num.setAttribute('fill', isSelected ? '#ffffff' : r.color);
-        num.setAttribute('class', 'start-num');
-        num.textContent = r.id;
-        num.addEventListener('click', () => openRouteDetails(r.id));
-        layer.appendChild(num);
-      });
-    }
-
-    function renderOverviewList() {
-      const container = document.getElementById('overviewRoutesList');
-      container.innerHTML = '';
-
-      LESNICHESTVO_ROUTES.forEach(r => {
-        const entry = userData[r.id] || {};
-        const statusBadge = entry.status === 'os' ? '<span class="status-dot">OS</span>' :
-                            entry.status === 'rp' ? '<span class="status-dot">RP</span>' : '';
-
-        const item = document.createElement('div');
-        item.className = `overview-item ${highlightedOverviewId === r.id ? 'selected' : ''}`;
-        item.onclick = () => openRouteDetails(r.id);
-        item.innerHTML = `
-          <div class="ov-left">
-            <span class="route-num">${r.id}</span>
-            <div style="min-width: 0;">
-              <div class="ov-title">${r.name}</div>
-              <div class="ov-sub">${r.height} • ${r.gear}</div>
-            </div>
-          </div>
-          <div class="ov-right">
-            ${statusBadge}
-            <span class="grade-badge ${getGradeClass(r.level)}">${r.grade}</span>
-          </div>
-        `;
-        container.appendChild(item);
-      });
     }
 
     function renderDetailTab() {
@@ -1040,12 +1162,18 @@
         btn.textContent = `#${r.id} ${r.name}`;
         btn.onclick = () => {
           activeRouteId = r.id;
+          isZoomed = true;
           renderDetailTab();
         };
         pills.appendChild(btn);
       });
 
       const r = LESNICHESTVO_ROUTES.find(item => item.id === activeRouteId) || LESNICHESTVO_ROUTES[0];
+      document.getElementById('detailZoomTitle').textContent = isZoomed ? 'Плавный зум на трассу' : 'Общий план массива';
+      document.getElementById('detailZoomBadge').textContent = `#${r.id} ${r.name} • ${r.grade}`;
+
+      renderDetailSvg();
+
       const card = document.getElementById('routeDetailCard');
       card.innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
@@ -1079,7 +1207,6 @@
       saveUserData();
       if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
       renderNotesTab();
-      renderOverviewList();
     }
 
     function setRouteRating(id, stars) {
@@ -1142,8 +1269,7 @@
     }
 
     updateProgress();
-    renderTopoSvg();
-    renderOverviewList();
+    renderOverviewSvg();
     renderDetailTab();
     renderNotesTab();
   </script>
