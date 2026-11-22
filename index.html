@@ -1,924 +1,629 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Almaty Climbing Topo — Скалы Лесничества</title>
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-<style>
-  :root {
-    --bg: #0c0e12;
-    --panel: #141820;
-    --panel-2: #1b202b;
-    --border: #283040;
-    --text: #eef2f7;
-    --muted: #93a0b5;
-    --accent: #38bdf8;
-    --accent-2: #f59e0b;
-    --danger: #ef4444;
-    --ok: #22c55e;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
-    line-height: 1.45;
-    padding-bottom: 40px;
-  }
-  header {
-    position: sticky;
-    top: 0;
-    z-index: 20;
-    background: rgba(12, 14, 18, 0.92);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--border);
-    padding: 12px 16px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .brand-badge {
-    width: 34px;
-    height: 34px;
-    border-radius: 9px;
-    background: linear-gradient(135deg, #1d4ed8, #0ea5e9);
-    display: grid;
-    place-items: center;
-    font-weight: 700;
-    font-size: 14px;
-  }
-  .brand h1 { font-size: 16px; font-weight: 700; }
-  .brand p { font-size: 12px; color: var(--muted); }
-  .sectors {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-  }
-  .sector-btn {
-    background: var(--panel);
-    color: var(--text);
-    border: 1px solid var(--border);
-    padding: 6px 11px;
-    border-radius: 8px;
-    font-size: 12px;
-    cursor: pointer;
-    transition: 0.15s;
-  }
-  .sector-btn.active {
-    background: var(--accent);
-    color: #07131d;
-    border-color: var(--accent);
-    font-weight: 700;
-  }
-  .sector-btn.locked {
-    opacity: 0.55;
-    cursor: not-allowed;
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Скалы Лесничества — Топо Гайдбук</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root {
+      --bg: #0d0f12;
+      --surface: #16191f;
+      --surface-2: #1f242d;
+      --border: #2a303c;
+      --text: #f3f4f6;
+      --muted: #9ca3af;
+      --accent: #38bdf8;
+      --accent-dim: rgba(56, 189, 248, 0.14);
+      --green: #22c55e;
+      --yellow: #eab308;
+      --orange: #f97316;
+      --red: #ef4444;
+      --radius: 14px;
+    }
 
-  .container {
-    max-width: 1240px;
-    margin: 16px auto;
-    padding: 0 14px;
-    display: grid;
-    grid-template-columns: 1.15fr 0.85fr;
-    gap: 16px;
-  }
-  @media (max-width: 960px) {
-    .container { grid-template-columns: 1fr; }
-  }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-  .card {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 14px;
-  }
-  .card-title {
-    font-size: 14px;
-    font-weight: 700;
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-  }
-  .meta-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-    gap: 10px;
-    margin-bottom: 14px;
-  }
-  .meta-box {
-    background: var(--panel-2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 10px 12px;
-    font-size: 12.5px;
-    color: var(--muted);
-  }
-  .meta-box strong {
-    display: block;
-    color: var(--text);
-    font-size: 13px;
-    margin-bottom: 3px;
-  }
-  .alert-box {
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid rgba(239, 68, 68, 0.35);
-    border-radius: 10px;
-    padding: 10px 12px;
-    font-size: 12.5px;
-    color: #fecaca;
-    margin-bottom: 14px;
-  }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+      padding-bottom: 84px;
+    }
 
-  .topo-wrap {
-    background: #090b0f;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-    position: relative;
-  }
-  svg#topo-svg {
-    width: 100%;
-    height: auto;
-    display: block;
-    user-select: none;
-  }
-  .route-line {
-    fill: none;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    cursor: pointer;
-    transition: opacity 0.2s, stroke-width 0.2s;
-  }
-  .route-badge {
-    cursor: pointer;
-  }
-  .topo-caption {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 8px;
-    font-size: 12px;
-    color: var(--muted);
-  }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(13, 15, 18, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 16px 12px;
+    }
 
-  .filters {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin-bottom: 10px;
-  }
-  .filter-btn {
-    background: var(--panel-2);
-    color: var(--muted);
-    border: 1px solid var(--border);
-    padding: 5px 10px;
-    border-radius: 7px;
-    font-size: 12px;
-    cursor: pointer;
-  }
-  .filter-btn.active {
-    background: rgba(56, 189, 248, 0.16);
-    color: var(--accent);
-    border-color: var(--accent);
-    font-weight: 600;
-  }
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
 
-  .route-list {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    max-height: 360px;
-    overflow-y: auto;
-    padding-right: 2px;
-  }
-  .route-item {
-    background: var(--panel-2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 9px 11px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    cursor: pointer;
-    transition: 0.15s;
-  }
-  .route-item:hover { border-color: #475569; }
-  .route-item.active {
-    border-color: var(--accent);
-    background: rgba(56, 189, 248, 0.1);
-  }
-  .route-main {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    min-width: 0;
-  }
-  .num-pill {
-    min-width: 24px;
-    height: 24px;
-    border-radius: 6px;
-    display: grid;
-    place-items: center;
-    font-size: 12px;
-    font-weight: 700;
-    color: #081018;
-    background: var(--accent);
-    flex-shrink: 0;
-  }
-  .route-title {
-    font-size: 13.5px;
-    font-weight: 600;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .route-sub {
-    font-size: 11.5px;
-    color: var(--muted);
-  }
-  .sent-tag {
-    font-size: 11px;
-    color: var(--ok);
-    font-weight: 600;
-    flex-shrink: 0;
-  }
+    .title-group h1 {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
 
-  .detail-card { margin-top: 14px; }
-  .detail-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 10px;
-    margin-bottom: 10px;
-  }
-  .detail-header h2 { font-size: 18px; }
-  .tags {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin-bottom: 10px;
-  }
-  .tag {
-    background: var(--panel-2);
-    border: 1px solid var(--border);
-    padding: 4px 9px;
-    border-radius: 6px;
-    font-size: 12px;
-    color: var(--text);
-  }
-  .tag.gear {
-    border-color: rgba(245, 158, 11, 0.45);
-    color: #fde68a;
-    background: rgba(245, 158, 11, 0.1);
-  }
-  .summary-text {
-    font-size: 13.5px;
-    color: #dbe4f0;
-    margin-bottom: 12px;
-  }
-  .steps {
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
-    margin-bottom: 12px;
-  }
-  .step-item {
-    background: var(--panel-2);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--accent);
-    border-radius: 8px;
-    padding: 8px 10px;
-    font-size: 12.5px;
-    cursor: pointer;
-    transition: 0.15s;
-  }
-  .step-item:hover, .step-item.highlight {
-    border-color: var(--accent-2);
-    border-left-color: var(--accent-2);
-    background: rgba(245, 158, 11, 0.08);
-  }
-  .step-gear {
-    display: inline-block;
-    margin-top: 4px;
-    font-size: 11.5px;
-    color: #fbbf24;
-    font-weight: 600;
-  }
-  .actions {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-top: 10px;
-  }
-  .btn {
-    border: 1px solid var(--border);
-    background: var(--panel-2);
-    color: var(--text);
-    padding: 8px 12px;
-    border-radius: 8px;
-    font-size: 12.5px;
-    font-weight: 600;
-    cursor: pointer;
-  }
-  .btn.primary {
-    background: var(--accent);
-    color: #06131c;
-    border-color: var(--accent);
-  }
-  .btn.success {
-    background: rgba(34, 197, 94, 0.16);
-    color: #86efac;
-    border-color: rgba(34, 197, 94, 0.45);
-  }
-  textarea.note-input {
-    width: 100%;
-    min-height: 68px;
-    margin-top: 10px;
-    background: #0d1017;
-    color: var(--text);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 8px 10px;
-    font-size: 12.5px;
-    resize: vertical;
-  }
-  .status-msg {
-    margin-top: 8px;
-    font-size: 12px;
-    color: var(--accent);
-    min-height: 16px;
-  }
-</style>
+    .title-group p {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .stats-pill {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .search-box {
+      position: relative;
+      margin-bottom: 10px;
+    }
+
+    .search-box input {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 9px 12px;
+      color: var(--text);
+      font-size: 14px;
+      outline: none;
+    }
+
+    .search-box input:focus {
+      border-color: var(--accent);
+    }
+
+    .filters {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .filters::-webkit-scrollbar {
+      display: none;
+    }
+
+    .chip {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: 0.15s ease;
+    }
+
+    .chip.active {
+      background: var(--accent-dim);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    main {
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Topo Preview Card */
+    .topo-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .topo-header {
+      padding: 12px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .topo-header span {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .topo-svg-wrap {
+      background: #111419;
+      padding: 8px;
+      display: flex;
+      justify-content: center;
+    }
+
+    svg.topo-scheme {
+      width: 100%;
+      max-height: 210px;
+      display: block;
+    }
+
+    .route-line {
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      opacity: 0.55;
+      transition: 0.2s;
+      cursor: pointer;
+    }
+
+    .route-line.selected {
+      stroke-width: 4;
+      opacity: 1;
+      filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.8));
+    }
+
+    /* Route Cards */
+    .sector-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .route-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: border-color 0.15s;
+    }
+
+    .route-card.highlighted {
+      border-color: var(--accent);
+    }
+
+    .route-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .route-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      background: var(--surface-2);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      margin-right: 6px;
+    }
+
+    .route-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .route-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .grade-badge {
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+
+    .g-easy { background: rgba(34, 197, 94, 0.15); color: var(--green); border: 1px solid rgba(34, 197, 94, 0.35); }
+    .g-mid  { background: rgba(234, 179, 8, 0.15); color: var(--yellow); border: 1px solid rgba(234, 179, 8, 0.35); }
+    .g-hard { background: rgba(249, 115, 22, 0.15); color: var(--orange); border: 1px solid rgba(249, 115, 22, 0.35); }
+    .g-pro  { background: rgba(239, 68, 68, 0.15); color: var(--red); border: 1px solid rgba(239, 68, 68, 0.35); }
+
+    .route-desc {
+      font-size: 13px;
+      color: #d1d5db;
+    }
+
+    .route-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .meta-tag {
+      background: var(--surface-2);
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .route-actions {
+      display: flex;
+      gap: 8px;
+      padding-top: 4px;
+      border-top: 1px solid var(--border);
+    }
+
+    .btn-status {
+      flex: 1;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 7px 6px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .btn-status.done-rp {
+      background: rgba(34, 197, 94, 0.18);
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    .btn-status.done-os {
+      background: rgba(56, 189, 248, 0.18);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .btn-status.done-proj {
+      background: rgba(234, 179, 8, 0.18);
+      border-color: var(--yellow);
+      color: var(--yellow);
+    }
+
+    /* Info Tab */
+    .info-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+    }
+
+    .info-block h3 {
+      font-size: 15px;
+      margin-bottom: 8px;
+      color: var(--accent);
+    }
+
+    .info-block ul {
+      padding-left: 18px;
+      font-size: 13px;
+      color: #d1d5db;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    /* Bottom Nav */
+    nav.bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(22, 25, 31, 0.95);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border);
+      display: flex;
+      padding: 8px 12px 18px;
+      gap: 8px;
+      z-index: 40;
+    }
+
+    .nav-item {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .nav-item.active {
+      background: var(--surface-2);
+      color: var(--text);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
 </head>
 <body>
 
-<header>
-  <div class="brand">
-    <div class="brand-badge">ALA</div>
-    <div>
-      <h1>Скалы Лесничества</h1>
-      <p>Скалолазание в Алматы • Окрестности Медео</p>
+  <header>
+    <div class="header-top">
+      <div class="title-group">
+        <h1>Скалы Лесничества</h1>
+        <p>Заилийский Алатау • Алматы</p>
+      </div>
+      <div class="stats-pill" id="progressPill">Пройдено: 0/12</div>
     </div>
-  </div>
-  <div class="sectors">
-    <button class="sector-btn active">Лесничество (10)</button>
-    <button class="sector-btn locked" title="Скоро">Бутаковка</button>
-    <button class="sector-btn locked" title="Скоро">Туйык-Су</button>
-    <button class="sector-btn locked" title="Скоро">Тамгалы-Тас</button>
-  </div>
-</header>
 
-<div class="container">
-  <div>
-    <div class="card">
-      <div class="card-title">
-        <span>Паспорт локации</span>
-        <span style="font-size:12px;color:var(--muted);font-weight:500;">Южная экспозиция • Трэд / Верхняя</span>
+    <div id="routesControls">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Поиск маршрута или сектора..." />
       </div>
-      <div class="meta-grid">
-        <div class="meta-box">
-          <strong>Подход и транспорт</strong>
-          Городской автобус №12. Летом на южной стене жарко, в остальное время комфортно; весной по выходным людно.
-        </div>
-        <div class="meta-box">
-          <strong>Страховка и железо</strong>
-          Для навески верхней страховки в скале забиты металлические штыри. Для трэда — камалоты до #3 (на отдельных линиях до #4).
-        </div>
-        <div class="meta-box">
-          <strong>Лагерь и вода</strong>
-          Справа от скал есть места под палатки, чуть выше озерца — труба с питьевой водой.
-        </div>
+      <div class="filters" id="gradeFilters">
+        <button class="chip active" data-filter="all">Все трассы</button>
+        <button class="chip" data-filter="4-5">4 – 5c</button>
+        <button class="chip" data-filter="6">6a – 6c+</button>
+        <button class="chip" data-filter="7">7a+</button>
+        <button class="chip" data-filter="done">Пройденные</button>
       </div>
-      <div class="alert-box">
-        <strong>Важно:</strong> до 2016 года в середине скалы был карниз «Рояль», который обвалился после занятий альпинистов.
+    </div>
+  </header>
+
+  <main id="tabRoutes">
+    <!-- Интерактивная схема сектора -->
+    <div class="topo-card">
+      <div class="topo-header">
+        <span>Схема линий • Основной массив</span>
+        <span id="selectedRouteLabel" style="color: var(--accent);">Нажми на линию</span>
       </div>
+      <div class="topo-svg-wrap">
+        <svg class="topo-scheme" viewBox="0 0 360 180">
+          <!-- Силуэт скального массива -->
+          <polygon points="10,170 35,95 75,45 130,22 200,18 265,35 320,80 350,170" fill="#1b2028" stroke="#2f3746" stroke-width="2" />
+          <polyline points="75,45 95,110 85,170" fill="none" stroke="#252c38" stroke-width="1.5" />
+          <polyline points="200,18 190,95 210,170" fill="none" stroke="#252c38" stroke-width="1.5" />
 
-      <div class="card-title">
-        <span>Интерактивная схема массива (топо)</span>
-        <span style="font-size:12px;color:var(--accent);font-weight:500;" id="topo-hint">Нажмите на линию или номер маршрута</span>
-      </div>
+          <!-- Линии маршрутов -->
+          <path id="line-1" class="route-line" stroke="#22c55e" d="M 55,168 Q 62,125 78,75" onclick="focusRoute(1)" />
+          <path id="line-2" class="route-line" stroke="#22c55e" d="M 88,168 Q 92,115 108,52" onclick="focusRoute(2)" />
+          <path id="line-3" class="route-line" stroke="#eab308" d="M 122,168 Q 118,105 135,34" onclick="focusRoute(3)" />
+          <path id="line-4" class="route-line" stroke="#eab308" d="M 155,168 Q 162,98 165,28" onclick="focusRoute(4)" />
+          <path id="line-5" class="route-line" stroke="#f97316" d="M 192,168 Q 186,95 198,25" onclick="focusRoute(5)" />
+          <path id="line-6" class="route-line" stroke="#ef4444" d="M 228,168 Q 238,100 232,36" onclick="focusRoute(6)" />
+          <path id="line-7" class="route-line" stroke="#f97316" d="M 265,168 Q 260,115 272,58" onclick="focusRoute(7)" />
+          <path id="line-8" class="route-line" stroke="#eab308" d="M 302,168 Q 298,125 308,88" onclick="focusRoute(8)" />
 
-      <div class="topo-wrap">
-        <svg id="topo-svg" viewBox="0 0 820 520" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="rockGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#262e3d" />
-              <stop offset="55%" stop-color="#1b212d" />
-              <stop offset="100%" stop-color="#12161f" />
-            </linearGradient>
-            <linearGradient id="overhangGrad" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#333e54" />
-              <stop offset="100%" stop-color="#181d28" />
-            </linearGradient>
-          </defs>
-
-          <!-- Фон -->
-          <rect x="0" y="0" width="820" height="520" fill="#090c11" />
-
-          <!-- Основной массив скалы -->
-          <polygon points="35,445 65,120 175,78 330,66 515,72 675,92 780,150 792,445" fill="url(#rockGrad)" stroke="#3b465c" stroke-width="2" />
-
-          <!-- Характерные формы рельефа -->
-          <!-- Место бывшего карниза Рояль -->
-          <polygon points="255,250 355,235 375,268 265,285" fill="#10131a" stroke="#475569" stroke-dasharray="4 3" />
-          <text x="315" y="266" fill="#94a3b8" font-size="11" text-anchor="middle">экс-«Рояль» (до 2016)</text>
-
-          <!-- Три карниза (маршрут 5) -->
-          <path d="M 335 330 L 420 322 L 412 338 L 335 344 Z" fill="url(#overhangGrad)" />
-          <path d="M 342 245 L 430 236 L 422 253 L 342 260 Z" fill="url(#overhangGrad)" />
-          <path d="M 348 158 L 438 148 L 430 166 L 348 173 Z" fill="url(#overhangGrad)" />
-          <text x="388" y="142" fill="#cbd5e1" font-size="11" text-anchor="middle">3 карниза</text>
-
-          <!-- Внутренний угол Щель (маршрут 6) -->
-          <line x1="468" y1="445" x2="462" y2="82" stroke="#475569" stroke-width="2.5" stroke-dasharray="6 4" />
-          <text x="464" y="64" fill="#cbd5e1" font-size="11" text-anchor="middle">Щель</text>
-
-          <!-- Утюги (маршруты 7 и 8) -->
-          <polygon points="510,380 565,355 555,390 505,405" fill="url(#overhangGrad)" />
-          <polygon points="522,275 582,248 570,285 516,302" fill="url(#overhangGrad)" />
-          <polygon points="535,175 598,145 585,186 528,204" fill="url(#overhangGrad)" />
-          <text x="562" y="135" fill="#cbd5e1" font-size="11" text-anchor="middle">Утюги</text>
-
-          <!-- Жёлоб справа (маршрут 9) -->
-          <path d="M 655 445 Q 645 265 662 96" fill="none" stroke="#334155" stroke-width="14" opacity="0.55" />
-          <text x="658" y="82" fill="#94a3b8" font-size="11" text-anchor="middle">Жёлоб</text>
-
-          <!-- Широкая нависающая щель справа (маршрут 10) -->
-          <path d="M 725 445 L 736 155" stroke="#64748b" stroke-width="5" opacity="0.65" />
-          <text x="735" y="138" fill="#cbd5e1" font-size="11" text-anchor="middle">Щель справа</text>
-
-          <!-- Линия базы / земли -->
-          <line x1="20" y1="445" x2="805" y2="445" stroke="#475569" stroke-width="2" />
-          <text x="410" y="472" fill="#94a3b8" font-size="12" text-anchor="middle">Подход под скалы (южная сторона)</text>
-
-          <!-- Контейнеры для маршрутов и точек -->
-          <g id="routes-layer"></g>
-          <g id="points-layer"></g>
+          <!-- Станции -->
+          <circle cx="78" cy="75" r="3" fill="#fff" />
+          <circle cx="108" cy="52" r="3" fill="#fff" />
+          <circle cx="135" cy="34" r="3" fill="#fff" />
+          <circle cx="165" cy="28" r="3" fill="#fff" />
+          <circle cx="198" cy="25" r="3" fill="#fff" />
+          <circle cx="232" cy="36" r="3" fill="#fff" />
+          <circle cx="272" cy="58" r="3" fill="#fff" />
+          <circle cx="308" cy="88" r="3" fill="#fff" />
         </svg>
       </div>
-
-      <div class="topo-caption">
-        <span>Клик по маршруту выделяет линию и точки страховки (#camalot)</span>
-        <span>Клик по шагу в детализации подсвечивает точку на схеме</span>
-      </div>
-    </div>
-  </div>
-
-  <div>
-    <div class="card">
-      <div class="card-title">
-        <span>Маршруты Лесничества</span>
-        <span id="routes-count" style="font-size:12px;color:var(--muted);">10 линий</span>
-      </div>
-
-      <div class="filters" id="filters">
-        <button class="filter-btn active" data-filter="all">Все (10)</button>
-        <button class="filter-btn" data-filter="fr4">Fr 4</button>
-        <button class="filter-btn" data-filter="6a">6a / 6a+</button>
-        <button class="filter-btn" data-filter="6b">6b / 6b+</button>
-      </div>
-
-      <div class="route-list" id="route-list"></div>
     </div>
 
-    <div class="card detail-card" id="detail-card"></div>
-  </div>
-</div>
+    <div id="routesContainer"></div>
+  </main>
 
-<script>
-const tg = window.Telegram?.WebApp;
-if (tg) {
-  tg.ready();
-  tg.expand();
-}
-
-const ROUTES = [
-  {
-    id: 1,
-    num: 1,
-    title: "Разминочная",
-    grade: "Fr 4",
-    group: "fr4",
-    length: "15 м",
-    color: "#38bdf8",
-    gear: ["Набор закладок / камалоты по рельефу"],
-    summary: "Пологая скала с удобными зацепками — отличный разогрев перед основными линиями.",
-    path: "M 95 445 L 105 350 L 118 240 L 126 112",
-    badge: { x: 95, y: 462 },
-    steps: [
-      { text: "Старт по пологой плите с удобными зацепками и хорошими ногами.", x: 105, y: 350, gear: "" },
-      { text: "Ровный подъём до верхней полки без сложных перехватов.", x: 126, y: 112, gear: "" }
-    ]
-  },
-  {
-    id: 2,
-    num: 2,
-    title: "Жёлтые пятна",
-    grade: "6b",
-    group: "6b",
-    length: "17 м",
-    color: "#f59e0b",
-    gear: ["Камалот #0.5", "Точки по трещинам"],
-    summary: "Техничный выход через систему трещин и горизонтальных щелей с контролем камалотом #0.5.",
-    path: "M 165 445 L 192 385 L 156 315 L 172 230 L 182 95",
-    badge: { x: 165, y: 462 },
-    steps: [
-      { text: "Для спокойного старта положите первую точку в трещину справа.", x: 192, y: 385, gear: "Точка в трещине справа" },
-      { text: "Перейдите влево-вверх до горизонтальной щели.", x: 156, y: 315, gear: "Горизонтальная щель" },
-      { text: "Идите вверх до следующей горизонтальной щели под камалот #0.5.", x: 172, y: 230, gear: "Камалот #0.5" },
-      { text: "Выше — по ситуации и рельефу до топа.", x: 182, y: 95, gear: "" }
-    ]
-  },
-  {
-    id: 3,
-    num: 3,
-    title: "Беговая",
-    grade: "6a",
-    group: "6a",
-    length: "23 м",
-    color: "#34d399",
-    gear: ["Набор камалотов до #3"],
-    summary: "Нижняя часть свободная по выбору, верхняя привязана ко второму углу слева от карниза.",
-    path: "M 235 445 L 250 355 L 285 235 L 298 84",
-    badge: { x: 235, y: 462 },
-    steps: [
-      { text: "Нижнюю половину пройдите так, как нравится по рельефу.", x: 250, y: 355, gear: "" },
-      { text: "Цельтесь во второй угол слева от карниза и дорабатывайте до верха.", x: 298, y: 84, gear: "2-й угол слева от карниза" }
-    ]
-  },
-  {
-    id: 4,
-    num: 4,
-    title: "Орлиное гнездо",
-    grade: "6a",
-    group: "6a",
-    length: "23 м",
-    color: "#a78bfa",
-    gear: ["Набор камалотов до #3"],
-    summary: "Линия с запоминающейся деталью в верхней части — подвижной, но надёжной ручкой.",
-    path: "M 305 445 L 315 340 L 325 185 L 332 76",
-    badge: { x: 305, y: 462 },
-    steps: [
-      { text: "Набор высоты по центральной части массива.", x: 315, y: 340, gear: "" },
-      { text: "В верхней четверти в углублении много лет шевелится хорошая ручка — не пугайтесь, она держится.", x: 325, y: 185, gear: "Подвижная ручка в верхней четверти" }
-    ]
-  },
-  {
-    id: 5,
-    num: 5,
-    title: "Три карниза",
-    grade: "6b",
-    group: "6b",
-    length: "25 м",
-    color: "#fb7185",
-    gear: ["Камалот в Щель справа", "Камалоты до #3"],
-    summary: "Серия карнизов: вверху можно штурмовать последний карниз в лоб или уйти в угол справа.",
-    path: "M 382 445 L 378 331 L 385 245 L 395 157 L 415 74",
-    badge: { x: 382, y: 462 },
-    steps: [
-      { text: "Прохождение серии карнизов с организацией точек по рельефу.", x: 378, y: 331, gear: "1-й карниз" },
-      { text: "Продолжение через средний карниз.", x: 385, y: 245, gear: "2-й карниз" },
-      { text: "Вверху отважные и сильные лезут через последний карниз в лоб; для страховки — камалот в Щели справа. Благоразумные уходят в угол справа.", x: 395, y: 157, gear: "Камалот в Щель справа / уход в угол" }
-    ]
-  },
-  {
-    id: 6,
-    num: 6,
-    title: "Щель",
-    grade: "6a+",
-    group: "6a",
-    length: "25 м",
-    color: "#22d3ee",
-    gear: ["Камалоты #3–#4", "Базовый набор до #3"],
-    summary: "Очевидный внутренний угол до самого верха; в верхней части пригодится крупный камалот #3–#4.",
-    path: "M 468 445 L 466 310 L 464 190 L 462 82",
-    badge: { x: 468, y: 462 },
-    steps: [
-      { text: "Подлаз к углу — любым удобным способом.", x: 466, y: 310, gear: "Подход к углу" },
-      { text: "Дальше очевидный угол до верха; в верхней части захочется камалот #3–#4.", x: 464, y: 190, gear: "Камалот #3–#4 вверху" }
-    ]
-  },
-  {
-    id: 7,
-    num: 7,
-    title: "Утюги",
-    grade: "6b+",
-    group: "6b",
-    length: "25 м",
-    color: "#f97316",
-    gear: ["Камалот #0.3", "Камалот #3 + длинная оттяжка"],
-    summary: "Крутые стенки с полками и культовый выход по последнему нависающему ребру со страховкой слева.",
-    path: "M 532 445 L 538 375 L 550 272 L 566 172 L 552 88",
-    badge: { x: 532, y: 462 },
-    steps: [
-      { text: "Положите камалот #0.3 в основание первого утюга и лезьте вверх по ребру.", x: 538, y: 375, gear: "Камалот #0.3 в основании 1-го утюга" },
-      { text: "Прохождение промежуточных стенок и полок.", x: 550, y: 272, gear: "Полки и ребро" },
-      { text: "Ключ — последнее нависающее ребро: пристройте камалот #3 с длинной оттяжкой в Щель слева, вернитесь на ребро и решительно лезьте вверх.", x: 566, y: 172, gear: "Камалот #3 + длинная оттяжка в Щель слева" }
-    ]
-  },
-  {
-    id: 8,
-    num: 8,
-    title: "Справа от утюгов",
-    grade: "6a+",
-    group: "6a",
-    length: "25 м",
-    color: "#eab308",
-    gear: ["Маленький камалот", "Набор до #3"],
-    summary: "Подход под первый утюг, ранняя точка правее ребра и аккуратный выход по углу без ухода в жёлоб.",
-    path: "M 588 445 L 605 365 L 592 250 L 608 155 L 615 92",
-    badge: { x: 588, y: 462 },
-    steps: [
-      { text: "Подберитесь под первый утюг и пристройте маленький камалот в горизонтальную щель в двух метрах справа от ребра.", x: 605, y: 365, gear: "Маленький камалот (2 м правее ребра)" },
-      { text: "Лезьте вверх, стараясь не уйти вправо в жёлоб.", x: 592, y: 250, gear: "Контроль линии левее жёлоба" },
-      { text: "Выход наверх по углу справа от последнего утюга.", x: 615, y: 92, gear: "Угол справа от последнего утюга" }
-    ]
-  },
-  {
-    id: 9,
-    num: 9,
-    title: "Жёлоб справа",
-    grade: "Fr 4",
-    group: "fr4",
-    length: "25 м",
-    color: "#60a5fa",
-    gear: ["Набор по рельефу"],
-    summary: "Пологий жёлоб, разделяющий два массива.",
-    path: "M 655 445 L 652 315 L 658 195 L 662 96",
-    badge: { x: 655, y: 462 },
-    steps: [
-      { text: "Движение по пологому жёлобу между двумя массивами до выхода наверх.", x: 652, y: 315, gear: "Жёлоб между массивами" }
-    ]
-  },
-  {
-    id: 10,
-    num: 10,
-    title: "Щель справа",
-    grade: "6a",
-    group: "6a",
-    length: "15 м",
-    color: "#f472b6",
-    gear: ["Камалот #4"],
-    summary: "Широкая нависающая щель с обилием зацепок; несложно, но нужен камалот #4.",
-    path: "M 725 445 L 729 310 L 733 215 L 736 155",
-    badge: { x: 725, y: 462 },
-    steps: [
-      { text: "Возьмите камалот #4 и заходите в широкую нависающую щель.", x: 729, y: 310, gear: "Камалот #4" },
-      { text: "Кругом хватает зацепок — лезьте спокойно и ровно до верха.", x: 733, y: 215, gear: "Зацепки по рельефу" }
-    ]
-  }
-];
-
-const STORAGE_KEY = "almaty_topo_lesnichestvo_v1";
-let state = loadState();
-let currentFilter = "all";
-let selectedRouteId = 7; // По умолчанию показываем «Утюги» с интересными точками
-
-function loadState() {
-  try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || { done: [], notes: {} };
-  } catch {
-    return { done: [], notes: {} };
-  }
-}
-
-function saveState() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-}
-
-function getFilteredRoutes() {
-  if (currentFilter === "all") return ROUTES;
-  return ROUTES.filter(r => r.group === currentFilter);
-}
-
-function renderTopo() {
-  const routesLayer = document.getElementById("routes-layer");
-  const pointsLayer = document.getElementById("points-layer");
-  routesLayer.innerHTML = "";
-  pointsLayer.innerHTML = "";
-
-  const visibleIds = new Set(getFilteredRoutes().map(r => r.id));
-
-  ROUTES.forEach(route => {
-    const isSelected = route.id === selectedRouteId;
-    const isVisible = visibleIds.has(route.id);
-
-    const pathEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    pathEl.setAttribute("d", route.path);
-    pathEl.setAttribute("stroke", route.color);
-    pathEl.setAttribute("stroke-width", isSelected ? "5.5" : "2.6");
-    pathEl.setAttribute("opacity", !isVisible ? "0.12" : (isSelected ? "1" : "0.62"));
-    if (route.group === "fr4") pathEl.setAttribute("stroke-dasharray", "7 4");
-    pathEl.classList.add("route-line");
-    pathEl.addEventListener("click", () => selectRoute(route.id));
-    routesLayer.appendChild(pathEl);
-
-    const badgeGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    badgeGroup.classList.add("route-badge");
-    badgeGroup.setAttribute("opacity", !isVisible ? "0.2" : "1");
-    badgeGroup.addEventListener("click", () => selectRoute(route.id));
-
-    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    circle.setAttribute("cx", route.badge.x);
-    circle.setAttribute("cy", route.badge.y);
-    circle.setAttribute("r", isSelected ? "13" : "11");
-    circle.setAttribute("fill", isSelected ? "#ffffff" : route.color);
-    circle.setAttribute("stroke", "#090c11");
-    circle.setAttribute("stroke-width", "2");
-
-    const txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    txt.setAttribute("x", route.badge.x);
-    txt.setAttribute("y", route.badge.y + 4);
-    txt.setAttribute("text-anchor", "middle");
-    txt.setAttribute("font-size", "11");
-    txt.setAttribute("font-weight", "800");
-    txt.setAttribute("fill", "#090c11");
-    txt.textContent = route.num;
-
-    badgeGroup.appendChild(circle);
-    badgeGroup.appendChild(txt);
-    pointsLayer.appendChild(badgeGroup);
-  });
-
-  const activeRoute = ROUTES.find(r => r.id === selectedRouteId);
-  if (activeRoute) {
-    activeRoute.steps.forEach((st, idx) => {
-      const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-      g.setAttribute("id", `topo-step-${idx}`);
-
-      const ring = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-      ring.setAttribute("cx", st.x);
-      ring.setAttribute("cy", st.y);
-      ring.setAttribute("r", st.gear ? "9" : "6.5");
-      ring.setAttribute("fill", st.gear ? "#f59e0b" : "#38bdf8");
-      ring.setAttribute("stroke", "#090c11");
-      ring.setAttribute("stroke-width", "2");
-
-      const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
-      label.setAttribute("x", st.x);
-      label.setAttribute("y", st.y + 3.5);
-      label.setAttribute("text-anchor", "middle");
-      label.setAttribute("font-size", "9.5");
-      label.setAttribute("font-weight", "800");
-      label.setAttribute("fill", "#090c11");
-      label.textContent = idx + 1;
-
-      g.appendChild(ring);
-      g.appendChild(label);
-      pointsLayer.appendChild(g);
-    });
-  }
-}
-
-function highlightStepOnTopo(stepIndex) {
-  document.querySelectorAll(".step-item").forEach((el, i) => {
-    el.classList.toggle("highlight", i === stepIndex);
-  });
-  const activeRoute = ROUTES.find(r => r.id === selectedRouteId);
-  if (!activeRoute || !activeRoute.steps[stepIndex]) return;
-  const st = activeRoute.steps[stepIndex];
-  document.getElementById("topo-hint").textContent = `Шаг ${stepIndex + 1}: ${st.gear || "ориентир по рельефу"}`;
-}
-
-function renderList() {
-  const listEl = document.getElementById("route-list");
-  const filtered = getFilteredRoutes();
-  document.getElementById("routes-count").textContent = `${filtered.length} из 10`;
-  listEl.innerHTML = "";
-
-  filtered.forEach(route => {
-    const isDone = state.done.includes(route.id);
-    const item = document.createElement("div");
-    item.className = "route-item" + (route.id === selectedRouteId ? " active" : "");
-    item.addEventListener("click", () => selectRoute(route.id));
-
-    item.innerHTML = `
-      <div class="route-main">
-        <div class="num-pill" style="background:${route.color}">${route.num}</div>
-        <div style="min-width:0">
-          <div class="route-title">${route.title}</div>
-          <div class="route-sub">${route.grade} • ${route.length}</div>
-        </div>
-      </div>
-      ${isDone ? '<span class="sent-tag">Пролезен</span>' : ""}
-    `;
-    listEl.appendChild(item);
-  });
-}
-
-function renderDetail() {
-  const route = ROUTES.find(r => r.id === selectedRouteId) || ROUTES[0];
-  const isDone = state.done.includes(route.id);
-  const noteText = state.notes[route.id] || "";
-  const card = document.getElementById("detail-card");
-
-  const gearTags = route.gear.map(g => `<span class="tag gear">${g}</span>`).join("");
-  const stepsHtml = route.steps.map((s, idx) => `
-    <div class="step-item" onclick="highlightStepOnTopo(${idx})" onmouseenter="highlightStepOnTopo(${idx})">
-      <div><strong>${idx + 1}.</strong> ${s.text}</div>
-      ${s.gear ? `<div class="step-gear">Точка: ${s.gear}</div>` : ""}
+  <main id="tabInfo" class="hidden">
+    <div class="info-block">
+      <h3>Подход и локация</h3>
+      <ul>
+        <li><strong>Район:</strong> Ущелье Малое Алматинское, район Лесничества (выше экопоста / поворот на Просвещенец).</li>
+        <li><strong>Порода:</strong> Гранит / гранодиорит — хорошее трение, острые мизера, трещины и положительные плиты.</li>
+        <li><strong>Сезон:</strong> Апрель — Ноябрь. После дождя северные и затенённые плиты сохнут 3–5 часов.</li>
+      </ul>
     </div>
-  `).join("");
 
-  card.innerHTML = `
-    <div class="detail-header">
-      <h2>#${route.num} ${route.title}</h2>
-      <span class="tag">${route.grade} • ${route.length}</span>
+    <div class="info-block">
+      <h3>Снаряжение и безопасность</h3>
+      <ul>
+        <li><strong>Верёвка:</strong> Одинарная динамика 60–70 м (узел на конце обязателен!).</li>
+        <li><strong>Оттяжки:</strong> 10–12 штук (плюс 2 удлинённые для уменьшения трения на перегибах).</li>
+        <li><strong>Станции:</strong> Оборудованы шлямбурами с кольцами / рапидами. Для верхней страховки встёгивайте свои карабины, не протирайте стационарные кольца.</li>
+        <li><strong>Каска:</strong> Обязательна страхующему у подножия — возможен сход мелких камней с полок.</li>
+      </ul>
     </div>
-    <div class="tags">${gearTags}</div>
-    <p class="summary-text">${route.summary}</p>
-    <div class="card-title"><span>Пошаговое прохождение</span></div>
-    <div class="steps">${stepsHtml}</div>
-    <label style="font-size:12px;color:var(--muted);">Личная заметка по маршруту</label>
-    <textarea class="note-input" id="route-note" placeholder="Запиши ключ, расклад по ногам или закладку камалота...">${noteText}</textarea>
-    <div class="actions">
-      <button class="btn ${isDone ? "success" : ""}" id="toggle-done-btn">
-        ${isDone ? "✓ Отмечен как пролезенный" : "Отметить прохождение"}
-      </button>
-      <button class="btn" id="save-note-btn">Сохранить заметку</button>
-      <button class="btn primary" id="send-tg-btn">Скинуть в Telegram-бот</button>
-    </div>
-    <div class="status-msg" id="status-msg"></div>
-  `;
 
-  document.getElementById("toggle-done-btn").addEventListener("click", () => {
-    if (state.done.includes(route.id)) {
-      state.done = state.done.filter(id => id !== route.id);
-    } else {
-      state.done.push(route.id);
+    <div class="info-block">
+      <h3>Памятка по узлам</h3>
+      <ul>
+        <li><strong>Привязывание:</strong> Восьмёрка с контрольным узлом (хвост не менее 10 см).</li>
+        <li><strong>Станция / самостраховка:</strong> Стремя или восьмёрка на петле, муфтованные карабины.</li>
+        <li><strong>Спуск:</strong> Через восьмёрку/корзинку со схватывающим узлом (Прусик) или гри-гри.</li>
+      </ul>
+    </div>
+  </main>
+
+  <nav class="bottom-nav">
+    <button class="nav-item active" id="navRoutes" onclick="switchTab('routes')">Маршруты и Топо</button>
+    <button class="nav-item" id="navInfo" onclick="switchTab('info')">Подход и Снаряжение</button>
+  </nav>
+
+  <script>
+    const tg = window.Telegram && window.Telegram.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+      tg.setHeaderColor('#0d0f12');
+      tg.setBackgroundColor('#0d0f12');
     }
-    saveState();
-    renderList();
-    renderDetail();
-  });
 
-  document.getElementById("save-note-btn").addEventListener("click", () => {
-    state.notes[route.id] = document.getElementById("route-note").value.trim();
-    saveState();
-    document.getElementById("status-msg").textContent = "Заметка сохранена.";
-  });
+    const ROUTES = [
+      { id: 1, sector: "Учебный сектор", name: "Разминочный угол", grade: "4c", level: "4-5", height: "14 м", draws: "6 оттяжек", style: "Внутренний угол, крупные ручки", desc: "Идеальная первая трасса для разминки и отработки постановки ног на гранитных полках." },
+      { id: 2, sector: "Учебный сектор", name: "Лесная тропа", grade: "5b", level: "4-5", height: "16 м", draws: "7 оттяжек", style: "Положительная плита", desc: "Плавное лазание на равновесие. Ключ перед предпоследним шлямбуром — переход на высокий мизер." },
+      { id: 3, sector: "Центральный бастион", name: "Гранитный гребень", grade: "6a", level: "6", height: "20 м", draws: "8 оттяжек", style: "Ребро и откидки", desc: "Классическая линия по ярко выраженному ребру. Хорошие места для отдыха в средней части." },
+      { id: 4, sector: "Центральный бастион", name: "Солнечное зеркало", grade: "6b", level: "6", height: "22 м", draws: "9 оттяжек", style: "Техничная плита, мизера", desc: "Требует точной работы ног на трении и аккуратных перехватов по мелким гранитным кристаллам." },
+      { id: 5, sector: "Центральный бастион", name: "Карниз Лесничества", grade: "6c+", level: "6", height: "24 м", draws: "10 оттяжек", style: "Вертикаль с выходом через карниз", desc: "Динамичный выход из-под небольшого нависания на хорошую полку. Рекомендуется удлинить оттяжку под карнизом." },
+      { id: 6, sector: "Центральный бастион", name: "Тень Барса", grade: "7a+", level: "7", height: "25 м", draws: "11 оттяжек", style: "Нависание, силовые перехваты", desc: "Самый требовательный маршрут массива: серия длинных перехватов по пассивам с жёстким финишным боулдерингом." },
+      { id: 7, sector: "Восточная стена", name: "Щель Памяти", grade: "6a+", level: "6", height: "19 м", draws: "8 оттяжек", style: "Тред / спорт, заклинки", desc: "Линия вдоль вертикальной щели с подхватами. Отлично тренирует работу в распор." },
+      { id: 8, sector: "Восточная стена", name: "Вечерний бриз", grade: "5c", level: "4-5", height: "17 м", draws: "7 оттяжек", style: "Ступенчатый рельеф", desc: "Приятный маршрут с хорошими зацепами и удобной станцией для спуска." },
+      { id: 9, sector: "Дальний камень", name: "Траверс Егеря", grade: "6b+", level: "6", height: "18 м", draws: "8 оттяжек", style: "Косой траверс вправо", desc: "Необычная траектория с переходом между двумя плитами. Внимательно следите за маятником второго номера." },
+      { id: 10, sector: "Дальний камень", name: "Вертикаль Алатау", grade: "7a", level: "7", height: "23 м", draws: "10 оттяжек", style: "Строгая вертикаль, щипки", desc: "Ровная силовая выносливость без явных мест отдыха до самой станции." },
+      { id: 11, sector: "Дальний камень", name: "Первый шаг", grade: "4b", level: "4-5", height: "12 м", draws: "5 оттяжек", style: "Пологий рельеф", desc: "Подходит для обучения страховке и спуска дюльфером." },
+      { id: 12, sector: "Восточная стена", name: "Гранит и Сталь", grade: "6c", level: "6", height: "21 м", draws: "9 оттяжек", style: "Техничный микс", desc: "Комбинация плиты внизу и боулдерингового ключа на последних трёх оттяжках." }
+    ];
 
-  document.getElementById("send-tg-btn").addEventListener("click", () => {
-    const payload = JSON.stringify({
-      action: "route_key",
-      sector: "Скалы Лесничества",
-      number: route.num,
-      title: route.title,
-      grade: route.grade,
-      length: route.length,
-      gear: route.gear,
-      summary: route.summary
-    });
-    if (tg && tg.initDataUnsafe?.user) {
-      tg.sendData(payload);
-    } else {
-      document.getElementById("status-msg").textContent = "Открыто вне Telegram: данные маршрута готовы к отправке через WebApp.";
+    let userLog = JSON.parse(localStorage.getItem('lesnichestvo_log') || '{}');
+    let currentFilter = 'all';
+    let searchQuery = '';
+    let selectedId = null;
+
+    function getGradeClass(level) {
+      if (level === '4-5') return 'g-easy';
+      if (level === '6') return 'g-mid';
+      return 'g-pro';
     }
-  });
-}
 
-function selectRoute(id) {
-  selectedRouteId = id;
-  const route = ROUTES.find(r => r.id === id);
-  if (route) {
-    document.getElementById("topo-hint").textContent = `Маршрут #${route.num} «${route.title}» (${route.grade}, ${route.length})`;
-  }
-  renderTopo();
-  renderList();
-  renderDetail();
-}
+    function updateProgress() {
+      const doneCount = Object.values(userLog).filter(v => v === 'rp' || v === 'os').length;
+      document.getElementById('progressPill').textContent = `Пройдено: ${doneCount}/${ROUTES.length}`;
+    }
 
-document.getElementById("filters").addEventListener("click", (e) => {
-  const btn = e.target.closest(".filter-btn");
-  if (!btn) return;
-  document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
-  btn.classList.add("active");
-  currentFilter = btn.dataset.filter;
-  const visible = getFilteredRoutes();
-  if (!visible.some(r => r.id === selectedRouteId) && visible.length) {
-    selectedRouteId = visible[0].id;
-  }
-  renderTopo();
-  renderList();
-  renderDetail();
-});
+    function toggleStatus(id, status) {
+      if (userLog[id] === status) {
+        delete userLog[id];
+      } else {
+        userLog[id] = status;
+      }
+      localStorage.setItem('lesnichestvo_log', JSON.stringify(userLog));
+      if (tg && tg.HapticFeedback) {
+        tg.HapticFeedback.impactOccurred('light');
+      }
+      updateProgress();
+      renderRoutes();
+    }
 
-renderTopo();
-renderList();
-renderDetail();
-</script>
+    function focusRoute(id) {
+      selectedId = id;
+      document.querySelectorAll('.route-line').forEach(el => el.classList.remove('selected'));
+      const line = document.getElementById(`line-${id}`);
+      if (line) line.classList.add('selected');
+
+      const r = ROUTES.find(item => item.id === id);
+      if (r) {
+        document.getElementById('selectedRouteLabel').textContent = `#${r.id} ${r.name} (${r.grade})`;
+      }
+
+      renderRoutes();
+      const card = document.getElementById(`card-${id}`);
+      if (card) {
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
+    function renderRoutes() {
+      const container = document.getElementById('routesContainer');
+      container.innerHTML = '';
+
+      const filtered = ROUTES.filter(r => {
+        const matchesSearch = r.name.toLowerCase().includes(searchQuery) ||
+                              r.sector.toLowerCase().includes(searchQuery) ||
+                              r.grade.toLowerCase().includes(searchQuery);
+        if (!matchesSearch) return false;
+
+        if (currentFilter === 'all') return true;
+        if (currentFilter === 'done') return userLog[r.id] === 'rp' || userLog[r.id] === 'os';
+        return r.level === currentFilter;
+      });
+
+      let lastSector = '';
+      filtered.forEach(r => {
+        if (r.sector !== lastSector) {
+          lastSector = r.sector;
+          const st = document.createElement('div');
+          st.className = 'sector-title';
+          st.textContent = r.sector;
+          container.appendChild(st);
+        }
+
+        const status = userLog[r.id] || '';
+        const card = document.createElement('div');
+        card.id = `card-${r.id}`;
+        card.className = `route-card ${selectedId === r.id ? 'highlighted' : ''}`;
+        card.innerHTML = `
+          <div class="route-top" onclick="focusRoute(${r.id})">
+            <div>
+              <div class="route-name"><span class="route-num">${r.id}</span>${r.name}</div>
+              <div class="route-sub">${r.style}</div>
+            </div>
+            <div class="grade-badge ${getGradeClass(r.level)}">${r.grade}</div>
+          </div>
+          <div class="route-desc">${r.desc}</div>
+          <div class="route-meta">
+            <span class="meta-tag">Высота: ${r.height}</span>
+            <span class="meta-tag">${r.draws}</span>
+          </div>
+          <div class="route-actions">
+            <button class="btn-status ${status === 'os' ? 'done-os' : ''}" onclick="toggleStatus(${r.id}, 'os')">Onsight</button>
+            <button class="btn-status ${status === 'rp' ? 'done-rp' : ''}" onclick="toggleStatus(${r.id}, 'rp')">Redpoint</button>
+            <button class="btn-status ${status === 'proj' ? 'done-proj' : ''}" onclick="toggleStatus(${r.id}, 'proj')">Проект</button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<p style="color: var(--muted); text-align: center; padding: 24px 0;">Маршруты по такому фильтру не найдены</p>';
+      }
+    }
+
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      searchQuery = e.target.value.trim().toLowerCase();
+      renderRoutes();
+    });
+
+    document.querySelectorAll('.chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        renderRoutes();
+      });
+    });
+
+    function switchTab(tab) {
+      const isRoutes = tab === 'routes';
+      document.getElementById('tabRoutes').classList.toggle('hidden', !isRoutes);
+      document.getElementById('routesControls').classList.toggle('hidden', !isRoutes);
+      document.getElementById('tabInfo').classList.toggle('hidden', isRoutes);
+      document.getElementById('navRoutes').classList.toggle('active', isRoutes);
+      document.getElementById('navInfo').classList.toggle('active', !isRoutes);
+    }
+
+    updateProgress();
+    renderRoutes();
+  </script>
 </body>
 </html>
