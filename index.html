@@ -19,6 +19,7 @@
       --yellow: #eab308;
       --orange: #f97316;
       --red: #ef4444;
+      --red-dim: rgba(239, 68, 68, 0.22);
       --radius: 14px;
     }
 
@@ -38,15 +39,17 @@
       overflow-x: hidden;
     }
 
+    /* Главный экран Adventure Club KZ — уезжает слайдом справа налево */
     .splash-screen {
       position: fixed;
       inset: 0;
       z-index: 100;
-      background: radial-gradient(circle at 50% 22%, #1d2533 0%, #10141b 58%, #090b0e 100%);
+      background: radial-gradient(circle at 50% 18%, #1d2533 0%, #10141b 58%, #090b0e 100%);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 28px 20px 26px;
+      padding: 18px 16px 20px;
+      overflow-y: auto;
       transform: translate3d(0, 0, 0);
       opacity: 1;
       transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease;
@@ -64,7 +67,7 @@
     }
 
     .splash-bg-mountain {
-      position: absolute;
+      position: fixed;
       inset: 0;
       width: 100%;
       height: 100%;
@@ -80,80 +83,351 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
-      margin-top: auto;
-      margin-bottom: auto;
-      gap: 16px;
+      gap: 12px;
+    }
+
+    .splash-top-row {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
     }
 
     .emblem-circle {
-      width: 176px;
-      height: 176px;
+      width: 72px;
+      height: 72px;
       border-radius: 50%;
       background: linear-gradient(165deg, #252d3a 0%, #11151c 100%);
       border: 2px solid rgba(255, 255, 255, 0.18);
-      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.65);
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.55);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 14px;
-      position: relative;
-      overflow: hidden;
+      padding: 6px;
+      flex-shrink: 0;
     }
 
     .emblem-peak-svg {
-      width: 82px;
-      height: 54px;
-      margin-bottom: 4px;
+      width: 34px;
+      height: 22px;
+      margin-bottom: 1px;
     }
 
     .emblem-brand {
-      font-size: 16px;
+      font-size: 7px;
       font-weight: 900;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.1em;
       color: #f9fafb;
-      line-height: 1.1;
+      line-height: 1.05;
     }
 
     .emblem-sub {
-      font-size: 10px;
+      font-size: 6px;
       font-weight: 700;
-      letter-spacing: 0.24em;
+      letter-spacing: 0.18em;
       color: #d1d5db;
-      margin-top: 3px;
+      margin-top: 1px;
+    }
+
+    .splash-heading-block {
+      text-align: left;
+      flex: 1;
+      min-width: 0;
     }
 
     .splash-title {
-      font-size: 22px;
+      font-size: 18px;
       font-weight: 800;
       letter-spacing: -0.02em;
+      line-height: 1.2;
     }
 
     .splash-desc {
-      font-size: 13px;
+      font-size: 12px;
       color: var(--muted);
-      max-width: 310px;
+      margin-top: 2px;
+    }
+
+    /* Календарь на главном экране */
+    .calendar-card {
+      width: 100%;
+      background: rgba(20, 24, 31, 0.92);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px;
+      backdrop-filter: blur(10px);
+      text-align: left;
+    }
+
+    .cal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .cal-month-title {
+      font-size: 15px;
+      font-weight: 800;
+      text-transform: capitalize;
+      color: var(--text);
+    }
+
+    .cal-nav-group {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .cal-icon-btn {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cal-today-btn {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 0 8px;
+      height: 28px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .admin-toggle-btn {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .admin-toggle-btn.active {
+      background: rgba(239, 68, 68, 0.18);
+      border-color: var(--red);
+      color: #fca5a5;
+    }
+
+    .cal-weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      margin-bottom: 4px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+
+    .cal-day {
+      min-height: 44px;
+      border-radius: 9px;
+      background: rgba(28, 34, 43, 0.72);
+      border: 1px solid rgba(40, 48, 61, 0.75);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      cursor: pointer;
+      padding: 3px 2px;
+      transition: transform 0.15s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .cal-day:active {
+      transform: scale(0.95);
+    }
+
+    .cal-day.empty {
+      background: transparent;
+      border-color: transparent;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .cal-day.is-today {
+      border-color: var(--accent);
+    }
+
+    .cal-day.event-day {
+      background: var(--red-dim);
+      border: 1.5px solid var(--red);
+      box-shadow: 0 0 12px rgba(239, 68, 68, 0.28);
+    }
+
+    .cal-day-num {
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+
+    .cal-day.event-day .cal-day-num {
+      color: #ffffff;
+    }
+
+    .cal-day-tag {
+      font-size: 8px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      padding: 1px 4px;
+      border-radius: 5px;
+      background: var(--red);
+      color: #ffffff;
+      max-width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .cal-legend-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-top: 9px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .red-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--red);
+      display: inline-block;
+      margin-right: 5px;
+      box-shadow: 0 0 6px var(--red);
+    }
+
+    .admin-panel {
+      margin-top: 10px;
+      background: var(--surface-2);
+      border: 1px solid rgba(239, 68, 68, 0.45);
+      border-radius: 11px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .admin-panel-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: #fca5a5;
+    }
+
+    .type-choice-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+
+    .type-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 8px 6px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .type-btn.selected {
+      background: var(--red-dim);
+      border-color: var(--red);
+      color: #ffffff;
+    }
+
+    .admin-note-input {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 7px 9px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 12px;
+      outline: none;
+    }
+
+    .admin-actions-row {
+      display: flex;
+      gap: 6px;
+    }
+
+    .admin-save-btn {
+      flex: 1;
+      background: var(--red);
+      border: none;
+      color: #ffffff;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .admin-clear-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
     }
 
     .enter-btn {
-      margin-top: 6px;
+      width: 100%;
       background: var(--text);
       color: var(--bg);
       border: none;
       border-radius: 12px;
-      padding: 13px 24px;
+      padding: 12px 20px;
       font-size: 14px;
       font-weight: 800;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
       box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
       transition: transform 0.2s ease, opacity 0.2s ease;
     }
 
     .enter-btn:active {
-      transform: scale(0.97);
+      transform: scale(0.98);
     }
 
     .splash-footer {
@@ -161,9 +435,10 @@
       z-index: 2;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
       border-top: 1px solid rgba(255, 255, 255, 0.1);
-      padding-top: 14px;
+      padding-top: 12px;
+      margin-top: 10px;
     }
 
     .splash-footer-label {
@@ -188,10 +463,10 @@
       justify-content: center;
       gap: 2px;
       text-decoration: none;
-      background: rgba(20, 24, 31, 0.9);
+      background: rgba(20, 24, 31, 0.92);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 10px 10px;
+      padding: 9px 10px;
       color: var(--text);
       transition: border-color 0.2s ease, background 0.2s ease;
     }
@@ -857,6 +1132,7 @@
 </head>
 <body>
 
+  <!-- ГЛАВНЫЙ ЭКРАН ADVENTURE CLUB KZ (уезжает слайдом справа налево) -->
   <section class="splash-screen" id="splashScreen">
     <svg class="splash-bg-mountain" viewBox="0 0 400 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <defs>
@@ -878,17 +1154,68 @@
     </svg>
 
     <div class="splash-content">
-      <div class="emblem-circle">
-        <svg class="emblem-peak-svg" viewBox="0 0 100 66" fill="none">
-          <polygon points="50,6 14,58 86,58" fill="#f9fafb" />
-          <path d="M54,18 C46,27 59,34 45,44 C38,49 44,54 41,58 L57,58 C59,52 50,46 57,38 C63,31 53,24 54,18 Z" fill="#14181f" />
-        </svg>
-        <div class="emblem-brand">ADVENTURE</div>
-        <div class="emblem-sub">CLUB KZ</div>
+      <div class="splash-top-row">
+        <div class="emblem-circle">
+          <svg class="emblem-peak-svg" viewBox="0 0 100 66" fill="none">
+            <polygon points="50,6 14,58 86,58" fill="#f9fafb" />
+            <path d="M54,18 C46,27 59,34 45,44 C38,49 44,54 41,58 L57,58 C59,52 50,46 57,38 C63,31 53,24 54,18 Z" fill="#14181f" />
+          </svg>
+          <div class="emblem-brand">ADVENTURE</div>
+          <div class="emblem-sub">CLUB KZ</div>
+        </div>
+        <div class="splash-heading-block">
+          <div class="splash-title">ADVENTURE CLUB KZ</div>
+          <p class="splash-desc">Красные даты — запись на восхождение и скалолазание</p>
+        </div>
       </div>
 
-      <div class="splash-title">Скалолазание и горы Алматы</div>
-      <p class="splash-desc">Топо-схемы Лесничества и Туюк-Су, снаряжение и личный журнал пролазов.</p>
+      <!-- КАЛЕНДАРЬ РАСПИСАНИЯ (автосмена месяцев + управление админа + запись в WhatsApp) -->
+      <div class="calendar-card">
+        <div class="cal-header">
+          <span class="cal-month-title" id="calMonthTitle">Месяц</span>
+          <div class="cal-nav-group">
+            <button class="cal-icon-btn" onclick="changeCalendarMonth(-1)" title="Предыдущий месяц">‹</button>
+            <button class="cal-today-btn" onclick="resetCalendarToToday()">Сегодня</button>
+            <button class="cal-icon-btn" onclick="changeCalendarMonth(1)" title="Следующий месяц">›</button>
+            <button class="admin-toggle-btn" id="adminToggleBtn" onclick="toggleAdminMode()">Админ</button>
+          </div>
+        </div>
+
+        <div class="cal-weekdays">
+          <span>Пн</span>
+          <span>Вт</span>
+          <span>Ср</span>
+          <span>Чт</span>
+          <span>Пт</span>
+          <span>Сб</span>
+          <span>Вс</span>
+        </div>
+
+        <div class="cal-grid" id="calendarGrid"></div>
+
+        <div class="cal-legend-bar">
+          <span><i class="red-dot"></i>Нажми на красную дату для записи в WhatsApp</span>
+          <span id="adminStatusHint">Только просмотр</span>
+        </div>
+
+        <div class="admin-panel hidden" id="adminPanel">
+          <div class="admin-panel-title" id="adminSelectedDateLabel">Выберите день в календаре</div>
+          <div class="type-choice-row">
+            <button class="type-btn selected" id="typeAscentBtn" onclick="selectActivityType('Восхождение')">Восхождение</button>
+            <button class="type-btn" id="typeClimbingBtn" onclick="selectActivityType('Скалолазание')">Скалолазание</button>
+          </div>
+          <input
+            type="text"
+            class="admin-note-input"
+            id="adminEventNote"
+            placeholder="Опционально: пик / скала, например «Пик Фурманова» или «Лесничество»"
+          />
+          <div class="admin-actions-row">
+            <button class="admin-save-btn" onclick="saveAdminDate()">Отметить красным</button>
+            <button class="admin-clear-btn" onclick="clearAdminDate()">Убрать дату</button>
+          </div>
+        </div>
+      </div>
 
       <button class="enter-btn" onclick="dismissSplash()">
         <span>Открыть топо</span>
@@ -913,7 +1240,7 @@
 
   <header>
     <div class="crag-switcher">
-      <button class="home-pill-btn" onclick="openSplash()">← Клуб</button>
+      <button class="home-pill-btn" onclick="openSplash()">← Главная</button>
       <button class="crag-tab active" id="crag-lesnichestvo" onclick="selectCrag('lesnichestvo')">Лесничество</button>
       <button class="crag-tab" id="crag-tuyuksu" onclick="selectCrag('tuyuksu')">Туюк-Су</button>
       <button class="crag-tab soon" id="crag-bao" onclick="selectCrag('bao')">БАО / Бутаковка (скоро)</button>
@@ -929,7 +1256,6 @@
   </header>
 
   <div class="tab-stage">
-    <!-- ВКЛАДКА 1: ОБЗОР -->
     <main id="view-overview" class="tab-panel">
       <div class="topo-card">
         <div class="topo-header">
@@ -949,7 +1275,6 @@
       <div id="overviewDynamicCards" style="display: flex; flex-direction: column; gap: 14px;"></div>
     </main>
 
-    <!-- ВКЛАДКА 2: МАРШРУТЫ -->
     <main id="view-routes" class="tab-panel hidden">
       <div class="section-label" id="routesSectionLabel">Выбери трассу</div>
       <div class="route-pills" id="detailPills"></div>
@@ -972,10 +1297,8 @@
       <div class="card" id="routeDetailCard"></div>
     </main>
 
-    <!-- ВКЛАДКА 3: СНАРЯЖЕНИЕ, ИНСТРУМЕНТЫ И НЮАНСЫ -->
-    <main id="view-gear" class="tab-panel hidden" id="gearDynamicContent"></main>
+    <main id="view-gear" class="tab-panel hidden"></main>
 
-    <!-- ВКЛАДКА 4: ОЦЕНКИ И ЗАМЕТКИ ПО ПРОЙДЕННЫМ МАРШРУТАМ -->
     <main id="view-notes" class="tab-panel hidden">
       <div class="section-label" id="notesSectionLabel">Твой журнал пролазов, оценки и заметки</div>
       <div id="notesList" style="display: flex; flex-direction: column; gap: 12px;"></div>
@@ -998,6 +1321,194 @@
       tg.setBackgroundColor('#0c0e11');
     }
 
+    const WHATSAPP_PHONE = "77054127588";
+    const ADMIN_PIN = "2026";
+    const CALENDAR_STORAGE_KEY = "adventure_club_kz_calendar_v1";
+
+    let isAdminUnlocked = false;
+    let selectedAdminDateKey = null;
+    let selectedActivityType = "Восхождение";
+
+    const nowDate = new Date();
+    let calYear = nowDate.getFullYear();
+    let calMonth = nowDate.getMonth();
+
+    function formatDateKey(year, month, day) {
+      const m = String(month + 1).padStart(2, '0');
+      const d = String(day).padStart(2, '0');
+      return `${year}-${m}-${d}`;
+    }
+
+    function formatRuDate(dateKey) {
+      const [y, m, d] = dateKey.split('-');
+      return `${d}.${m}.${y}`;
+    }
+
+    function loadSchedule() {
+      try {
+        return JSON.parse(localStorage.getItem(CALENDAR_STORAGE_KEY) || '{}');
+      } catch {
+        return {};
+      }
+    }
+
+    function saveSchedule(data) {
+      localStorage.setItem(CALENDAR_STORAGE_KEY, JSON.stringify(data));
+    }
+
+    function changeCalendarMonth(delta) {
+      const target = new Date(calYear, calMonth + delta, 1);
+      calYear = target.getFullYear();
+      calMonth = target.getMonth();
+      renderCalendar();
+    }
+
+    function resetCalendarToToday() {
+      const now = new Date();
+      calYear = now.getFullYear();
+      calMonth = now.getMonth();
+      renderCalendar();
+    }
+
+    function toggleAdminMode() {
+      if (isAdminUnlocked) {
+        isAdminUnlocked = false;
+        document.getElementById('adminToggleBtn').classList.remove('active');
+        document.getElementById('adminPanel').classList.add('hidden');
+        document.getElementById('adminStatusHint').textContent = 'Только просмотр';
+        return;
+      }
+
+      const pin = prompt('Введите PIN-код администратора:');
+      if (pin === null) return;
+      if (pin.trim() === ADMIN_PIN) {
+        isAdminUnlocked = true;
+        document.getElementById('adminToggleBtn').classList.add('active');
+        document.getElementById('adminPanel').classList.remove('hidden');
+        document.getElementById('adminStatusHint').textContent = 'Режим админа активен';
+        const today = new Date();
+        if (!selectedAdminDateKey) {
+          selectedAdminDateKey = formatDateKey(today.getFullYear(), today.getMonth(), today.getDate());
+        }
+        syncAdminFormWithDate(selectedAdminDateKey);
+      } else {
+        alert('Неверный PIN-код');
+      }
+    }
+
+    function selectActivityType(type) {
+      selectedActivityType = type;
+      document.getElementById('typeAscentBtn').classList.toggle('selected', type === 'Восхождение');
+      document.getElementById('typeClimbingBtn').classList.toggle('selected', type === 'Скалолазание');
+    }
+
+    function syncAdminFormWithDate(dateKey) {
+      selectedAdminDateKey = dateKey;
+      const schedule = loadSchedule();
+      const existing = schedule[dateKey];
+      document.getElementById('adminSelectedDateLabel').textContent = `Дата: ${formatRuDate(dateKey)}`;
+      if (existing) {
+        selectActivityType(existing.type || 'Восхождение');
+        document.getElementById('adminEventNote').value = existing.note || '';
+      } else {
+        document.getElementById('adminEventNote').value = '';
+      }
+    }
+
+    function saveAdminDate() {
+      if (!isAdminUnlocked || !selectedAdminDateKey) return;
+      const schedule = loadSchedule();
+      const note = document.getElementById('adminEventNote').value.trim();
+      schedule[selectedAdminDateKey] = {
+        type: selectedActivityType,
+        note
+      };
+      saveSchedule(schedule);
+      renderCalendar();
+    }
+
+    function clearAdminDate() {
+      if (!isAdminUnlocked || !selectedAdminDateKey) return;
+      const schedule = loadSchedule();
+      delete schedule[selectedAdminDateKey];
+      saveSchedule(schedule);
+      document.getElementById('adminEventNote').value = '';
+      renderCalendar();
+    }
+
+    function openWhatsAppForDate(dateKey, eventObj) {
+      const formattedDate = formatRuDate(dateKey);
+      const activityText = eventObj.type === 'Скалолазание'
+        ? 'скалолазание'
+        : 'восхождение';
+      const extraNote = eventObj.note ? ` (${eventObj.note})` : '';
+      const message = `Здравствуйте, пишу из приложения Telegram. Хотелось бы пойти с вами на ${activityText}${extraNote} в эту дату — ${formattedDate}.`;
+      const url = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(message)}`;
+      if (tg && tg.openLink) {
+        tg.openLink(url);
+      } else {
+        window.open(url, '_blank', 'noopener,noreferrer');
+      }
+    }
+
+    function handleCalendarDayClick(dateKey) {
+      const schedule = loadSchedule();
+      if (isAdminUnlocked) {
+        syncAdminFormWithDate(dateKey);
+        return;
+      }
+      const ev = schedule[dateKey];
+      if (ev) {
+        openWhatsAppForDate(dateKey, ev);
+      }
+    }
+
+    function renderCalendar() {
+      const monthNames = [
+        'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
+        'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+      ];
+      document.getElementById('calMonthTitle').textContent = `${monthNames[calMonth]} ${calYear}`;
+
+      const grid = document.getElementById('calendarGrid');
+      grid.innerHTML = '';
+
+      const firstDay = new Date(calYear, calMonth, 1);
+      const startOffset = (firstDay.getDay() + 6) % 7; // Пн = 0
+      const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+
+      const today = new Date();
+      const todayKey = formatDateKey(today.getFullYear(), today.getMonth(), today.getDate());
+      const schedule = loadSchedule();
+
+      for (let i = 0; i < startOffset; i++) {
+        const emptyCell = document.createElement('div');
+        emptyCell.className = 'cal-day empty';
+        grid.appendChild(emptyCell);
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dateKey = formatDateKey(calYear, calMonth, day);
+        const ev = schedule[dateKey];
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'cal-day';
+        if (dateKey === todayKey) btn.classList.add('is-today');
+        if (ev) btn.classList.add('event-day');
+
+        const shortTag = ev
+          ? (ev.type === 'Скалолазание' ? 'Скалы' : 'Горы')
+          : '';
+
+        btn.innerHTML = `
+          <span class="cal-day-num">${day}</span>
+          ${ev ? `<span class="cal-day-tag">${shortTag}</span>` : ''}
+        `;
+        btn.addEventListener('click', () => handleCalendarDayClick(dateKey));
+        grid.appendChild(btn);
+      }
+    }
+
     function dismissSplash() {
       const splash = document.getElementById('splashScreen');
       splash.classList.remove('dismissed');
@@ -1014,20 +1525,23 @@
       splash.classList.remove('dismissed');
       void splash.offsetWidth;
       splash.classList.remove('slide-out-left');
+      renderCalendar();
     }
 
     (function setupSplashSwipe() {
       const splash = document.getElementById('splashScreen');
       let startX = 0;
       splash.addEventListener('touchstart', (e) => {
+        if (e.target && e.target.closest('.calendar-card')) return;
         if (e.touches && e.touches.length === 1) {
           startX = e.touches[0].clientX;
         }
       }, { passive: true });
       splash.addEventListener('touchend', (e) => {
+        if (e.target && e.target.closest('.calendar-card')) return;
         if (!e.changedTouches || !e.changedTouches.length) return;
         const dx = e.changedTouches[0].clientX - startX;
-        if (dx < -45) {
+        if (dx < -55) {
           dismissSplash();
         }
       }, { passive: true });
@@ -1275,13 +1789,13 @@
         `,
         historyTitle: "Учебно-тренировочные линии на «Треугольнике»",
         historyItems: [
-          "<strong>Высокогорный полигон у альплагеря:</strong> Скала «Треугольник» расположена в районе альплагеря Туюк-Су на высоте около 2450 м и используется для отработки многопитчевого лазания, работы с верёвками и станции[span_7](start_span)[span_7](end_span).",
-          "<strong>Цветовая маркировка анкеров и точек:</strong> На массиве проложено 5 логичных линий с разной цветовой маркировкой — зелёной (№1), голубой (№2 и №5), ярко-оранжевой (№3) и чёрной (№4)[span_8](start_span)[span_8](end_span).",
-          "<strong>Тактика верёвок и спуска:</strong> На маршрутах №1–№3 критично учитывать работу двумя верёвками, тогда как №4 можно пройти с одной верёвкой со спуском пешком[span_9](start_span)[span_9](end_span)."
+          "<strong>Высокогорный полигон у альплагеря:</strong> Скала «Треугольник» расположена в районе альплагеря Туюк-Су на высоте около 2450 м и используется для отработки многопитчевого лазания, работы с верёвками и станции[span_3](start_span)[span_3](end_span).",
+          "<strong>Цветовая маркировка анкеров и точек:</strong> На массиве проложено 5 логичных линий с разной цветовой маркировкой — зелёной (№1), голубой (№2 и №5), ярко-оранжевой (№3) и чёрной (№4)[span_4](start_span)[span_4](end_span).",
+          "<strong>Тактика верёвок и спуска:</strong> На маршрутах №1–№3 критично учитывать работу двумя верёвками, тогда как №4 можно пройти с одной верёвкой со спуском пешком[span_5](start_span)[span_5](end_span)."
         ],
         accessTitle: "Район Туюк-Су (выше Медео, ~2450 м)",
         accessItems: [
-          "<strong>Подход к массиву:</strong> Путь лежит через верхнюю часть ущелья Малого Алматинского выше Медео и Шымбулака в сторону альплагеря Туюк-Су[span_10](start_span)[span_10](end_span).",
+          "<strong>Подход к массиву:</strong> Путь лежит через верхнюю часть ущелья Малого Алматинского выше Медео и Шымбулака в сторону альплагеря Туюк-Су[span_6](start_span)[span_6](end_span).",
           "<strong>Высота и погода:</strong> На ~2450 м даже летом воздух прохладнее, чем в городе, а облачность и ветер меняются быстро — берите ветрозащиту, тёплый слой и воду с запасом.",
           "<strong>Контроль верёвок:</strong> Заранее проверяйте длину верёвок, станции и цветовую маркировку точек на рельефе, чтобы не перепутать соседние линии."
         ],
@@ -1298,11 +1812,11 @@
         ],
         tipsTitle: "Важные нюансы маршрутов Туюк-Су",
         tipsItems: [
-          "<strong>№1 (5b, 5c, 5b — зелёные анкера):</strong> Простой маршрут, который легко перепутать с соседним №2[span_11](start_span)[span_11](end_span). До первой станции около 50 м, использование двух верёвок обязательно[span_12](start_span)[span_12](end_span).",
-          "<strong>№2 (5c, 6a, 5c — голубые анкера):</strong> Чуть сложнее первого, есть интересный участок на 3-й верёвке[span_13](start_span)[span_13](end_span). Также нужны 2 верёвки, так как анкера сильно разнесены[span_14](start_span)[span_14](end_span).",
-          "<strong>№3 (6a, 6a — ярко-оранжевые анкера):</strong> Ещё немного сложнее[span_15](start_span)[span_15](end_span). Без двух верёвок до первой станции не вылезти; маркировка ярко-оранжевая (пока не выцветет)[span_16](start_span)[span_16](end_span).",
-          "<strong>№4 (6a+, 6b — чёрные точки страховки):</strong> Самый сложный и логичный маршрут[span_17](start_span)[span_17](end_span). Иногда имеет общие точки и общие станции с маршрутом №3[span_18](start_span)[span_18](end_span). Можно лезть с одной верёвкой, но спускаться придётся пешком[span_19](start_span)[span_19](end_span).",
-          "<strong>№5 (6a, 5b — голубые анкера на 2-й верёвке):</strong> Логичный (если не считать начала) несложный маршрут[span_20](start_span)[span_20](end_span). Анкера на второй верёвке отмечены голубой краской[span_21](start_span)[span_21](end_span)."
+          "<strong>№1 (5b, 5c, 5b — зелёные анкера):</strong> Простой маршрут, который легко перепутать с соседним №2[span_7](start_span)[span_7](end_span). До первой станции около 50 м, использование двух верёвок обязательно[span_8](start_span)[span_8](end_span).",
+          "<strong>№2 (5c, 6a, 5c — голубые анкера):</strong> Чуть сложнее первого, есть интересный участок на 3-й верёвке[span_9](start_span)[span_9](end_span). Также нужны 2 верёвки, так как анкера сильно разнесены[span_10](start_span)[span_10](end_span).",
+          "<strong>№3 (6a, 6a — ярко-оранжевые анкера):</strong> Ещё немного сложнее[span_11](start_span)[span_11](end_span). Без двух верёвок до первой станции не вылезти; маркировка ярко-оранжевая (пока не выцветет)[span_12](start_span)[span_12](end_span).",
+          "<strong>№4 (6a+, 6b — чёрные точки страховки):</strong> Самый сложный и логичный маршрут[span_13](start_span)[span_13](end_span). Иногда имеет общие точки и общие станции с маршрутом №3[span_14](start_span)[span_14](end_span). Можно лезть с одной верёвкой, но спускаться придётся пешком[span_15](start_span)[span_15](end_span).",
+          "<strong>№5 (6a, 5b — голубые анкера на 2-й верёвке):</strong> Логичный (если не считать начала) несложный маршрут[span_16](start_span)[span_16](end_span). Анкера на второй верёвке отмечены голубой краской[span_17](start_span)[span_17](end_span)."
         ],
         routes: [
           {
@@ -1470,7 +1984,6 @@
           }));
         });
       } else {
-        // Рельефные линии и пояса для массива «Треугольник» в Туюк-Су
         const tuyukLedges = [
           [55, 142, 325, 134],
           [92, 102, 294, 96],
@@ -1916,6 +2429,7 @@
       });
     }
 
+    renderCalendar();
     updateProgress();
     renderCragStaticSections();
     renderOverviewSvg();
