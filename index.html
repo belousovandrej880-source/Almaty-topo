@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Скалы Алматы — Топо Гайдбук</title>
+  <title>ADVENTURE CLUB KZ — Скалы Алматы</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
@@ -38,6 +38,182 @@
       overflow-x: hidden;
     }
 
+    /* Главный экран Adventure Club KZ — уезжает слайдом справа налево */
+    .splash-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: radial-gradient(circle at 50% 22%, #1d2533 0%, #10141b 58%, #090b0e 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 28px 20px 26px;
+      transform: translate3d(0, 0, 0);
+      opacity: 1;
+      transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease;
+      will-change: transform, opacity;
+    }
+
+    .splash-screen.slide-out-left {
+      transform: translate3d(-100%, 0, 0);
+      opacity: 0.15;
+      pointer-events: none;
+    }
+
+    .splash-screen.dismissed {
+      display: none;
+    }
+
+    /* Фоновая гора */
+    .splash-bg-mountain {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.22;
+      pointer-events: none;
+    }
+
+    .splash-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-top: auto;
+      margin-bottom: auto;
+      gap: 16px;
+    }
+
+    .emblem-circle {
+      width: 176px;
+      height: 176px;
+      border-radius: 50%;
+      background: linear-gradient(165deg, #252d3a 0%, #11151c 100%);
+      border: 2px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.65);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .emblem-peak-svg {
+      width: 82px;
+      height: 54px;
+      margin-bottom: 4px;
+    }
+
+    .emblem-brand {
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      color: #f9fafb;
+      line-height: 1.1;
+    }
+
+    .emblem-sub {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.24em;
+      color: #d1d5db;
+      margin-top: 3px;
+    }
+
+    .splash-title {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .splash-desc {
+      font-size: 13px;
+      color: var(--muted);
+      max-width: 310px;
+    }
+
+    .enter-btn {
+      margin-top: 6px;
+      background: var(--text);
+      color: var(--bg);
+      border: none;
+      border-radius: 12px;
+      padding: 13px 24px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .enter-btn:active {
+      transform: scale(0.97);
+    }
+
+    .splash-footer {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 14px;
+    }
+
+    .splash-footer-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .contact-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .contact-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      text-decoration: none;
+      background: rgba(20, 24, 31, 0.9);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 10px;
+      color: var(--text);
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .contact-btn:hover {
+      border-color: var(--accent);
+      background: var(--surface-2);
+    }
+
+    .contact-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .contact-sub {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
     header {
       position: sticky;
       top: 0;
@@ -50,6 +226,7 @@
 
     .crag-switcher {
       display: flex;
+      align-items: center;
       gap: 6px;
       overflow-x: auto;
       scrollbar-width: none;
@@ -58,6 +235,18 @@
 
     .crag-switcher::-webkit-scrollbar {
       display: none;
+    }
+
+    .home-pill-btn {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      padding: 6px 11px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: pointer;
     }
 
     .crag-tab {
@@ -112,7 +301,6 @@
       white-space: nowrap;
     }
 
-    /* Плавные слайды между вкладками */
     .tab-stage {
       position: relative;
       width: 100%;
@@ -156,7 +344,6 @@
       }
     }
 
-    /* Topo SVG */
     .topo-card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -355,7 +542,6 @@
       display: inline-block;
     }
 
-    /* Section Headings & Cards */
     .section-label {
       font-size: 12px;
       font-weight: 700;
@@ -673,8 +859,67 @@
 </head>
 <body>
 
+  <!-- ГЛАВНЫЙ ЭКРАН ADVENTURE CLUB KZ (убирается слайдом справа налево) -->
+  <section class="splash-screen" id="splashScreen">
+    <!-- Стилизованный горный рельеф на фоне -->
+    <svg class="splash-bg-mountain" viewBox="0 0 400 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#2c3a52" />
+          <stop offset="55%" stop-color="#131923" />
+          <stop offset="100%" stop-color="#090c10" />
+        </linearGradient>
+        <linearGradient id="snowGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#e5e7eb" />
+          <stop offset="100%" stop-color="#6b7280" />
+        </linearGradient>
+      </defs>
+      <rect width="400" height="800" fill="url(#skyGrad)" />
+      <!-- Дальний хребет -->
+      <polygon points="0,420 95,290 175,365 275,235 400,375 400,800 0,800" fill="#18202c" opacity="0.7" />
+      <!-- Главная снежная вершина -->
+      <polygon points="20,540 165,245 215,310 278,195 385,480 400,800 0,800" fill="#11161f" />
+      <polygon points="278,195 252,255 274,244 290,262 316,285" fill="url(#snowGrad)" opacity="0.65" />
+      <polygon points="165,245 144,295 166,286 184,302" fill="url(#snowGrad)" opacity="0.5" />
+    </svg>
+
+    <div class="splash-content">
+      <div class="emblem-circle">
+        <svg class="emblem-peak-svg" viewBox="0 0 100 66" fill="none">
+          <polygon points="50,6 14,58 86,58" fill="#f9fafb" />
+          <path d="M54,18 C46,27 59,34 45,44 C38,49 44,54 41,58 L57,58 C59,52 50,46 57,38 C63,31 53,24 54,18 Z" fill="#14181f" />
+        </svg>
+        <div class="emblem-brand">ADVENTURE</div>
+        <div class="emblem-sub">CLUB KZ</div>
+      </div>
+
+      <div class="splash-title">Скалолазание и горы Алматы</div>
+      <p class="splash-desc">Топо-схемы маршрутов, расклад по снаряжению и личный журнал пролазов.</p>
+
+      <button class="enter-btn" onclick="dismissSplash()">
+        <span>Открыть топо</span>
+        <span>→</span>
+      </button>
+    </div>
+
+    <div class="splash-footer">
+      <div class="splash-footer-label">Контакты и запись</div>
+      <div class="contact-row">
+        <a class="contact-btn" href="https://www.instagram.com/adventure_club_kz" target="_blank" rel="noopener noreferrer">
+          <span class="contact-title">Instagram</span>
+          <span class="contact-sub">@adventure_club_kz</span>
+        </a>
+        <a class="contact-btn" href="https://wa.me/77054127588" target="_blank" rel="noopener noreferrer">
+          <span class="contact-title">WhatsApp</span>
+          <span class="contact-sub">+7 705 412 7588</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <header>
     <div class="crag-switcher">
+      <button class="home-pill-btn" onclick="openSplash()">← Клуб</button>
       <button class="crag-tab active" onclick="selectCrag('lesnichestvo')">Лесничество</button>
       <button class="crag-tab soon" onclick="selectCrag('tuyuksu')">Туюк-Су (скоро)</button>
       <button class="crag-tab soon" onclick="selectCrag('bao')">БАО / Бутаковка (скоро)</button>
@@ -829,6 +1074,42 @@
       tg.setHeaderColor('#0c0e11');
       tg.setBackgroundColor('#0c0e11');
     }
+
+    function dismissSplash() {
+      const splash = document.getElementById('splashScreen');
+      splash.classList.remove('dismissed');
+      splash.classList.add('slide-out-left');
+      setTimeout(() => {
+        if (splash.classList.contains('slide-out-left')) {
+          splash.classList.add('dismissed');
+        }
+      }, 660);
+    }
+
+    function openSplash() {
+      const splash = document.getElementById('splashScreen');
+      splash.classList.remove('dismissed');
+      void splash.offsetWidth;
+      splash.classList.remove('slide-out-left');
+    }
+
+    // Свайп влево на главном экране тоже убирает его слайдом справа налево
+    (function setupSplashSwipe() {
+      const splash = document.getElementById('splashScreen');
+      let startX = 0;
+      splash.addEventListener('touchstart', (e) => {
+        if (e.touches && e.touches.length === 1) {
+          startX = e.touches[0].clientX;
+        }
+      }, { passive: true });
+      splash.addEventListener('touchend', (e) => {
+        if (!e.changedTouches || !e.changedTouches.length) return;
+        const dx = e.changedTouches[0].clientX - startX;
+        if (dx < -45) {
+          dismissSplash();
+        }
+      }, { passive: true });
+    })();
 
     const LESNICHESTVO_ROUTES = [
       {
@@ -1431,4 +1712,3 @@
   </script>
 </body>
 </html>
-
