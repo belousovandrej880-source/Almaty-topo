@@ -125,7 +125,7 @@
     }
 
     .topo-header {
-      padding: 10px 14px;
+      padding: 10px 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -134,32 +134,42 @@
       font-size: 12px;
     }
 
-    .topo-title {
-      color: var(--muted);
-      font-weight: 600;
+    .topo-info-col {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
     }
 
-    .topo-controls-right {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    .topo-title {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .topo-active {
       color: var(--accent);
+      font-size: 12px;
       font-weight: 700;
-      text-align: right;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .reset-zoom-btn {
       background: var(--surface-2);
-      border: 1px solid var(--border);
-      color: var(--text);
+      border: 1px solid var(--accent);
+      color: var(--accent);
       font-size: 11px;
-      font-weight: 600;
-      padding: 4px 8px;
-      border-radius: 7px;
+      font-weight: 700;
+      padding: 6px 10px;
+      border-radius: 8px;
       cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .topo-svg-wrap {
@@ -177,8 +187,9 @@
     }
 
     #zoomGroup {
-      transform-origin: center center;
-      transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+      transform-box: view-box;
+      transform-origin: 0 0;
+      transition: transform 0.65s cubic-bezier(0.25, 0.85, 0.35, 1);
     }
 
     .rock-mass {
@@ -215,9 +226,9 @@
     }
 
     .route-path.selected {
-      stroke-width: 3.4;
+      stroke-width: 3.1;
       opacity: 1;
-      filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.35));
+      filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.3));
     }
 
     .bolt-dot {
@@ -251,12 +262,12 @@
     .callout-pill {
       fill: rgba(12, 14, 17, 0.92);
       stroke: #38bdf8;
-      stroke-width: 0.9;
-      rx: 3;
+      stroke-width: 0.7;
+      rx: 2.5;
     }
 
     .callout-label {
-      font-size: 6.2px;
+      font-size: 5.2px;
       font-weight: 700;
       fill: #f3f4f6;
       text-anchor: middle;
@@ -264,8 +275,8 @@
     }
 
     .callout-sub {
-      font-size: 5.2px;
-      font-weight: 600;
+      font-size: 4.4px;
+      font-weight: 700;
       fill: #38bdf8;
       text-anchor: middle;
       dominant-baseline: central;
@@ -599,8 +610,10 @@
   <main id="view-overview">
     <div class="topo-card">
       <div class="topo-header">
-        <span class="topo-title">Массив Лесничества • 1–10</span>
-        <span class="topo-active" id="overviewSelectedLabel">Нажми на линию для перехода</span>
+        <div class="topo-info-col">
+          <span class="topo-title">Массив Лесничества • 1–10</span>
+          <span class="topo-active" id="overviewSelectedLabel">Нажми на линию для перехода</span>
+        </div>
       </div>
       <div class="topo-svg-wrap">
         <svg class="topo-scheme" viewBox="0 0 380 215">
@@ -643,11 +656,11 @@
 
     <div class="topo-card">
       <div class="topo-header">
-        <span class="topo-title" id="detailZoomTitle">Плавный зум на маршрут</span>
-        <div class="topo-controls-right">
+        <div class="topo-info-col">
+          <span class="topo-title" id="detailZoomTitle">Плавный зум на трассу</span>
           <span class="topo-active" id="detailZoomBadge">#1 Разминочная • Fr4</span>
-          <button class="reset-zoom-btn" onclick="resetZoom()">Вся скала</button>
         </div>
+        <button class="reset-zoom-btn" onclick="resetZoom()">Вся скала</button>
       </div>
       <div class="topo-svg-wrap">
         <svg class="topo-scheme" id="detailSvg" viewBox="0 0 380 215">
@@ -745,8 +758,7 @@
         anchor: [78, 62],
         start: [32, 204],
         keyPoint: [56, 126],
-        keyLabel: "Пологая плита, ручки",
-        zoom: { scale: 2.35, tx: 105, ty: 28 }
+        keyLabel: "Пологая плита, ручки"
       },
       {
         id: 2,
@@ -764,8 +776,7 @@
         anchor: [98, 52],
         start: [60, 204],
         keyPoint: [74, 104],
-        keyLabel: "Щель под #0.5",
-        zoom: { scale: 2.35, tx: 90, ty: 32 }
+        keyLabel: "Щель под #0.5"
       },
       {
         id: 3,
@@ -783,8 +794,7 @@
         anchor: [118, 40],
         start: [88, 204],
         keyPoint: [112, 78],
-        keyLabel: "2-й угол слева от карниза",
-        zoom: { scale: 2.35, tx: 65, ty: 36 }
+        keyLabel: "2-й угол слева от карниза"
       },
       {
         id: 4,
@@ -802,8 +812,7 @@
         anchor: [144, 41],
         start: [116, 204],
         keyPoint: [138, 72],
-        keyLabel: "Ручка шевелится (держит)",
-        zoom: { scale: 2.35, tx: 35, ty: 36 }
+        keyLabel: "Ручка шевелится (держит)"
       },
       {
         id: 5,
@@ -821,8 +830,7 @@
         anchor: [170, 32],
         start: [144, 204],
         keyPoint: [156, 62],
-        keyLabel: "Карниз / угол справа",
-        zoom: { scale: 2.35, tx: 8, ty: 38 }
+        keyLabel: "Карниз / угол справа"
       },
       {
         id: 6,
@@ -840,8 +848,7 @@
         anchor: [198, 32],
         start: [174, 204],
         keyPoint: [200, 72],
-        keyLabel: "Угол, камалоты #3–4",
-        zoom: { scale: 2.35, tx: -18, ty: 38 }
+        keyLabel: "Угол, камалоты #3–4"
       },
       {
         id: 7,
@@ -859,8 +866,7 @@
         anchor: [262, 42],
         start: [228, 204],
         keyPoint: [266, 84],
-        keyLabel: "#3 с длинной оттяжкой",
-        zoom: { scale: 2.35, tx: -76, ty: 36 }
+        keyLabel: "#3 с длинной оттяжкой"
       },
       {
         id: 8,
@@ -878,8 +884,7 @@
         anchor: [288, 40],
         start: [258, 204],
         keyPoint: [284, 118],
-        keyLabel: "Не уйти в жёлоб",
-        zoom: { scale: 2.35, tx: -104, ty: 36 }
+        keyLabel: "Не уйти в жёлоб"
       },
       {
         id: 9,
@@ -897,8 +902,7 @@
         anchor: [314, 54],
         start: [314, 204],
         keyPoint: [312, 114],
-        keyLabel: "Пологий жёлоб",
-        zoom: { scale: 2.35, tx: -134, ty: 32 }
+        keyLabel: "Пологий жёлоб"
       },
       {
         id: 10,
@@ -916,8 +920,7 @@
         anchor: [334, 108],
         start: [344, 204],
         keyPoint: [336, 134],
-        keyLabel: "Щель, нужен #4",
-        zoom: { scale: 2.45, tx: -156, ty: 10 }
+        keyLabel: "Щель, нужен #4"
       }
     ];
 
@@ -999,30 +1002,30 @@
       });
     }
 
-    function addCallout(parent, x, y, sub, label) {
+    function addCallout(parent, x, y, sub, label, minX = 6, maxX = 374, minY = 10, maxY = 205) {
       const g = createSvgEl('g', { class: 'zoom-callout' });
-      const pillW = Math.max(label.length * 3.4 + 10, 34);
-      const clampX = Math.max(pillW / 2 + 4, Math.min(380 - pillW / 2 - 4, x));
-      const clampY = Math.max(12, Math.min(198, y));
+      const pillW = Math.max(label.length * 2.75 + 8, 28);
+      const clampX = Math.max(minX + pillW / 2, Math.min(maxX - pillW / 2, x));
+      const clampY = Math.max(minY + 6, Math.min(maxY - 6, y));
 
       g.appendChild(createSvgEl('rect', {
         x: clampX - pillW / 2,
-        y: clampY - 7.5,
+        y: clampY - 6.2,
         width: pillW,
-        height: 15,
+        height: 12.4,
         class: 'callout-pill'
       }));
 
       const t1 = createSvgEl('text', {
         x: clampX,
-        y: clampY - 2.6,
+        y: clampY - 2.3,
         class: 'callout-sub'
       });
       t1.textContent = sub;
 
       const t2 = createSvgEl('text', {
         x: clampX,
-        y: clampY + 3.4,
+        y: clampY + 2.7,
         class: 'callout-label'
       });
       t2.textContent = label;
@@ -1030,6 +1033,36 @@
       g.appendChild(t1);
       g.appendChild(t2);
       parent.appendChild(g);
+    }
+
+    function computeRouteTransform(selected) {
+      const svgW = 380;
+      const svgH = 215;
+
+      const pts = [selected.start, selected.anchor, selected.keyPoint, ...selected.bolts];
+      let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+      pts.forEach(([x, y]) => {
+        if (x < minX) minX = x;
+        if (x > maxX) maxX = x;
+        if (y < minY) minY = y;
+        if (y > maxY) maxY = y;
+      });
+
+      const padX = 38;
+      const padY = 22;
+      const boxW = Math.max(maxX - minX + padX * 2, 70);
+      const boxH = Math.max(maxY - minY + padY * 2, 95);
+      const cx = (minX + maxX) / 2;
+      const cy = (minY + maxY) / 2;
+
+      // Умеренный зум, чтобы маршрут и подписи старта/финиша оставались в кадре
+      const rawScale = Math.min(svgW / boxW, svgH / boxH);
+      const scale = Math.max(1.45, Math.min(1.9, rawScale));
+
+      const tx = svgW / 2 - cx * scale;
+      const ty = svgH / 2 - cy * scale;
+
+      return { scale, tx, ty, minX, maxX, minY, maxY };
     }
 
     function renderDetailSvg() {
@@ -1057,10 +1090,10 @@
           zoomGroup.appendChild(createSvgEl('circle', {
             cx: bx,
             cy: by,
-            r: isSel ? '2.5' : '1.9',
+            r: isSel ? '2.2' : '1.8',
             stroke: r.color,
             class: 'bolt-dot',
-            opacity: isSel ? '1' : '0.2'
+            opacity: isSel ? '1' : '0.18'
           }));
         });
 
@@ -1068,9 +1101,9 @@
         zoomGroup.appendChild(createSvgEl('circle', {
           cx: ax,
           cy: ay,
-          r: isSel ? '2.8' : '2.2',
+          r: isSel ? '2.4' : '2.0',
           class: 'anchor-top',
-          opacity: isSel ? '1' : '0.2'
+          opacity: isSel ? '1' : '0.18'
         }));
 
         const [sx, sy] = r.start;
@@ -1079,24 +1112,28 @@
           y: sy,
           fill: isSel ? '#ffffff' : r.color,
           class: 'start-num',
-          opacity: isSel ? '1' : '0.25'
+          opacity: isSel ? '1' : '0.22'
         });
         num.textContent = r.id;
         zoomGroup.appendChild(num);
       });
 
-      // Подписи старта, ключевого места и финиша выбранного маршрута
+      const info = computeRouteTransform(selected);
       const [sx, sy] = selected.start;
       const [kx, ky] = selected.keyPoint;
       const [ax, ay] = selected.anchor;
 
-      addCallout(zoomGroup, sx, sy - 11, 'СТАРТ', `#${selected.id} ${selected.name}`);
-      addCallout(zoomGroup, kx + (kx > 240 ? -24 : 24), ky, 'КЛЮЧ / РЕЛЬЕФ', selected.keyLabel);
-      addCallout(zoomGroup, ax, ay - 11, 'ФИНИШ', `Станция (${selected.height})`);
+      const labelMinX = info.minX - 24;
+      const labelMaxX = info.maxX + 24;
+      const labelMinY = info.minY - 8;
+      const labelMaxY = info.maxY + 8;
 
-      if (isZoomed && selected.zoom) {
-        const { scale, tx, ty } = selected.zoom;
-        zoomGroup.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+      addCallout(zoomGroup, sx, sy - 9, 'СТАРТ', `#${selected.id} ${selected.name}`, labelMinX, labelMaxX, labelMinY, labelMaxY);
+      addCallout(zoomGroup, kx + (kx > 250 ? -18 : 18), ky, 'КЛЮЧ / РЕЛЬЕФ', selected.keyLabel, labelMinX, labelMaxX, labelMinY, labelMaxY);
+      addCallout(zoomGroup, ax, ay - 9, 'ФИНИШ', `Станция (${selected.height})`, labelMinX, labelMaxX, labelMinY, labelMaxY);
+
+      if (isZoomed) {
+        zoomGroup.style.transform = `translate(${info.tx.toFixed(1)}px, ${info.ty.toFixed(1)}px) scale(${info.scale.toFixed(2)})`;
       } else {
         zoomGroup.style.transform = 'translate(0px, 0px) scale(1)';
       }
