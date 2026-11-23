@@ -1558,11 +1558,14 @@
     const WHATSAPP_PHONE = "77054127588";
     const ADMIN_PIN = "2026";
     const CALENDAR_STORAGE_KEY = "adventure_club_kz_calendar_v1";
+    const FIREBASE_DB_URL = "https://adventure-club-kz-default-rtdb.firebaseio.com";
+    const FIREBASE_SCHEDULE_ENDPOINT = `${FIREBASE_DB_URL}/schedule.json`;
 
     let isAdminUnlocked = false;
     let selectedAdminDateKey = null;
     let selectedActivityType = "Восхождение";
     let previewedDateKey = null;
+    let scheduleCache = {};
 
     const nowDate = new Date();
     let calYear = nowDate.getFullYear();
@@ -1584,16 +1587,52 @@
       return formatRuDate(formatDateKey(d.getFullYear(), d.getMonth(), d.getDate()));
     }
 
-    function loadSchedule() {
+    function loadLocalSchedule() {
       try {
-        return JSON.parse(localStorage.getItem(CALENDAR_STORAGE_KEY) || '{}');
+        return JSON.parse(localStorage.getItem(CALENDAR_STORAGE_KEY) || '{}') || {};
       } catch {
         return {};
       }
     }
 
-    function saveSchedule(data) {
-      localStorage.setItem(CALENDAR_STORAGE_KEY, JSON.stringify(data));
+    function saveLocalSchedule(data) {
+      try {
+        localStorage.setItem(CALENDAR_STORAGE_KEY, JSON.stringify(data));
+      } catch {}
+    }
+
+    function getSchedule() {
+      return scheduleCache || {};
+    }
+
+    async function syncScheduleFromCloud() {
+      try {
+        const res = await fetch(FIREBASE_SCHEDULE_ENDPOINT, { cache: 'no-store' });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const cloudData = await res.json();
+        const normalized = (cloudData && typeof cloudData === 'object') ? cloudData : {};
+        scheduleCache = normalized;
+        saveLocalSchedule(normalized);
+        renderCalendar();
+      } catch (err) {
+        scheduleCache = loadLocalSchedule();
+        renderCalendar();
+      }
+    }
+
+    async function pushScheduleToCloud(nextSchedule) {
+      scheduleCache = nextSchedule;
+      saveLocalSchedule(nextSchedule);
+      renderCalendar();
+      try {
+        await fetch(FIREBASE_SCHEDULE_ENDPOINT, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(nextSchedule)
+        });
+      } catch (err) {
+        console.warn('Ошибка синхронизации с Firebase:', err);
+      }
     }
 
     function closeEventPreview() {
@@ -1679,7 +1718,7 @@
 
     function syncAdminFormWithDate(dateKey) {
       selectedAdminDateKey = dateKey;
-      const schedule = loadSchedule();
+      const schedule = getSchedule();
       const existing = schedule[dateKey];
       document.getElementById('adminSelectedDateLabel').textContent = `Дата: ${formatRuDate(dateKey)}`;
       if (existing) {
@@ -1690,25 +1729,23 @@
       }
     }
 
-    function saveAdminDate() {
+    async function saveAdminDate() {
       if (!isAdminUnlocked || !selectedAdminDateKey) return;
-      const schedule = loadSchedule();
+      const nextSchedule = { ...getSchedule() };
       const note = document.getElementById('adminEventNote').value.trim();
-      schedule[selectedAdminDateKey] = {
+      nextSchedule[selectedAdminDateKey] = {
         type: selectedActivityType,
         note
       };
-      saveSchedule(schedule);
-      renderCalendar();
+      await pushScheduleToCloud(nextSchedule);
     }
 
-    function clearAdminDate() {
+    async function clearAdminDate() {
       if (!isAdminUnlocked || !selectedAdminDateKey) return;
-      const schedule = loadSchedule();
-      delete schedule[selectedAdminDateKey];
-      saveSchedule(schedule);
+      const nextSchedule = { ...getSchedule() };
+      delete nextSchedule[selectedAdminDateKey];
       document.getElementById('adminEventNote').value = '';
-      renderCalendar();
+      await pushScheduleToCloud(nextSchedule);
     }
 
     function openWhatsAppForDate(dateKey, eventObj) {
@@ -1727,7 +1764,7 @@
     }
 
     function handleCalendarDayClick(dateKey) {
-      const schedule = loadSchedule();
+      const schedule = getSchedule();
       if (isAdminUnlocked) {
         closeEventPreview();
         syncAdminFormWithDate(dateKey);
@@ -1761,7 +1798,7 @@
 
       const today = new Date();
       const todayKey = formatDateKey(today.getFullYear(), today.getMonth(), today.getDate());
-      const schedule = loadSchedule();
+      const schedule = getSchedule();
 
       for (let i = 0; i < startOffset; i++) {
         const emptyCell = document.createElement('div');
@@ -1810,6 +1847,7 @@
       void splash.offsetWidth;
       splash.classList.remove('slide-out-left');
       renderCalendar();
+      syncScheduleFromCloud();
     }
 
     (function setupSplashSwipe() {
@@ -2753,7 +2791,9 @@
 
     function initApp() {
       resetSessionToFirstRoute();
+      scheduleCache = loadLocalSchedule();
       renderCalendar();
+      syncScheduleFromCloud();
       updateProgress();
       renderCragStaticSections();
       renderOverviewSvg();
@@ -2767,6 +2807,7 @@
         resetSessionToFirstRoute();
         closeEventPreview();
         renderCalendar();
+        syncScheduleFromCloud();
         renderDetailTab();
       }
     });
