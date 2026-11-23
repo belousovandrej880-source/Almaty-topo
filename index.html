@@ -34,7 +34,7 @@
       background-color: var(--bg);
       color: var(--text);
       line-height: 1.45;
-      padding-bottom: 86px;
+      padding-bottom: 88px;
       overflow-x: hidden;
     }
 
@@ -70,6 +70,7 @@
       font-weight: 700;
       white-space: nowrap;
       cursor: pointer;
+      transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
     }
 
     .crag-tab.active {
@@ -111,6 +112,7 @@
       white-space: nowrap;
     }
 
+    /* Плавные слайды между вкладками */
     .tab-stage {
       position: relative;
       width: 100%;
@@ -121,36 +123,36 @@
       display: flex;
       flex-direction: column;
       gap: 14px;
-      transition: transform 0.36s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.28s ease;
+      will-change: transform, opacity;
     }
 
     main.tab-panel.slide-enter-right {
-      animation: slideInRight 0.36s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      animation: smoothSlideRight 0.48s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
     main.tab-panel.slide-enter-left {
-      animation: slideInLeft 0.36s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      animation: smoothSlideLeft 0.48s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
-    @keyframes slideInRight {
-      from {
+    @keyframes smoothSlideRight {
+      0% {
         opacity: 0;
-        transform: translateX(28px);
+        transform: translate3d(12px, 0, 0);
       }
-      to {
+      100% {
         opacity: 1;
-        transform: translateX(0);
+        transform: translate3d(0, 0, 0);
       }
     }
 
-    @keyframes slideInLeft {
-      from {
+    @keyframes smoothSlideLeft {
+      0% {
         opacity: 0;
-        transform: translateX(-28px);
+        transform: translate3d(-12px, 0, 0);
       }
-      to {
+      100% {
         opacity: 1;
-        transform: translateX(0);
+        transform: translate3d(0, 0, 0);
       }
     }
 
@@ -208,6 +210,11 @@
       cursor: pointer;
       white-space: nowrap;
       flex-shrink: 0;
+      transition: background 0.25s ease, transform 0.2s ease;
+    }
+
+    .zoom-toggle-btn:active {
+      transform: scale(0.97);
     }
 
     .zoom-toggle-btn.active-zoom {
@@ -231,7 +238,8 @@
     #zoomGroup {
       transform-box: view-box;
       transform-origin: 0 0;
-      transition: transform 0.65s cubic-bezier(0.25, 0.85, 0.35, 1);
+      transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform;
     }
 
     .rock-mass {
@@ -260,7 +268,7 @@
       stroke-linejoin: round;
       opacity: 0.72;
       cursor: pointer;
-      transition: opacity 0.25s ease, stroke-width 0.25s ease;
+      transition: opacity 0.35s ease, stroke-width 0.35s ease;
     }
 
     .route-path.dimmed {
@@ -277,7 +285,7 @@
       fill: #0e1116;
       stroke-width: 1.3;
       pointer-events: none;
-      transition: opacity 0.25s ease;
+      transition: opacity 0.35s ease;
     }
 
     .anchor-top {
@@ -285,7 +293,7 @@
       stroke: #0e1116;
       stroke-width: 0.9;
       pointer-events: none;
-      transition: opacity 0.25s ease;
+      transition: opacity 0.35s ease;
     }
 
     .start-num {
@@ -293,12 +301,12 @@
       font-weight: 800;
       text-anchor: middle;
       cursor: pointer;
-      transition: opacity 0.25s ease;
+      transition: opacity 0.35s ease;
     }
 
     .zoom-callout {
       pointer-events: none;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.35s ease;
     }
 
     .callout-pill {
@@ -402,7 +410,7 @@
       font-weight: 700;
       padding: 8px 12px;
       border-radius: 10px;
-      transition: border-color 0.15s, background 0.15s;
+      transition: border-color 0.25s ease, background 0.25s ease;
     }
 
     .map-link-btn:hover {
@@ -444,6 +452,7 @@
       font-weight: 700;
       white-space: nowrap;
       cursor: pointer;
+      transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
     }
 
     .r-pill.active {
@@ -559,6 +568,7 @@
       font-weight: 600;
       cursor: pointer;
       text-align: center;
+      transition: background 0.22s ease, color 0.22s ease, border-color 0.22s ease;
     }
 
     .btn-status.done-os { background: rgba(56, 189, 248, 0.18); border-color: var(--accent); color: var(--accent); }
@@ -591,6 +601,7 @@
       border-radius: 7px;
       font-size: 14px;
       cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
     }
 
     .star-btn.active {
@@ -611,6 +622,7 @@
       resize: vertical;
       min-height: 54px;
       outline: none;
+      transition: border-color 0.2s ease;
     }
 
     .note-input:focus {
@@ -642,7 +654,11 @@
       border-radius: 9px;
       cursor: pointer;
       text-align: center;
-      transition: color 0.2s, background 0.2s;
+      transition: color 0.28s ease, background 0.28s ease, transform 0.18s ease;
+    }
+
+    .nav-item:active {
+      transform: scale(0.96);
     }
 
     .nav-item.active {
