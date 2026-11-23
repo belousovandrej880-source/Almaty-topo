@@ -1056,11 +1056,35 @@
       color: var(--accent);
     }
 
+    .quick-log-box {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .quick-log-meta {
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .quick-log-date {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
     .detail-box {
       display: flex;
       flex-direction: column;
       gap: 10px;
-      margin-top: 10px;
+      margin-top: 12px;
     }
 
     .step-row {
@@ -1129,6 +1153,11 @@
       justify-content: space-between;
       align-items: center;
       gap: 8px;
+    }
+
+    .log-date-line {
+      font-size: 11px;
+      color: var(--muted);
     }
 
     .route-num {
@@ -1548,6 +1577,11 @@
     function formatRuDate(dateKey) {
       const [y, m, d] = dateKey.split('-');
       return `${d}.${m}.${y}`;
+    }
+
+    function getTodayRuDate() {
+      const d = new Date();
+      return formatRuDate(formatDateKey(d.getFullYear(), d.getMonth(), d.getDate()));
     }
 
     function loadSchedule() {
@@ -2437,6 +2471,13 @@
       return 'g-mid';
     }
 
+    function getStatusLabel(status) {
+      if (status === 'os') return 'Onsight';
+      if (status === 'rp') return 'Redpoint';
+      if (status === 'proj') return 'Проект';
+      return 'Не отмечено';
+    }
+
     function updateProgress() {
       const routes = getCurrentRoutes();
       const store = getCragStorage(currentCrag);
@@ -2546,6 +2587,8 @@
       currentTab = tabName;
       if (tabName === 'routes') {
         renderDetailTab();
+      } else if (tabName === 'notes') {
+        renderNotesTab();
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -2559,6 +2602,7 @@
 
     function renderDetailTab() {
       const routes = getCurrentRoutes();
+      const store = getCragStorage(currentCrag);
       const pills = document.getElementById('detailPills');
       pills.innerHTML = '';
 
@@ -2574,6 +2618,10 @@
       });
 
       const r = routes.find(item => item.id === activeRouteId) || routes[0];
+      const entry = store[r.id] || {};
+      const statusTxt = getStatusLabel(entry.status);
+      const dateTxt = entry.status && entry.updatedAt ? `Дата отметки: ${entry.updatedAt}` : '';
+
       document.getElementById('detailZoomTitle').textContent = isZoomed
         ? 'Плавный зум на маршрут'
         : 'Вся скала • Финиш виден полностью';
@@ -2593,6 +2641,18 @@
             <div style="font-size: 12px; color: var(--muted); margin-top: 2px;">Высота / питчи: ${r.height} • Снаряжение: ${r.gear}</div>
           </div>
           <span class="grade-badge ${getGradeClass(r.level)}" style="font-size: 14px;">${r.grade}</span>
+        </div>
+
+        <div class="quick-log-box">
+          <div class="quick-log-meta">
+            <span>Статус пролаза: <strong>${statusTxt}</strong></span>
+            <span class="quick-log-date">${dateTxt}</span>
+          </div>
+          <div class="route-actions">
+            <button class="btn-status ${entry.status === 'os' ? 'done-os' : ''}" onclick="setRouteStatus(${r.id}, 'os')">Onsight</button>
+            <button class="btn-status ${entry.status === 'rp' ? 'done-rp' : ''}" onclick="setRouteStatus(${r.id}, 'rp')">Redpoint</button>
+            <button class="btn-status ${entry.status === 'proj' ? 'done-proj' : ''}" onclick="setRouteStatus(${r.id}, 'proj')">Проект</button>
+          </div>
         </div>
 
         <div class="detail-box">
@@ -2615,9 +2675,14 @@
     function setRouteStatus(id, status) {
       const store = getCragStorage(currentCrag);
       if (!store[id]) store[id] = {};
-      store[id].status = store[id].status === status ? '' : status;
+      const nextStatus = store[id].status === status ? '' : status;
+      store[id].status = nextStatus;
+      store[id].updatedAt = nextStatus ? getTodayRuDate() : '';
       saveUserData();
       if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+      if (currentTab === 'routes') {
+        renderDetailTab();
+      }
       renderNotesTab();
     }
 
@@ -2646,6 +2711,7 @@
       routes.forEach(r => {
         const entry = store[r.id] || {};
         const currentRating = entry.rating || 0;
+        const dateBadge = entry.status && entry.updatedAt ? ` • ${entry.updatedAt}` : '';
 
         let starsHtml = '';
         for (let i = 1; i <= 5; i++) {
@@ -2659,6 +2725,7 @@
             <div>
               <span class="route-num">${r.id}</span>
               <strong style="font-size: 15px;">${r.name}</strong>
+              <span class="log-date-line">${dateBadge}</span>
             </div>
             <span class="grade-badge ${getGradeClass(r.level)}">${r.grade}</span>
           </div>
