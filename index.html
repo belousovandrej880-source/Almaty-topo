@@ -320,6 +320,10 @@
       box-shadow: 0 0 14px rgba(239, 68, 68, 0.36);
     }
 
+    .cal-day.preview-selected {
+      box-shadow: 0 0 0 2px #ffffff, 0 0 16px rgba(239, 68, 68, 0.55);
+    }
+
     .cal-day-num {
       font-size: 12px;
       font-weight: 800;
@@ -367,6 +371,96 @@
       display: inline-block;
       margin-right: 5px;
       box-shadow: 0 0 6px var(--red);
+    }
+
+    /* Карточка предпросмотра локации перед переходом в WhatsApp */
+    .event-preview-card {
+      margin-top: 10px;
+      background: rgba(20, 24, 31, 0.94);
+      border: 1px solid rgba(239, 68, 68, 0.55);
+      border-radius: 11px;
+      padding: 11px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      backdrop-filter: blur(8px);
+      animation: previewFadeIn 0.22s ease forwards;
+    }
+
+    @keyframes previewFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-4px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .event-preview-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .event-preview-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 800;
+      color: #fca5a5;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .event-preview-close {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      width: 24px;
+      height: 24px;
+      border-radius: 7px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .event-preview-location {
+      font-size: 14px;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.3;
+    }
+
+    .event-preview-sub {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .event-preview-wa-btn {
+      width: 100%;
+      background: #22c55e;
+      border: none;
+      color: #07130c;
+      padding: 9px 12px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .event-preview-wa-btn:active {
+      transform: scale(0.98);
     }
 
     .admin-panel {
@@ -1288,8 +1382,24 @@
           <div class="cal-grid" id="calendarGrid"></div>
 
           <div class="cal-legend-bar">
-            <span><i class="red-dot"></i>Нажми на красную дату для записи в WhatsApp</span>
+            <span><i class="red-dot"></i>Нажми на красную дату, чтобы посмотреть локацию</span>
             <span id="adminStatusHint">Только просмотр</span>
+          </div>
+
+          <!-- ПРЕДПРОСМОТР ЛОКАЦИИ ПЕРЕД ПЕРЕХОДОМ В WHATSAPP -->
+          <div class="event-preview-card hidden" id="eventPreviewCard">
+            <div class="event-preview-top">
+              <span class="event-preview-badge" id="previewTypeBadge">Скалолазание • 28.11.2026</span>
+              <button type="button" class="event-preview-close" onclick="closeEventPreview()" title="Закрыть">✕</button>
+            </div>
+            <div>
+              <div class="event-preview-location" id="previewLocationText">Локация уточняется</div>
+              <div class="event-preview-sub" id="previewHintText">Нажми кнопку ниже, чтобы отправить заявку в WhatsApp</div>
+            </div>
+            <button type="button" class="event-preview-wa-btn" id="previewWhatsAppBtn">
+              <span>Записаться в WhatsApp</span>
+              <span>→</span>
+            </button>
           </div>
 
           <div class="admin-panel hidden" id="adminPanel">
@@ -1423,6 +1533,7 @@
     let isAdminUnlocked = false;
     let selectedAdminDateKey = null;
     let selectedActivityType = "Восхождение";
+    let previewedDateKey = null;
 
     const nowDate = new Date();
     let calYear = nowDate.getFullYear();
@@ -1451,7 +1562,40 @@
       localStorage.setItem(CALENDAR_STORAGE_KEY, JSON.stringify(data));
     }
 
+    function closeEventPreview() {
+      previewedDateKey = null;
+      const card = document.getElementById('eventPreviewCard');
+      if (card) card.classList.add('hidden');
+      document.querySelectorAll('#calendarGrid .cal-day.preview-selected').forEach(el => {
+        el.classList.remove('preview-selected');
+      });
+    }
+
+    function openEventPreview(dateKey, eventObj) {
+      previewedDateKey = dateKey;
+      const card = document.getElementById('eventPreviewCard');
+      const badge = document.getElementById('previewTypeBadge');
+      const locationEl = document.getElementById('previewLocationText');
+      const waBtn = document.getElementById('previewWhatsAppBtn');
+
+      const formattedDate = formatRuDate(dateKey);
+      const activityTitle = eventObj.type === 'Скалолазание' ? 'Скалолазание' : 'Восхождение';
+      badge.textContent = `${activityTitle} • ${formattedDate}`;
+
+      locationEl.textContent = eventObj.note && eventObj.note.trim()
+        ? `Локация: ${eventObj.note.trim()}`
+        : `Локация: ${activityTitle} (уточняется в WhatsApp)`;
+
+      waBtn.onclick = () => openWhatsAppForDate(dateKey, eventObj);
+      card.classList.remove('hidden');
+
+      document.querySelectorAll('#calendarGrid .cal-day').forEach(el => {
+        el.classList.toggle('preview-selected', el.dataset.dateKey === dateKey);
+      });
+    }
+
     function changeCalendarMonth(delta) {
+      closeEventPreview();
       const target = new Date(calYear, calMonth + delta, 1);
       calYear = target.getFullYear();
       calMonth = target.getMonth();
@@ -1459,6 +1603,7 @@
     }
 
     function resetCalendarToToday() {
+      closeEventPreview();
       const now = new Date();
       calYear = now.getFullYear();
       calMonth = now.getMonth();
@@ -1466,6 +1611,7 @@
     }
 
     function toggleAdminMode() {
+      closeEventPreview();
       if (isAdminUnlocked) {
         isAdminUnlocked = false;
         document.getElementById('adminToggleBtn').classList.remove('active');
@@ -1549,12 +1695,19 @@
     function handleCalendarDayClick(dateKey) {
       const schedule = loadSchedule();
       if (isAdminUnlocked) {
+        closeEventPreview();
         syncAdminFormWithDate(dateKey);
         return;
       }
       const ev = schedule[dateKey];
       if (ev) {
-        openWhatsAppForDate(dateKey, ev);
+        if (previewedDateKey === dateKey) {
+          closeEventPreview();
+        } else {
+          openEventPreview(dateKey, ev);
+        }
+      } else {
+        closeEventPreview();
       }
     }
 
@@ -1588,8 +1741,10 @@
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'cal-day';
+        btn.dataset.dateKey = dateKey;
         if (dateKey === todayKey) btn.classList.add('is-today');
         if (ev) btn.classList.add('event-day');
+        if (previewedDateKey === dateKey) btn.classList.add('preview-selected');
 
         const shortTag = ev
           ? (ev.type === 'Скалолазание' ? 'Скалы' : 'Горы')
@@ -2543,6 +2698,7 @@
     window.addEventListener('pageshow', (e) => {
       if (e.persisted) {
         resetSessionToFirstRoute();
+        closeEventPreview();
         renderCalendar();
         renderDetailTab();
       }
