@@ -18,6 +18,7 @@
       --green: #22c55e;
       --yellow: #eab308;
       --orange: #f97316;
+      --red: #ef4444;
       --radius: 14px;
     }
 
@@ -33,7 +34,8 @@
       background-color: var(--bg);
       color: var(--text);
       line-height: 1.45;
-      padding-bottom: 84px;
+      padding-bottom: 86px;
+      overflow-x: hidden;
     }
 
     header {
@@ -109,11 +111,48 @@
       white-space: nowrap;
     }
 
-    main {
+    /* Плавные слайды между вкладками */
+    .tab-stage {
+      position: relative;
+      width: 100%;
+    }
+
+    main.tab-panel {
       padding: 14px 16px;
       display: flex;
       flex-direction: column;
       gap: 14px;
+      transition: transform 0.36s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.28s ease;
+    }
+
+    main.tab-panel.slide-enter-right {
+      animation: slideInRight 0.36s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    main.tab-panel.slide-enter-left {
+      animation: slideInLeft 0.36s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(28px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-28px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
     }
 
     /* Topo SVG */
@@ -159,7 +198,7 @@
       text-overflow: ellipsis;
     }
 
-    .reset-zoom-btn {
+    .zoom-toggle-btn {
       background: var(--surface-2);
       border: 1px solid var(--accent);
       color: var(--accent);
@@ -170,6 +209,10 @@
       cursor: pointer;
       white-space: nowrap;
       flex-shrink: 0;
+    }
+
+    .zoom-toggle-btn.active-zoom {
+      background: var(--accent-dim);
     }
 
     .topo-svg-wrap {
@@ -216,17 +259,17 @@
       stroke-width: 2.3;
       stroke-linecap: round;
       stroke-linejoin: round;
-      opacity: 0.68;
+      opacity: 0.72;
       cursor: pointer;
       transition: opacity 0.25s ease, stroke-width 0.25s ease;
     }
 
     .route-path.dimmed {
-      opacity: 0.16;
+      opacity: 0.18;
     }
 
     .route-path.selected {
-      stroke-width: 3.1;
+      stroke-width: 3.3;
       opacity: 1;
       filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.3));
     }
@@ -260,14 +303,14 @@
     }
 
     .callout-pill {
-      fill: rgba(12, 14, 17, 0.92);
+      fill: rgba(12, 14, 17, 0.93);
       stroke: #38bdf8;
       stroke-width: 0.7;
       rx: 2.5;
     }
 
     .callout-label {
-      font-size: 5.2px;
+      font-size: 5px;
       font-weight: 700;
       fill: #f3f4f6;
       text-anchor: middle;
@@ -275,7 +318,7 @@
     }
 
     .callout-sub {
-      font-size: 4.4px;
+      font-size: 4.3px;
       font-weight: 700;
       fill: #38bdf8;
       text-anchor: middle;
@@ -351,7 +394,7 @@
 
     .g-easy { background: rgba(34, 197, 94, 0.15); color: var(--green); border: 1px solid rgba(34, 197, 94, 0.35); }
     .g-mid  { background: rgba(234, 179, 8, 0.15); color: var(--yellow); border: 1px solid rgba(234, 179, 8, 0.35); }
-    .g-hard { background: rgba(249, 115, 22, 0.15); color: var(--orange); border: 1px solid rgba(249, 115, 22, 0.35); }
+    .g-hard { background: rgba(239, 68, 68, 0.15); color: var(--red); border: 1px solid rgba(239, 68, 68, 0.35); }
 
     /* Tab 2: Detailed Route Selector & Breakdown */
     .route-pills {
@@ -576,6 +619,7 @@
       border-radius: 9px;
       cursor: pointer;
       text-align: center;
+      transition: color 0.2s, background 0.2s;
     }
 
     .nav-item.active {
@@ -606,124 +650,126 @@
     </div>
   </header>
 
-  <!-- ВКЛАДКА 1: ОБЗОР (Только скала + история + как доехать) -->
-  <main id="view-overview">
-    <div class="topo-card">
-      <div class="topo-header">
-        <div class="topo-info-col">
-          <span class="topo-title">Массив Лесничества • 1–10</span>
-          <span class="topo-active" id="overviewSelectedLabel">Нажми на линию для перехода</span>
+  <div class="tab-stage">
+    <!-- ВКЛАДКА 1: ОБЗОР -->
+    <main id="view-overview" class="tab-panel">
+      <div class="topo-card">
+        <div class="topo-header">
+          <div class="topo-info-col">
+            <span class="topo-title">Массив Лесничества • 1–10</span>
+            <span class="topo-active" id="overviewSelectedLabel">Нажми на линию для перехода</span>
+          </div>
+        </div>
+        <div class="topo-svg-wrap">
+          <svg class="topo-scheme" viewBox="0 0 380 215">
+            <g id="overviewRockGroup"></g>
+          </svg>
+        </div>
+        <div class="topo-legend">
+          <span class="legend-item"><i class="dot-swatch" style="background: var(--green);"></i>Fr4</span>
+          <span class="legend-item"><i class="dot-swatch" style="background: var(--yellow);"></i>6a–6b / 3 карниза</span>
+          <span class="legend-item"><i class="dot-swatch" style="background: var(--red);"></i>Щель / ключи</span>
+          <span class="legend-item">● Точка / штырь</span>
         </div>
       </div>
-      <div class="topo-svg-wrap">
-        <svg class="topo-scheme" viewBox="0 0 380 215">
-          <g id="overviewRockGroup"></g>
-        </svg>
+
+      <div class="section-label">История скалы</div>
+      <div class="card">
+        <h3>Отправная точка алматинского скалолазания</h3>
+        <ul>
+          <li><strong>Школа для поколений:</strong> Скалы Лесничества много лет служат базовым учебным и тренировочным полигоном для алматинских скалолазов и альпинистов.</li>
+          <li><strong>История карниза «Рояль»:</strong> До 2016 года в центральной части скалы нависал характерный карниз «Рояль». После очередных занятий альпклуба «Буревестник» карниз обрушился, изменив рельеф середины массива.</li>
+          <li><strong>Оборудование стен:</strong> Для организации верхней страховки в верхней части скалы забиты металлические штыри, а сам рельеф идеален для отработки лазания со своими точками (трэд).</li>
+        </ul>
       </div>
-      <div class="topo-legend">
-        <span class="legend-item"><i class="dot-swatch" style="background: var(--green);"></i>Fr4</span>
-        <span class="legend-item"><i class="dot-swatch" style="background: var(--yellow);"></i>6a–6b</span>
-        <span class="legend-item"><i class="dot-swatch" style="background: var(--orange);"></i>Трэд / карнизы / 6b+</span>
-        <span class="legend-item">● Точка / штырь</span>
+
+      <div class="section-label">Как доехать и быт</div>
+      <div class="card">
+        <h3>Дорога и стоянка</h3>
+        <ul>
+          <li><strong>Общественный транспорт:</strong> До района скал можно доехать на городском автобусе №12 (направление Медео, район Лесничества).</li>
+          <li><strong>Экспозиция и сезон:</strong> Скала обращена на юг — летом на солнце жарко, поэтому лучшее время для лазания — весна, осень и прохладные дни. Весной по выходным здесь многолюдно.</li>
+          <li><strong>Палатки и вода:</strong> Справа от скал есть удобные площадки под палатки, а чуть выше небольшого озерца находится труба с чистой питьевой водой.</li>
+        </ul>
       </div>
-    </div>
+    </main>
 
-    <div class="section-label">История скалы</div>
-    <div class="card">
-      <h3>Отправная точка алматинского скалолазания</h3>
-      <ul>
-        <li><strong>Школа для поколений:</strong> Скалы Лесничества много лет служат базовым учебным и тренировочным полигоном для алматинских скалолазов и альпинистов.</li>
-        <li><strong>История карниза «Рояль»:</strong> До 2016 года в центральной части скалы нависал характерный карниз «Рояль». После очередных занятий альпклуба «Буревестник» карниз обрушился, изменив рельеф середины массива.</li>
-        <li><strong>Оборудование стен:</strong> Для организации верхней страховки в верхней части скалы забиты металлические штыри, а сам рельеф идеален для отработки лазания со своими точками (трэд).</li>
-      </ul>
-    </div>
+    <!-- ВКЛАДКА 2: МАРШРУТЫ -->
+    <main id="view-routes" class="tab-panel hidden">
+      <div class="section-label">Выбери трассу (1–10)</div>
+      <div class="route-pills" id="detailPills"></div>
 
-    <div class="section-label">Как доехать и быт</div>
-    <div class="card">
-      <h3>Дорога и стоянка</h3>
-      <ul>
-        <li><strong>Общественный транспорт:</strong> До района скал можно доехать на городском автобусе №12 (направление Медео, район Лесничества).</li>
-        <li><strong>Экспозиция и сезон:</strong> Скала обращена на юг — летом на солнце жарко, поэтому лучшее время для лазания — весна, осень и прохладные дни. Весной по выходным здесь многолюдно.</li>
-        <li><strong>Палатки и вода:</strong> Справа от скал есть удобные площадки под палатки, а чуть выше небольшого озерца находится труба с чистой питьевой водой.</li>
-      </ul>
-    </div>
-  </main>
-
-  <!-- ВКЛАДКА 2: МАРШРУТЫ (Гора с плавным зумом, подписями старта/финиша/особенностей + разбор) -->
-  <main id="view-routes" class="hidden">
-    <div class="section-label">Выбери трассу (1–10)</div>
-    <div class="route-pills" id="detailPills"></div>
-
-    <div class="topo-card">
-      <div class="topo-header">
-        <div class="topo-info-col">
-          <span class="topo-title" id="detailZoomTitle">Плавный зум на трассу</span>
-          <span class="topo-active" id="detailZoomBadge">#1 Разминочная • Fr4</span>
+      <div class="topo-card">
+        <div class="topo-header">
+          <div class="topo-info-col">
+            <span class="topo-title" id="detailZoomTitle">Вся скала • Финиш виден полностью</span>
+            <span class="topo-active" id="detailZoomBadge">#5 Три карниза • 6b</span>
+          </div>
+          <button class="zoom-toggle-btn" id="zoomToggleBtn" onclick="toggleZoomMode()">Приблизить</button>
         </div>
-        <button class="reset-zoom-btn" onclick="resetZoom()">Вся скала</button>
-      </div>
-      <div class="topo-svg-wrap">
-        <svg class="topo-scheme" id="detailSvg" viewBox="0 0 380 215">
-          <g id="zoomGroup"></g>
-        </svg>
-      </div>
-    </div>
-
-    <div class="card" id="routeDetailCard"></div>
-  </main>
-
-  <!-- ВКЛАДКА 3: СНАРЯЖЕНИЕ, ИНСТРУМЕНТЫ И НЮАНСЫ -->
-  <main id="view-gear" class="hidden">
-    <div class="section-label">Необходимые камалоты и железо</div>
-    <div class="card">
-      <h3>Набор под трэд и верхнюю страховку</h3>
-      <p style="margin-bottom: 8px;">Базово для нижней страховки на массиве нужен комплект камалотов до <strong>#3</strong>, а на двух щелевых линиях пригодится <strong>#4</strong>:</p>
-      <div class="gear-grid">
-        <div class="gear-row">
-          <span class="gear-name">Камалот #0.3</span>
-          <span class="gear-routes">№7 Утюги (основание 1-го утюга)</span>
-        </div>
-        <div class="gear-row">
-          <span class="gear-name">Камалот #0.5 и мелкие</span>
-          <span class="gear-routes">№2 Жёлтые пятна, №8 Справа от утюгов</span>
-        </div>
-        <div class="gear-row">
-          <span class="gear-name">Средний набор (#0.75 – #2)</span>
-          <span class="gear-routes">№3, №4, №5 (щель справа от карниза)</span>
-        </div>
-        <div class="gear-row">
-          <span class="gear-name">Камалот #3 + длинная оттяжка</span>
-          <span class="gear-routes">№6 Щель, №7 Утюги (перед верхним ребром)</span>
-        </div>
-        <div class="gear-row">
-          <span class="gear-name">Камалот #4 (крупный)</span>
-          <span class="gear-routes">№6 Щель (верх), №10 Щель справа</span>
-        </div>
-        <div class="gear-row">
-          <span class="gear-name">Петли / станция под верхнюю</span>
-          <span class="gear-routes">Металлические штыри наверху массива</span>
+        <div class="topo-svg-wrap">
+          <svg class="topo-scheme" id="detailSvg" viewBox="0 0 380 215">
+            <g id="zoomGroup"></g>
+          </svg>
         </div>
       </div>
-    </div>
 
-    <div class="section-label">Ключевые нюансы маршрутов</div>
-    <div class="card">
-      <h3>Что важно знать перед стартом</h3>
-      <ul>
-        <li><strong>Шевелящаяся ручка (№4 «Орлиное гнездо»):</strong> В верхней четверти трассы в углублении много лет шевелится крупная ручка — не пугайтесь при нагрузке, она держит.</li>
-        <li><strong>Выбор выхода (№5 «Три карниза»):</strong> В верхней части самый эффектный вариант — лезть через последний карниз в лоб (страховка камалотом в щели справа). Более спокойный обход — уйти в угол справа.</li>
-        <li><strong>Трение верёвки (№7 «Утюги»):</strong> Перед выходом на финальное нависающее ребро заложите камалот #3 в щель слева обязательно с длинной оттяжкой, чтобы не заклинило верёвку при возврате на ребро.</li>
-        <li><strong>Не уйти в сторону (№8 «Справа от утюгов»):</strong> В средней части держите линию вверх и не уходите правее в пологий жёлоб (№9), выход — по углу справа от последнего утюга.</li>
-        <li><strong>Опыт с верхней страховкой:</strong> Если вы ещё не успели выучить все зацепки с верхней страховкой, прохождение тех же линий трэдом держит в хорошем тонусе.</li>
-      </ul>
-    </div>
-  </main>
+      <div class="card" id="routeDetailCard"></div>
+    </main>
 
-  <!-- ВКЛАДКА 4: ОЦЕНКИ И ЗАМЕТКИ ПО ПРОЙДЕННЫМ МАРШРУТАМ -->
-  <main id="view-notes" class="hidden">
-    <div class="section-label">Твой журнал пролазов, оценки и заметки</div>
-    <div id="notesList" style="display: flex; flex-direction: column; gap: 12px;"></div>
-  </main>
+    <!-- ВКЛАДКА 3: СНАРЯЖЕНИЕ, ИНСТРУМЕНТЫ И НЮАНСЫ -->
+    <main id="view-gear" class="tab-panel hidden">
+      <div class="section-label">Необходимые камалоты и железо</div>
+      <div class="card">
+        <h3>Набор под трэд и верхнюю страховку</h3>
+        <p style="margin-bottom: 8px;">Базово для нижней страховки на массиве нужен комплект камалотов до <strong>#3</strong>, а на двух щелевых линиях пригодится <strong>#4</strong>:</p>
+        <div class="gear-grid">
+          <div class="gear-row">
+            <span class="gear-name">Камалот #0.3</span>
+            <span class="gear-routes">№7 Утюги (основание 1-го утюга)</span>
+          </div>
+          <div class="gear-row">
+            <span class="gear-name">Камалот #0.5 и мелкие</span>
+            <span class="gear-routes">№2 Жёлтые пятна, №8 Справа от утюгов</span>
+          </div>
+          <div class="gear-row">
+            <span class="gear-name">Средний набор (#0.75 – #2)</span>
+            <span class="gear-routes">№3, №4, №5 (щель справа от карниза)</span>
+          </div>
+          <div class="gear-row">
+            <span class="gear-name">Камалот #3 + длинная оттяжка</span>
+            <span class="gear-routes">№6 Щель, №7 Утюги (перед верхним ребром)</span>
+          </div>
+          <div class="gear-row">
+            <span class="gear-name">Камалот #4 (крупный)</span>
+            <span class="gear-routes">№6 Щель (верх), №10 Щель справа</span>
+          </div>
+          <div class="gear-row">
+            <span class="gear-name">Петли / станция под верхнюю</span>
+            <span class="gear-routes">Металлические штыри наверху массива</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-label">Ключевые нюансы маршрутов</div>
+      <div class="card">
+        <h3>Что важно знать перед стартом</h3>
+        <ul>
+          <li><strong>Шевелящаяся ручка (№4 «Орлиное гнездо»):</strong> В верхней четверти трассы в углублении много лет шевелится крупная ручка — не пугайтесь при нагрузке, она держит.</li>
+          <li><strong>Выбор выхода (№5 «Три карниза»):</strong> В верхней части самый эффектный вариант — лезть через последний карниз в лоб (страховка камалотом в щели справа). Более спокойный обход — уйти в угол справа.</li>
+          <li><strong>Трение верёвки (№7 «Утюги»):</strong> Перед выходом на финальное нависающее ребро заложите камалот #3 в щель слева обязательно с длинной оттяжкой, чтобы не заклинило верёвку при возврате на ребро.</li>
+          <li><strong>Не уйти в сторону (№8 «Справа от утюгов»):</strong> В средней части держите линию вверх и не уходите правее в пологий жёлоб (№9), выход — по углу справа от последнего утюга.</li>
+          <li><strong>Опыт с верхней страховкой:</strong> Если вы ещё не успели выучить все зацепки с верхней страховкой, прохождение тех же линий трэдом держит в хорошем тонусе.</li>
+        </ul>
+      </div>
+    </main>
+
+    <!-- ВКЛАДКА 4: ОЦЕНКИ И ЗАМЕТКИ ПО ПРОЙДЕННЫМ МАРШРУТАМ -->
+    <main id="view-notes" class="tab-panel hidden">
+      <div class="section-label">Твой журнал пролазов, оценки и заметки</div>
+      <div id="notesList" style="display: flex; flex-direction: column; gap: 12px;"></div>
+    </main>
+  </div>
 
   <nav class="bottom-nav">
     <button class="nav-item active" id="nav-overview" onclick="switchTab('overview')">Обзор</button>
@@ -741,6 +787,7 @@
       tg.setBackgroundColor('#0c0e11');
     }
 
+    // Разметка привязана к фото: №5 «Три карниза» — жёлтым, №6 «Щель» — красным рядом правее
     const LESNICHESTVO_ROUTES = [
       {
         id: 1,
@@ -753,11 +800,11 @@
         startDesc: "Крайняя левая часть массива, подход по пологим ступеням к основанию плиты.",
         climbDesc: "Пологая скала с большими, надёжными зацепками. Идеальна для разминки, постановки ног и знакомства с гранитом Лесничества.",
         finishDesc: "Выход на верхнюю полку к металлическим штырям для организации станции / спуска.",
-        d: "M 32,190 L 42,158 L 56,126 L 68,94 L 78,62",
-        bolts: [[42, 158], [56, 126], [68, 94]],
-        anchor: [78, 62],
-        start: [32, 204],
-        keyPoint: [56, 126],
+        d: "M 30,192 L 42,160 L 56,128 L 68,96 L 78,66",
+        bolts: [[42, 160], [56, 128], [68, 96]],
+        anchor: [78, 66],
+        start: [30, 205],
+        keyPoint: [56, 128],
         keyLabel: "Пологая плита, ручки"
       },
       {
@@ -771,11 +818,11 @@
         startDesc: "Правее «Разминочной», старт у заметной вертикальной трещины справа от линии.",
         climbDesc: "Положите первую точку в трещину справа для спокойного старта. Затем переходите влево-вверх до горизонтальной щели и лезьте вверх до следующей горизонтальной щели под камалот #0,5. Выше — свободный выбор по рельефу.",
         finishDesc: "Верхний перегиб левой части стены, станция на металлических штырях.",
-        d: "M 60,190 L 76,162 L 58,134 L 74,104 L 92,76 L 98,52",
-        bolts: [[76, 162], [58, 134], [74, 104], [92, 76]],
-        anchor: [98, 52],
-        start: [60, 204],
-        keyPoint: [74, 104],
+        d: "M 58,192 L 74,164 L 58,136 L 74,106 L 90,78 L 96,54",
+        bolts: [[74, 164], [58, 136], [74, 106], [90, 78]],
+        anchor: [96, 54],
+        start: [58, 205],
+        keyPoint: [74, 106],
         keyLabel: "Щель под #0.5"
       },
       {
@@ -789,11 +836,11 @@
         startDesc: "Центрально-левая часть массива, под серией внутренних углов.",
         climbDesc: "Нижнюю половину маршрута можно пройти по любому удобному варианту. В верхней половине держите ориентир на второй внутренний угол слева от карниза.",
         finishDesc: "Выход из второго угла на верхнюю полку массива.",
-        d: "M 88,190 L 94,152 L 106,116 L 112,78 L 118,40",
-        bolts: [[94, 152], [106, 116], [112, 78]],
-        anchor: [118, 40],
-        start: [88, 204],
-        keyPoint: [112, 78],
+        d: "M 86,192 L 94,154 L 106,118 L 114,80 L 122,42",
+        bolts: [[94, 154], [106, 118], [114, 80]],
+        anchor: [122, 42],
+        start: [86, 205],
+        keyPoint: [114, 80],
         keyLabel: "2-й угол слева от карниза"
       },
       {
@@ -807,29 +854,29 @@
         startDesc: "Правее «Беговой», линия идёт прямо по стенке левее системы карнизов.",
         climbDesc: "Ровное техничное лазание по стенке. Ключевой нюанс: в верхней четверти маршрута в углублении находится большая шевелящаяся ручка — не пугайтесь, она держит нагрузку.",
         finishDesc: "Выход выше углубления на верхнюю полку к штырям.",
-        d: "M 116,190 L 122,150 L 130,110 L 138,72 L 144,41",
-        bolts: [[122, 150], [130, 110], [138, 72]],
-        anchor: [144, 41],
-        start: [116, 204],
-        keyPoint: [138, 72],
+        d: "M 114,192 L 122,152 L 132,114 L 140,76 L 148,40",
+        bolts: [[122, 152], [132, 114], [140, 76]],
+        anchor: [148, 40],
+        start: [114, 205],
+        keyPoint: [140, 76],
         keyLabel: "Ручка шевелится (держит)"
       },
       {
         id: 5,
         name: "Три карниза",
         grade: "6b",
-        level: "hard",
-        color: "#f97316",
+        level: "mid",
+        color: "#eab308",
         height: "25 м",
         gear: "Камалот в щели справа",
-        startDesc: "Центр массива, прямо под каскадом из трёх нависающих карнизов.",
-        climbDesc: "Непростое силовое и техничное лазанье через карнизы. В верхней части два варианта: отважные и сильные лезут через последний карниз в лоб (для страховки — камалот в щели справа), благоразумные уходят в угол справа.",
+        startDesc: "Центр массива, под каскадом из трёх нависающих карнизов (отмечено жёлтым на фото).",
+        climbDesc: "Непростое лазанье через карнизы. В верхней части два варианта: отважные и сильные лезут через последний карниз в лоб (страховка — камалот в щели справа), благоразумные уходят в угол справа.",
         finishDesc: "Выход через верхний карниз либо по правому углу на вершинную полку.",
-        d: "M 144,190 L 152,154 L 146,124 L 162,92 L 156,62 L 170,32",
-        bolts: [[152, 154], [146, 124], [162, 92], [156, 62]],
-        anchor: [170, 32],
-        start: [144, 204],
-        keyPoint: [156, 62],
+        d: "M 146,192 L 154,158 L 150,126 L 164,96 L 158,64 L 176,34",
+        bolts: [[154, 158], [150, 126], [164, 96], [158, 64]],
+        anchor: [176, 34],
+        start: [146, 205],
+        keyPoint: [158, 64],
         keyLabel: "Карниз / угол справа"
       },
       {
@@ -837,18 +884,18 @@
         name: "Щель",
         grade: "6a+",
         level: "hard",
-        color: "#f97316",
+        color: "#ef4444",
         height: "25 м",
         gear: "Камалоты #3–4",
-        startDesc: "Правее карнизов, под выраженным внутренним углом с широкой щелью.",
-        climbDesc: "Подлаз к основанию угла — любым удобным способом, дальше движение идёт по очевидному внутреннему углу до самого верха. В верхней части потребуется крупный камалот #3–4.",
-        finishDesc: "Верхний выход из внутреннего угла на полку со штырями.",
-        d: "M 174,190 L 194,158 L 202,118 L 200,72 L 198,32",
-        bolts: [[194, 158], [202, 118], [200, 72]],
-        anchor: [198, 32],
-        start: [174, 204],
-        keyPoint: [200, 72],
-        keyLabel: "Угол, камалоты #3–4"
+        startDesc: "Правее «Трёх карнизов» (отмечено красным на фото), под чёткой вертикальной щелью.",
+        climbDesc: "Подлаз к основанию угла — как удобнее, дальше очевидный угол до самого верха. В верхней части потребуются крупные камалоты #3–4.",
+        finishDesc: "Верхний выход из щели на вершину центральной башни.",
+        d: "M 176,192 L 190,156 L 194,116 L 196,72 L 198,28",
+        bolts: [[190, 156], [194, 116], [196, 72]],
+        anchor: [198, 28],
+        start: [176, 205],
+        keyPoint: [196, 72],
+        keyLabel: "Щель, камалоты #3–4"
       },
       {
         id: 7,
@@ -861,11 +908,11 @@
         startDesc: "Под основанием первого характерного выступа («утюга») правее «Щели».",
         climbDesc: "Серия крутых стенок, разделённых полками. Положите камалот #0,3 в основание первого утюга и лезьте вверх по ребру. Изюминка — последнее нависающее ребро: заложите камалот #3 с длинной оттяжкой в щель слева, вернитесь на ребро и решительно лезьте вверх.",
         finishDesc: "Выход с финального нависающего ребра на верхнюю полку.",
-        d: "M 228,190 L 242,158 L 256,124 L 266,84 L 262,42",
-        bolts: [[242, 158], [256, 124], [266, 84]],
-        anchor: [262, 42],
-        start: [228, 204],
-        keyPoint: [266, 84],
+        d: "M 228,192 L 242,160 L 256,126 L 266,86 L 262,44",
+        bolts: [[242, 160], [256, 126], [266, 86]],
+        anchor: [262, 44],
+        start: [228, 205],
+        keyPoint: [266, 86],
         keyLabel: "#3 с длинной оттяжкой"
       },
       {
@@ -879,11 +926,11 @@
         startDesc: "Подберитесь под первый утюг и сместитесь на два метра правее его ребра.",
         climbDesc: "Пристройте маленький камалот в горизонтальную щель в двух метрах справа от ребра. Дальше лезьте вверх по стенке, стараясь не уходить правее в пологий жёлоб.",
         finishDesc: "Выход наверх по внутреннему углу справа от последнего утюга.",
-        d: "M 258,190 L 278,156 L 284,118 L 292,78 L 288,40",
-        bolts: [[278, 156], [284, 118], [292, 78]],
-        anchor: [288, 40],
-        start: [258, 204],
-        keyPoint: [284, 118],
+        d: "M 258,192 L 278,158 L 284,120 L 292,80 L 288,42",
+        bolts: [[278, 158], [284, 120], [292, 80]],
+        anchor: [288, 42],
+        start: [258, 205],
+        keyPoint: [284, 120],
         keyLabel: "Не уйти в жёлоб"
       },
       {
@@ -897,11 +944,11 @@
         startDesc: "Основание широкого пологого жёлоба в правой части основного массива.",
         climbDesc: "Пологий жёлоб, разделяющий два скальных массива. Хорошо читаемый рельеф без сложных ключей, подходит для новичков и спуска.",
         finishDesc: "Выход на верхнюю перемычку между массивами.",
-        d: "M 314,190 L 310,152 L 312,114 L 314,78 L 314,54",
-        bolts: [[310, 152], [312, 114], [314, 78]],
-        anchor: [314, 54],
-        start: [314, 204],
-        keyPoint: [312, 114],
+        d: "M 314,192 L 310,154 L 312,116 L 314,80 L 314,56",
+        bolts: [[310, 154], [312, 116], [314, 80]],
+        anchor: [314, 56],
+        start: [314, 205],
+        keyPoint: [312, 116],
         keyLabel: "Пологий жёлоб"
       },
       {
@@ -915,18 +962,20 @@
         startDesc: "Правый массив за жёлобом, под широкой нависающей щелью.",
         climbDesc: "Широкая нависающая щель. Не пугайтесь нависания: кругом хватает хороших зацепок, чтобы спокойно лезть по ним. Технически несложно, но для страховки нужен камалот #4.",
         finishDesc: "Выход на полку правого массива на высоте 15 м.",
-        d: "M 344,190 L 338,162 L 336,134 L 334,108",
-        bolts: [[338, 162], [336, 134]],
-        anchor: [334, 108],
-        start: [344, 204],
-        keyPoint: [336, 134],
+        d: "M 344,192 L 338,164 L 336,136 L 334,110",
+        bolts: [[338, 164], [336, 136]],
+        anchor: [334, 110],
+        start: [344, 205],
+        keyPoint: [336, 136],
         keyLabel: "Щель, нужен #4"
       }
     ];
 
+    const TAB_ORDER = ['overview', 'routes', 'gear', 'notes'];
+    let currentTab = 'overview';
     let userData = JSON.parse(localStorage.getItem('lesnichestvo_journal_v3') || '{}');
-    let activeRouteId = 1;
-    let isZoomed = true;
+    let activeRouteId = 5;
+    let isZoomed = false; // По умолчанию вся скала, чтобы финиш был полностью виден
 
     function createSvgEl(tag, attrs = {}) {
       const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
@@ -939,6 +988,23 @@
         class: 'rock-mass',
         points: '10,192 24,142 38,136 46,96 62,88 74,56 96,48 116,34 142,38 164,24 192,28 214,18 244,26 266,36 292,32 314,52 336,92 354,112 368,192'
       }));
+
+      // Визуальные контуры зоны «Три карниза» (жёлтый) и «Щель» (красный) по фото
+      parent.appendChild(createSvgEl('path', {
+        d: 'M 150,156 Q 146,126 160,96 Q 154,66 172,38 L 182,42 L 178,154 Z',
+        fill: 'rgba(234, 179, 8, 0.08)',
+        stroke: 'rgba(234, 179, 8, 0.45)',
+        'stroke-width': '1',
+        'stroke-dasharray': '2.5 2'
+      }));
+      parent.appendChild(createSvgEl('path', {
+        d: 'M 190,156 L 195,28 L 203,28 L 198,156 Z',
+        fill: 'rgba(239, 68, 68, 0.10)',
+        stroke: 'rgba(239, 68, 68, 0.55)',
+        'stroke-width': '1',
+        'stroke-dasharray': '2.5 2'
+      }));
+
       const ledges = [
         [22, 146, 112, 132],
         [44, 98, 152, 86],
@@ -979,7 +1045,7 @@
         });
         path.addEventListener('click', () => {
           document.getElementById('overviewSelectedLabel').textContent = `#${r.id} ${r.name} (${r.grade})`;
-          openRouteDetails(r.id);
+          openRouteDetails(r.id, false);
         });
         group.appendChild(path);
 
@@ -997,35 +1063,37 @@
           x: sx, y: sy, fill: r.color, class: 'start-num'
         });
         num.textContent = r.id;
-        num.addEventListener('click', () => openRouteDetails(r.id));
+        num.addEventListener('click', () => openRouteDetails(r.id, false));
         group.appendChild(num);
       });
     }
 
-    function addCallout(parent, x, y, sub, label, minX = 6, maxX = 374, minY = 10, maxY = 205) {
+    function addCallout(parent, x, y, sub, label, strokeColor = '#38bdf8') {
       const g = createSvgEl('g', { class: 'zoom-callout' });
-      const pillW = Math.max(label.length * 2.75 + 8, 28);
-      const clampX = Math.max(minX + pillW / 2, Math.min(maxX - pillW / 2, x));
-      const clampY = Math.max(minY + 6, Math.min(maxY - 6, y));
+      const pillW = Math.max(label.length * 2.6 + 8, 28);
+      const clampX = Math.max(pillW / 2 + 6, Math.min(374 - pillW / 2, x));
+      const clampY = Math.max(10, Math.min(182, y));
 
       g.appendChild(createSvgEl('rect', {
         x: clampX - pillW / 2,
-        y: clampY - 6.2,
+        y: clampY - 5.8,
         width: pillW,
-        height: 12.4,
-        class: 'callout-pill'
+        height: 11.6,
+        class: 'callout-pill',
+        stroke: strokeColor
       }));
 
       const t1 = createSvgEl('text', {
         x: clampX,
-        y: clampY - 2.3,
-        class: 'callout-sub'
+        y: clampY - 2.1,
+        class: 'callout-sub',
+        fill: strokeColor
       });
       t1.textContent = sub;
 
       const t2 = createSvgEl('text', {
         x: clampX,
-        y: clampY + 2.7,
+        y: clampY + 2.5,
         class: 'callout-label'
       });
       t2.textContent = label;
@@ -1038,7 +1106,6 @@
     function computeRouteTransform(selected) {
       const svgW = 380;
       const svgH = 215;
-
       const pts = [selected.start, selected.anchor, selected.keyPoint, ...selected.bolts];
       let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
       pts.forEach(([x, y]) => {
@@ -1048,21 +1115,19 @@
         if (y > maxY) maxY = y;
       });
 
-      const padX = 38;
-      const padY = 22;
-      const boxW = Math.max(maxX - minX + padX * 2, 70);
-      const boxH = Math.max(maxY - minY + padY * 2, 95);
+      const padX = 48;
+      const padY = 26;
+      const boxW = Math.max(maxX - minX + padX * 2, 85);
+      const boxH = Math.max(maxY - minY + padY * 2, 120);
       const cx = (minX + maxX) / 2;
-      const cy = (minY + maxY) / 2;
+      const cy = Math.min(115, (minY + maxY) / 2 + 4);
 
-      // Умеренный зум, чтобы маршрут и подписи старта/финиша оставались в кадре
       const rawScale = Math.min(svgW / boxW, svgH / boxH);
-      const scale = Math.max(1.45, Math.min(1.9, rawScale));
-
+      const scale = Math.max(1.32, Math.min(1.62, rawScale));
       const tx = svgW / 2 - cx * scale;
       const ty = svgH / 2 - cy * scale;
 
-      return { scale, tx, ty, minX, maxX, minY, maxY };
+      return { scale, tx, ty };
     }
 
     function renderDetailSvg() {
@@ -1101,7 +1166,7 @@
         zoomGroup.appendChild(createSvgEl('circle', {
           cx: ax,
           cy: ay,
-          r: isSel ? '2.4' : '2.0',
+          r: isSel ? '2.5' : '2.0',
           class: 'anchor-top',
           opacity: isSel ? '1' : '0.18'
         }));
@@ -1112,37 +1177,32 @@
           y: sy,
           fill: isSel ? '#ffffff' : r.color,
           class: 'start-num',
-          opacity: isSel ? '1' : '0.22'
+          opacity: isSel ? '1' : '0.25'
         });
         num.textContent = r.id;
         zoomGroup.appendChild(num);
       });
 
-      const info = computeRouteTransform(selected);
+      // Подписи старта, ключа и финиша видны на выбранном маршруте, при этом финиш не выходит за рамку
       const [sx, sy] = selected.start;
       const [kx, ky] = selected.keyPoint;
       const [ax, ay] = selected.anchor;
 
-      const labelMinX = info.minX - 24;
-      const labelMaxX = info.maxX + 24;
-      const labelMinY = info.minY - 8;
-      const labelMaxY = info.maxY + 8;
-
-      addCallout(zoomGroup, sx, sy - 9, 'СТАРТ', `#${selected.id} ${selected.name}`, labelMinX, labelMaxX, labelMinY, labelMaxY);
-      addCallout(zoomGroup, kx + (kx > 250 ? -18 : 18), ky, 'КЛЮЧ / РЕЛЬЕФ', selected.keyLabel, labelMinX, labelMaxX, labelMinY, labelMaxY);
-      addCallout(zoomGroup, ax, ay - 9, 'ФИНИШ', `Станция (${selected.height})`, labelMinX, labelMaxX, labelMinY, labelMaxY);
+      addCallout(zoomGroup, sx, sy - 14, 'СТАРТ', `#${selected.id} ${selected.name}`, selected.color);
+      addCallout(zoomGroup, kx + (kx > 240 ? -22 : 22), ky, 'КЛЮЧ', selected.keyLabel, selected.color);
+      addCallout(zoomGroup, ax, ay + 10, 'ФИНИШ', `Станция (${selected.height})`, selected.color);
 
       if (isZoomed) {
+        const info = computeRouteTransform(selected);
         zoomGroup.style.transform = `translate(${info.tx.toFixed(1)}px, ${info.ty.toFixed(1)}px) scale(${info.scale.toFixed(2)})`;
       } else {
         zoomGroup.style.transform = 'translate(0px, 0px) scale(1)';
       }
     }
 
-    function resetZoom() {
-      isZoomed = false;
-      document.getElementById('detailZoomTitle').textContent = 'Общий план массива';
-      renderDetailSvg();
+    function toggleZoomMode() {
+      isZoomed = !isZoomed;
+      renderDetailTab();
     }
 
     function saveUserData() {
@@ -1172,21 +1232,35 @@
     }
 
     function switchTab(tabName) {
-      ['overview', 'routes', 'gear', 'notes'].forEach(t => {
-        document.getElementById(`view-${t}`).classList.toggle('hidden', t !== tabName);
-        document.getElementById(`nav-${t}`).classList.toggle('active', t === tabName);
+      if (tabName === currentTab) return;
+      const prevIdx = TAB_ORDER.indexOf(currentTab);
+      const nextIdx = TAB_ORDER.indexOf(tabName);
+      const animClass = nextIdx > prevIdx ? 'slide-enter-right' : 'slide-enter-left';
+
+      TAB_ORDER.forEach(t => {
+        const panel = document.getElementById(`view-${t}`);
+        panel.classList.remove('slide-enter-right', 'slide-enter-left');
+        const isTarget = t === tabName;
+        panel.classList.toggle('hidden', !isTarget);
+        if (isTarget) {
+          void panel.offsetWidth;
+          panel.classList.add(animClass);
+        }
+        document.getElementById(`nav-${t}`).classList.toggle('active', isTarget);
       });
+
+      currentTab = tabName;
       if (tabName === 'routes') {
-        isZoomed = true;
         renderDetailTab();
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function openRouteDetails(id) {
+    function openRouteDetails(id, zoom = false) {
       activeRouteId = id;
-      isZoomed = true;
+      isZoomed = zoom;
       switchTab('routes');
+      renderDetailTab();
     }
 
     function renderDetailTab() {
@@ -1199,15 +1273,20 @@
         btn.textContent = `#${r.id} ${r.name}`;
         btn.onclick = () => {
           activeRouteId = r.id;
-          isZoomed = true;
           renderDetailTab();
         };
         pills.appendChild(btn);
       });
 
       const r = LESNICHESTVO_ROUTES.find(item => item.id === activeRouteId) || LESNICHESTVO_ROUTES[0];
-      document.getElementById('detailZoomTitle').textContent = isZoomed ? 'Плавный зум на трассу' : 'Общий план массива';
+      document.getElementById('detailZoomTitle').textContent = isZoomed
+        ? 'Плавный зум на трассу'
+        : 'Вся скала • Финиш виден полностью';
       document.getElementById('detailZoomBadge').textContent = `#${r.id} ${r.name} • ${r.grade}`;
+
+      const zoomBtn = document.getElementById('zoomToggleBtn');
+      zoomBtn.textContent = isZoomed ? 'Вся скала' : 'Приблизить';
+      zoomBtn.classList.toggle('active-zoom', isZoomed);
 
       renderDetailSvg();
 
