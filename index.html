@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>ADVENTURE CLUB KZ — Скалы Алматы</title>
+  <title>ADVENTURE CLUB KZ — Скалы и горы Алматы</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
@@ -20,8 +20,6 @@
       --orange: #f97316;
       --red: #ef4444;
       --red-dim: rgba(239, 68, 68, 0.24);
-      --radius: 16px;
-      --glass-bg: rgba(255, 255, 255, 0.08);
       --glass-border: rgba(255, 255, 255, 0.22);
       --ease-page: cubic-bezier(0.22, 1, 0.36, 1);
     }
@@ -38,32 +36,31 @@
       background-color: var(--bg);
       color: var(--text);
       line-height: 1.45;
-      padding-bottom: 92px;
+      padding-bottom: 94px;
       overflow-x: hidden;
     }
 
-    /* Закруглённая стеклянная рамка-подсказка движения (без острых углов) */
+    /* Закруглённые стеклянные рамки без острых углов */
     .glass-move-pill {
       display: inline-flex;
       align-items: center;
       gap: 6px;
       padding: 5px 12px;
       border-radius: 999px;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.04));
       border: 1px solid var(--glass-border);
       backdrop-filter: blur(12px) saturate(150%);
       -webkit-backdrop-filter: blur(12px) saturate(150%);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 6px 18px rgba(0, 0, 0, 0.28);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 6px 18px rgba(0, 0, 0, 0.28);
       font-size: 11px;
       font-weight: 700;
       color: #e5e7eb;
-      letter-spacing: 0.01em;
+      white-space: nowrap;
     }
 
     .glass-move-arrows {
       display: inline-flex;
       align-items: center;
-      gap: 2px;
       color: var(--accent);
       font-weight: 800;
       animation: gentleSlideHint 2.2s ease-in-out infinite;
@@ -81,15 +78,15 @@
       gap: 8px;
       flex-wrap: wrap;
       padding: 8px 12px;
-      border-radius: 26px;
-      background: linear-gradient(145deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.03));
+      border-radius: 999px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03));
       border: 1px solid var(--glass-border);
       backdrop-filter: blur(14px) saturate(150%);
       -webkit-backdrop-filter: blur(14px) saturate(150%);
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 8px 22px rgba(0, 0, 0, 0.3);
     }
 
-    /* Главный экран Adventure Club KZ */
+    /* Главный экран */
     .splash-screen {
       position: fixed;
       inset: 0;
@@ -145,8 +142,8 @@
     }
 
     .emblem-circle {
-      width: 68px;
-      height: 68px;
+      width: 66px;
+      height: 66px;
       border-radius: 50%;
       background: linear-gradient(165deg, #252d3a 0%, #11151c 100%);
       border: 2px solid rgba(255, 255, 255, 0.18);
@@ -160,8 +157,8 @@
     }
 
     .emblem-peak-svg {
-      width: 32px;
-      height: 20px;
+      width: 30px;
+      height: 19px;
       margin-bottom: 1px;
     }
 
@@ -200,10 +197,9 @@
       margin-top: 2px;
     }
 
-    /* Виджет погоды на главном экране */
     .weather-glass-card {
       width: 100%;
-      border-radius: 24px;
+      border-radius: 26px;
       padding: 11px 14px;
       background: linear-gradient(135deg, rgba(56, 189, 248, 0.14), rgba(255, 255, 255, 0.06));
       border: 1px solid var(--glass-border);
@@ -256,13 +252,12 @@
       flex-shrink: 0;
     }
 
-    /* Календарь на главном экране с горной панорамой на заднем фоне */
     .calendar-card {
       position: relative;
       width: 100%;
       background: #12161e;
       border: 1px solid rgba(255, 255, 255, 0.16);
-      border-radius: 22px;
+      border-radius: 24px;
       padding: 12px;
       overflow: hidden;
       text-align: left;
@@ -389,7 +384,7 @@
 
     .cal-day {
       min-height: 44px;
-      border-radius: 12px;
+      border-radius: 14px;
       background: rgba(16, 20, 27, 0.56);
       border: 1px solid rgba(255, 255, 255, 0.14);
       color: var(--text);
@@ -483,7 +478,7 @@
       margin-top: 10px;
       background: rgba(20, 24, 31, 0.94);
       border: 1px solid rgba(239, 68, 68, 0.55);
-      border-radius: 16px;
+      border-radius: 18px;
       padding: 11px 12px;
       display: flex;
       flex-direction: column;
@@ -564,15 +559,11 @@
       gap: 6px;
     }
 
-    .event-preview-wa-btn:active {
-      transform: scale(0.98);
-    }
-
     .admin-panel {
       margin-top: 10px;
       background: rgba(20, 24, 31, 0.9);
       border: 1px solid rgba(239, 68, 68, 0.55);
-      border-radius: 16px;
+      border-radius: 18px;
       padding: 10px;
       display: flex;
       flex-direction: column;
@@ -613,8 +604,8 @@
       width: 100%;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 7px 12px;
+      border-radius: 999px;
+      padding: 7px 14px;
       color: var(--text);
       font-family: inherit;
       font-size: 12px;
@@ -649,26 +640,45 @@
       cursor: pointer;
     }
 
+    .splash-nav-grid {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
     .enter-btn {
       width: 100%;
       background: var(--text);
       color: var(--bg);
       border: none;
       border-radius: 999px;
-      padding: 12px 20px;
-      font-size: 14px;
+      padding: 12px 16px;
+      font-size: 13px;
       font-weight: 800;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 6px;
       box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
-      transition: transform 0.2s ease, opacity 0.2s ease;
+      transition: transform 0.2s ease;
     }
 
-    .enter-btn:active {
-      transform: scale(0.98);
+    .secondary-splash-btn {
+      width: 100%;
+      background: rgba(20, 24, 31, 0.9);
+      color: var(--text);
+      border: 1px solid var(--glass-border);
+      border-radius: 999px;
+      padding: 12px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
     }
 
     .splash-footer {
@@ -706,15 +716,9 @@
       text-decoration: none;
       background: rgba(20, 24, 31, 0.92);
       border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 9px 10px;
+      border-radius: 999px;
+      padding: 9px 12px;
       color: var(--text);
-      transition: border-color 0.2s ease, background 0.2s ease;
-    }
-
-    .contact-btn:hover {
-      border-color: var(--accent);
-      background: var(--surface-2);
     }
 
     .contact-title {
@@ -728,6 +732,7 @@
       color: var(--muted);
     }
 
+    /* Шапка и меню */
     header {
       position: sticky;
       top: 0;
@@ -815,7 +820,36 @@
       white-space: nowrap;
     }
 
-    /* Плавный эффект перелистывания между вкладками */
+    .sub-pill-bar {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .sub-pill-bar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .sub-pill-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 7px 13px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .sub-pill-btn.active {
+      background: var(--accent-dim);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* Эффект перелистывания между разделами */
     .tab-stage {
       position: relative;
       width: 100%;
@@ -864,7 +898,7 @@
     .topo-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 20px;
+      border-radius: 22px;
       overflow: hidden;
     }
 
@@ -914,11 +948,6 @@
       cursor: pointer;
       white-space: nowrap;
       flex-shrink: 0;
-      transition: background 0.25s ease, transform 0.2s ease;
-    }
-
-    .zoom-toggle-btn:active {
-      transform: scale(0.97);
     }
 
     .zoom-toggle-btn.active-zoom {
@@ -989,7 +1018,6 @@
       fill: #0e1116;
       stroke-width: 1.3;
       pointer-events: none;
-      transition: opacity 0.35s ease;
     }
 
     .anchor-top {
@@ -997,7 +1025,6 @@
       stroke: #0e1116;
       stroke-width: 0.9;
       pointer-events: none;
-      transition: opacity 0.35s ease;
     }
 
     .start-num {
@@ -1005,12 +1032,10 @@
       font-weight: 800;
       text-anchor: middle;
       cursor: pointer;
-      transition: opacity 0.35s ease;
     }
 
     .zoom-callout {
       pointer-events: none;
-      transition: opacity 0.35s ease;
     }
 
     .callout-pill {
@@ -1070,7 +1095,7 @@
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 20px;
+      border-radius: 22px;
       padding: 14px;
     }
 
@@ -1112,18 +1137,12 @@
       font-weight: 700;
       padding: 8px 14px;
       border-radius: 999px;
-      transition: border-color 0.25s ease, background 0.25s ease;
-    }
-
-    .map-link-btn:hover {
-      border-color: var(--accent);
-      background: var(--accent-dim);
     }
 
     .grade-badge {
       padding: 4px 11px;
       border-radius: 999px;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 800;
       white-space: nowrap;
     }
@@ -1154,7 +1173,6 @@
       font-weight: 700;
       white-space: nowrap;
       cursor: pointer;
-      transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
     }
 
     .r-pill.active {
@@ -1197,7 +1215,7 @@
     .step-row {
       background: var(--surface-2);
       border: 1px solid var(--border);
-      border-radius: 14px;
+      border-radius: 16px;
       padding: 10px 12px;
     }
 
@@ -1229,7 +1247,7 @@
       gap: 10px;
       background: var(--surface-2);
       border: 1px solid var(--border);
-      border-radius: 14px;
+      border-radius: 16px;
       padding: 9px 12px;
       font-size: 13px;
     }
@@ -1248,7 +1266,7 @@
     .log-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 20px;
+      border-radius: 22px;
       padding: 13px 14px;
       display: flex;
       flex-direction: column;
@@ -1299,7 +1317,6 @@
       font-weight: 600;
       cursor: pointer;
       text-align: center;
-      transition: background 0.22s ease, color 0.22s ease, border-color 0.22s ease;
     }
 
     .btn-status.done-os { background: rgba(56, 189, 248, 0.18); border-color: var(--accent); color: var(--accent); }
@@ -1332,7 +1349,6 @@
       border-radius: 999px;
       font-size: 14px;
       cursor: pointer;
-      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
     }
 
     .star-btn.active {
@@ -1353,11 +1369,96 @@
       resize: vertical;
       min-height: 54px;
       outline: none;
-      transition: border-color 0.2s ease;
     }
 
-    .note-input:focus {
-      border-color: var(--accent);
+    /* Таблица расписания (декабрь 2026) */
+    .schedule-poster-card {
+      background: linear-gradient(180deg, #161c26 0%, #11151d 100%);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 16px 14px;
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.42);
+    }
+
+    .schedule-poster-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+      margin-bottom: 6px;
+    }
+
+    .schedule-poster-month {
+      font-size: 20px;
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+    }
+
+    .schedule-poster-sub {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .schedule-cols-head {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      padding: 6px 4px 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .schedule-item-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 11px 6px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      cursor: pointer;
+    }
+
+    .schedule-item-row:last-child {
+      border-bottom: none;
+    }
+
+    .schedule-route-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .schedule-route-sub {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
+    .schedule-date-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 11px;
+      border-radius: 999px;
+      background: rgba(239, 68, 68, 0.16);
+      border: 1px solid rgba(239, 68, 68, 0.45);
+      font-size: 12px;
+      font-weight: 800;
+      color: #fca5a5;
+      white-space: nowrap;
+    }
+
+    .schedule-date-badge.glacier {
+      background: rgba(56, 189, 248, 0.16);
+      border-color: rgba(56, 189, 248, 0.45);
+      color: #7dd3fc;
     }
 
     nav.bottom-nav {
@@ -1369,9 +1470,9 @@
       backdrop-filter: blur(12px);
       border-top: 1px solid var(--border);
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      padding: 7px 10px 16px;
-      gap: 5px;
+      grid-template-columns: repeat(3, 1fr);
+      padding: 7px 12px 16px;
+      gap: 6px;
       z-index: 40;
     }
 
@@ -1379,9 +1480,9 @@
       background: transparent;
       border: none;
       color: var(--muted);
-      font-size: 11px;
-      font-weight: 600;
-      padding: 7px 6px;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 8px 6px;
       border-radius: 999px;
       cursor: pointer;
       text-align: center;
@@ -1404,7 +1505,7 @@
 </head>
 <body>
 
-  <!-- ГЛАВНЫЙ ЭКРАН ADVENTURE CLUB KZ -->
+  <!-- ГЛАВНЫЙ ЭКРАН -->
   <section class="splash-screen" id="splashScreen">
     <svg class="splash-bg-mountain" viewBox="0 0 400 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <defs>
@@ -1422,7 +1523,6 @@
       <polygon points="0,420 95,290 175,365 275,235 400,375 400,800 0,800" fill="#18202c" opacity="0.7" />
       <polygon points="20,540 165,245 215,310 278,195 385,480 400,800 0,800" fill="#11161f" />
       <polygon points="278,195 252,255 274,244 290,262 316,285" fill="url(#snowGrad)" opacity="0.65" />
-      <polygon points="165,245 144,295 166,286 184,302" fill="url(#snowGrad)" opacity="0.5" />
     </svg>
 
     <div class="splash-content">
@@ -1437,11 +1537,11 @@
         </div>
         <div class="splash-heading-block">
           <div class="splash-title">ADVENTURE CLUB KZ</div>
-          <p class="splash-desc">Красные даты — запись на восхождение и скалолазание</p>
+          <p class="splash-desc">Сб — скалолазание • Вс — ледник Богдановича</p>
         </div>
       </div>
 
-      <!-- ПОГОДА НА ГЛАВНОМ ЭКРАНЕ -->
+      <!-- ПОГОДА -->
       <div class="weather-glass-card" id="homeWeatherWidget">
         <div class="weather-main-left">
           <div class="weather-temp-big" id="weatherTempText">6°C</div>
@@ -1451,19 +1551,14 @@
           </div>
         </div>
         <div class="weather-meta-right">
-          <span id="weatherWindText">Ветер: 4 mph ЮВ</span>
+          <span id="weatherWindText">Ветер: 4 mph</span>
           <span id="weatherHumText">Влажность: 38%</span>
         </div>
       </div>
 
-      <!-- КАЛЕНДАРЬ РАСПИСАНИЯ С ГОРНОЙ ПАНОРАМОЙ НА ЗАДНЕМ ФОНЕ -->
+      <!-- КАЛЕНДАРЬ -->
       <div class="calendar-card">
-        <svg
-          class="calendar-bg-photo"
-          viewBox="0 0 900 360"
-          preserveAspectRatio="xMidYMid slice"
-          aria-hidden="true"
-        >
+        <svg class="calendar-bg-photo" viewBox="0 0 900 360" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
           <defs>
             <linearGradient id="calMountainSky" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stop-color="#4b6b8e" />
@@ -1475,37 +1570,11 @@
               <stop offset="65%" stop-color="#cbd5e1" />
               <stop offset="100%" stop-color="#475569" />
             </linearGradient>
-            <linearGradient id="calWarmRidge" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#fed7aa" stop-opacity="0.85" />
-              <stop offset="100%" stop-color="#64748b" stop-opacity="0.5" />
-            </linearGradient>
           </defs>
-
           <rect width="900" height="360" fill="url(#calMountainSky)" />
-          <ellipse cx="180" cy="76" rx="130" ry="26" fill="#e2e8f0" opacity="0.24" />
-          <ellipse cx="440" cy="62" rx="170" ry="32" fill="#f1f5f9" opacity="0.26" />
-          <ellipse cx="715" cy="80" rx="145" ry="25" fill="#e2e8f0" opacity="0.22" />
-
-          <polygon
-            points="0,255 110,155 215,195 345,128 485,172 630,92 775,152 900,118 900,360 0,360"
-            fill="#334155"
-            opacity="0.75"
-          />
-          <polygon
-            points="0,285 135,168 255,222 415,142 565,198 765,62 900,175 900,360 0,360"
-            fill="url(#calSnowPeak)"
-            opacity="0.68"
-          />
-          <polygon
-            points="40,310 175,192 295,245 455,168 615,220 765,62 695,210 520,255 340,285 160,330"
-            fill="url(#calWarmRidge)"
-            opacity="0.48"
-          />
-          <polygon
-            points="0,330 95,235 190,275 320,210 470,265 655,155 815,245 900,215 900,360 0,360"
-            fill="#0f141c"
-            opacity="0.78"
-          />
+          <polygon points="0,255 110,155 215,195 345,128 485,172 630,92 775,152 900,118 900,360 0,360" fill="#334155" opacity="0.75" />
+          <polygon points="0,285 135,168 255,222 415,142 565,198 765,62 900,175 900,360 0,360" fill="url(#calSnowPeak)" opacity="0.68" />
+          <polygon points="0,330 95,235 190,275 320,210 470,265 655,155 815,245 900,215 900,360 0,360" fill="#0f141c" opacity="0.78" />
         </svg>
         <div class="calendar-bg-scrim"></div>
 
@@ -1521,30 +1590,24 @@
           </div>
 
           <div class="cal-weekdays">
-            <span>Пн</span>
-            <span>Вт</span>
-            <span>Ср</span>
-            <span>Чт</span>
-            <span>Пт</span>
-            <span>Сб</span>
-            <span>Вс</span>
+            <span>Пн</span><span>Вт</span><span>Ср</span><span>Чт</span><span>Пт</span><span>Сб</span><span>Вс</span>
           </div>
 
           <div class="cal-grid" id="calendarGrid"></div>
 
           <div class="cal-legend-bar">
-            <span><i class="red-dot"></i>Нажми на красную дату, чтобы посмотреть локацию</span>
+            <span><i class="red-dot"></i>Нажми на дату, чтобы посмотреть локацию</span>
             <span id="adminStatusHint">Только просмотр</span>
           </div>
 
           <div class="event-preview-card hidden" id="eventPreviewCard">
             <div class="event-preview-top">
-              <span class="event-preview-badge" id="previewTypeBadge">Скалолазание • 28.11.2026</span>
+              <span class="event-preview-badge" id="previewTypeBadge">Скалолазание • 05.12.2026</span>
               <button type="button" class="event-preview-close" onclick="closeEventPreview()" title="Закрыть">✕</button>
             </div>
             <div>
               <div class="event-preview-location" id="previewLocationText">Локация уточняется</div>
-              <div class="event-preview-sub" id="previewHintText">Нажми кнопку ниже, чтобы отправить заявку в WhatsApp</div>
+              <div class="event-preview-sub">Нажми кнопку ниже, чтобы отправить заявку в WhatsApp</div>
             </div>
             <button type="button" class="event-preview-wa-btn" id="previewWhatsAppBtn">
               <span>Записаться в WhatsApp</span>
@@ -1562,7 +1625,7 @@
               type="text"
               class="admin-note-input"
               id="adminEventNote"
-              placeholder="Опционально: пик / скала, например «Пик Фурманова» или «Лесничество»"
+              placeholder="Локация, например «Ледник Богдановича» или «Лесничество»"
             />
             <div class="admin-actions-row">
               <button class="admin-save-btn" onclick="saveAdminDate()">Отметить красным</button>
@@ -1572,10 +1635,15 @@
         </div>
       </div>
 
-      <button class="enter-btn" onclick="dismissSplash()">
-        <span>Открыть топо</span>
-        <span>→</span>
-      </button>
+      <div class="splash-nav-grid">
+        <button class="enter-btn" onclick="dismissSplash('crags')">
+          <span>Скалы и топо</span>
+          <span>→</span>
+        </button>
+        <button class="secondary-splash-btn" onclick="dismissSplash('schedule')">
+          <span>Расписание</span>
+        </button>
+      </div>
     </div>
 
     <div class="splash-footer">
@@ -1593,100 +1661,189 @@
     </div>
   </section>
 
+  <!-- ВЕРХНЕЕ МЕНЮ -->
   <header>
-    <div class="crag-switcher">
+    <div class="crag-switcher" id="cragSwitcherRow">
       <button class="home-pill-btn" onclick="openSplash()">← Главная</button>
       <button class="crag-tab active" id="crag-lesnichestvo" onclick="selectCrag('lesnichestvo')">Лесничество</button>
       <button class="crag-tab" id="crag-tuyuksu" onclick="selectCrag('tuyuksu')">Туюк-Су</button>
-      <button class="crag-tab soon" id="crag-bao" onclick="selectCrag('bao')">БАО / Бутаковка (скоро)</button>
+      <button class="crag-tab soon" id="crag-bao" onclick="selectCrag('bao')">БАО (скоро)</button>
     </div>
 
     <div class="header-top">
       <div class="title-group">
-        <h1 id="cragTitle">Скалы Лесничества</h1>
-        <p id="cragSubtitle">Окрестности Медео • Трэд и верхняя страховка</p>
+        <h1 id="headerMainTitle">Скалы Лесничества</h1>
+        <p id="headerMainSubtitle">Окрестности Медео • Трэд и верхняя страховка</p>
       </div>
       <div class="stats-pill" id="progressPill">Пройдено: 0/10</div>
     </div>
   </header>
 
   <div class="tab-stage">
-    <main id="view-overview" class="tab-panel">
+    <!-- ГРУППА 1: СКАЛЫ (ОБЗОР + МАРШРУТЫ + СНАРЯГА + ЗАМЕТКИ) -->
+    <main id="view-crags" class="tab-panel">
       <div class="glass-tab-frame">
-        <span class="section-label" id="overviewSectionLabel">Обзор района</span>
-        <span class="glass-move-pill">
-          <span class="glass-move-arrows">↔</span>
-          <span>Листай вкладки или свайпай</span>
-        </span>
-      </div>
-
-      <div class="topo-card">
-        <div class="topo-header">
-          <div class="topo-info-col">
-            <span class="topo-title" id="overviewTopoTitle">Массив Лесничества • 1–10</span>
-            <span class="topo-active" id="overviewSelectedLabel">Нажми на линию для перехода</span>
-          </div>
-          <span class="glass-move-pill">Тап по линии</span>
-        </div>
-        <div class="topo-svg-wrap">
-          <svg class="topo-scheme" viewBox="0 0 380 215">
-            <g id="overviewRockGroup"></g>
-          </svg>
-        </div>
-        <div class="topo-legend" id="overviewLegend"></div>
-      </div>
-
-      <div id="overviewDynamicCards" style="display: flex; flex-direction: column; gap: 14px;"></div>
-    </main>
-
-    <main id="view-routes" class="tab-panel hidden">
-      <div class="glass-tab-frame">
-        <span class="section-label" id="routesSectionLabel">Выбери трассу (1–10)</span>
+        <span class="section-label">Раздел «Скалы»</span>
         <span class="glass-move-pill">
           <span class="glass-move-arrows">⇄</span>
-          <span>Двигай список трасс</span>
+          <span>Двигай вкладки внутри скал</span>
         </span>
       </div>
 
-      <div class="route-pills" id="detailPills"></div>
-
-      <div class="topo-card">
-        <div class="topo-header">
-          <div class="topo-info-col">
-            <span class="topo-title" id="detailZoomTitle">Вся скала • Финиш виден полностью</span>
-            <span class="topo-active" id="detailZoomBadge">#1 Разминочная • Fr4</span>
-          </div>
-          <button class="zoom-toggle-btn" id="zoomToggleBtn" onclick="toggleZoomMode()">Приблизить</button>
-        </div>
-        <div class="topo-svg-wrap">
-          <svg class="topo-scheme" id="detailSvg" viewBox="0 0 380 215">
-            <g id="zoomGroup"></g>
-          </svg>
-        </div>
+      <div class="sub-pill-bar">
+        <button class="sub-pill-btn active" id="sub-overview" onclick="switchCragSubTab('overview')">Обзор и топо</button>
+        <button class="sub-pill-btn" id="sub-routes" onclick="switchCragSubTab('routes')">Маршруты</button>
+        <button class="sub-pill-btn" id="sub-gear" onclick="switchCragSubTab('gear')">Снаряга</button>
+        <button class="sub-pill-btn" id="sub-notes" onclick="switchCragSubTab('notes')">Заметки</button>
       </div>
 
-      <div class="card" id="routeDetailCard"></div>
+      <div id="crag-sub-overview" style="display: flex; flex-direction: column; gap: 14px;">
+        <div class="topo-card">
+          <div class="topo-header">
+            <div class="topo-info-col">
+              <span class="topo-title" id="overviewTopoTitle">Массив Лесничества • 1–10</span>
+              <span class="topo-active" id="overviewSelectedLabel">Нажми на линию для перехода</span>
+            </div>
+            <span class="glass-move-pill">Тап по линии</span>
+          </div>
+          <div class="topo-svg-wrap">
+            <svg class="topo-scheme" viewBox="0 0 380 215">
+              <g id="overviewRockGroup"></g>
+            </svg>
+          </div>
+          <div class="topo-legend" id="overviewLegend"></div>
+        </div>
+
+        <div id="overviewDynamicCards" style="display: flex; flex-direction: column; gap: 14px;"></div>
+      </div>
+
+      <div id="crag-sub-routes" class="hidden" style="display: flex; flex-direction: column; gap: 14px;">
+        <div class="glass-tab-frame">
+          <span class="section-label" id="routesSectionLabel">Выбери трассу (1–10)</span>
+          <span class="glass-move-pill">
+            <span class="glass-move-arrows">⇄</span>
+            <span>Листай трассы</span>
+          </span>
+        </div>
+        <div class="route-pills" id="detailPills"></div>
+
+        <div class="topo-card">
+          <div class="topo-header">
+            <div class="topo-info-col">
+              <span class="topo-title" id="detailZoomTitle">Вся скала • Финиш виден полностью</span>
+              <span class="topo-active" id="detailZoomBadge">#1 Разминочная • Fr4</span>
+            </div>
+            <button class="zoom-toggle-btn" id="zoomToggleBtn" onclick="toggleZoomMode()">Приблизить</button>
+          </div>
+          <div class="topo-svg-wrap">
+            <svg class="topo-scheme" id="detailSvg" viewBox="0 0 380 215">
+              <g id="zoomGroup"></g>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card" id="routeDetailCard"></div>
+      </div>
+
+      <div id="crag-sub-gear" class="hidden" style="display: flex; flex-direction: column; gap: 14px;"></div>
+      <div id="crag-sub-notes" class="hidden" style="display: flex; flex-direction: column; gap: 14px;">
+        <div class="glass-tab-frame">
+          <span class="section-label">Журнал пролазов и заметок</span>
+          <span class="glass-move-pill">
+            <span class="glass-move-arrows">↕</span>
+            <span>Листай карточки</span>
+          </span>
+        </div>
+        <div id="notesList" style="display: flex; flex-direction: column; gap: 12px;"></div>
+      </div>
     </main>
 
-    <main id="view-gear" class="tab-panel hidden"></main>
-
-    <main id="view-notes" class="tab-panel hidden">
+    <!-- ГРУППА 2: РАСПИСАНИЕ (ДЕКАБРЬ 2026: СБ — СКАЛОЛАЗАНИЕ, ВС — ЛЕДНИК БОГДАНОВИЧА) -->
+    <main id="view-schedule" class="tab-panel hidden">
       <div class="glass-tab-frame">
-        <span class="section-label" id="notesSectionLabel">Журнал пролазов и заметок</span>
+        <span class="section-label">График выездов</span>
         <span class="glass-move-pill">
           <span class="glass-move-arrows">↕</span>
-          <span>Листай карточки трасс</span>
+          <span>Нажми на дату для записи</span>
         </span>
       </div>
-      <div id="notesList" style="display: flex; flex-direction: column; gap: 12px;"></div>
+
+      <div class="schedule-poster-card">
+        <div class="schedule-poster-head">
+          <span class="schedule-poster-month">декабрь 2026</span>
+          <span class="schedule-poster-sub">Сб: скалы • Вс: ледник</span>
+        </div>
+        <div class="schedule-cols-head">
+          <span>направление / активность</span>
+          <span>дата</span>
+        </div>
+        <div id="decemberScheduleList"></div>
+      </div>
+
+      <div class="card">
+        <h3>Формат выходных в декабре</h3>
+        <ul>
+          <li><strong>Каждая суббота декабря:</strong> выезды на <strong>скалолазание</strong> — отработка техники, работа на рельефе и страховке.</li>
+          <li><strong>Каждое воскресенье декабря:</strong> выход на <strong>ледник Богдановича</strong> — зимний высокогорный маршрут в районе Туюк-Су.</li>
+          <li><strong>Запись и сборы:</strong> нажми на нужную дату выше или на красную дату календаря на главной, чтобы сразу перейти в WhatsApp с готовым сообщением.</li>
+        </ul>
+      </div>
+    </main>
+
+    <!-- ГРУППА 3: ЛЕДНИК БОГДАНОВИЧА -->
+    <main id="view-glacier" class="tab-panel hidden">
+      <div class="glass-tab-frame">
+        <span class="section-label">Высокогорный маршрут</span>
+        <span class="glass-move-pill">
+          <span class="glass-move-arrows">↕</span>
+          <span>Ледник Богдановича</span>
+        </span>
+      </div>
+
+      <div class="card">
+        <h3>Ледник Богдановича (верховья Туюк-Су)</h3>
+        <p style="margin-bottom: 8px;">
+          Один из самых известных и живописных ледников Заилийского Алатау в верховьях ущелья Малого Алматинского (выше альплагеря Туюк-Су). Зимой и в начале зимы в декабре это отличный формат полноценного горного выхода с видами на снежные вершины и гребни.
+        </p>
+        <ul>
+          <li><strong>Высота и условия:</strong> район выше 3000 м — в декабре здесь морознее, чем на скалах у города, возможен плотный фирн, свежий снег, скользкие участки и порывистый ветер.</li>
+          <li><strong>Что важно по снаряжению:</strong> надёжная треккинговая или альпинистская обувь, <strong>кошки</strong> (при наличии открытого льда/жёсткого фирна), тёплая мембранная куртка и утепляющий слой, перчатки, шапка/бафф, термос и солнцезащита.</li>
+          <li><strong>Тактика и безопасность:</strong> выходим в темпе группы, следим за самочувствием на высоте, не сходим с согласованного маршрута и заранее берем запас тепла и воды.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Снаряжение для воскресного выхода на ледник</h3>
+        <div class="gear-grid">
+          <div class="gear-row">
+            <span class="gear-name">Кошки (под обувь)</span>
+            <span class="gear-routes">На жёсткий фирн и лёд</span>
+          </div>
+          <div class="gear-row">
+            <span class="gear-name">Тёплый комплект + ветрозащита</span>
+            <span class="gear-routes">Слои для высоты и ветра</span>
+          </div>
+          <div class="gear-row">
+            <span class="gear-name">Перчатки, шапка, очки / маска</span>
+            <span class="gear-routes">Защита от холода и солнца</span>
+          </div>
+          <div class="gear-row">
+            <span class="gear-name">Термос, перекус, фонарик</span>
+            <span class="gear-routes">Зимний световой день</span>
+          </div>
+        </div>
+        <div class="map-links">
+          <a class="map-link-btn" href="https://wa.me/77054127588?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%2C%20%D0%BF%D0%B8%D1%88%D1%83%20%D0%B8%D0%B7%20%D0%BF%D1%80%D0%B8%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F%20Telegram.%20%D0%A5%D0%BE%D1%87%D1%83%20%D1%83%D0%B7%D0%BD%D0%B0%D1%82%D1%8C%20%D0%BF%D0%BE%D0%B4%D1%80%D0%BE%D0%B1%D0%BD%D0%B5%D0%B5%20%D0%BF%D1%80%D0%BE%20%D0%B2%D1%8B%D1%85%D0%BE%D0%B4%20%D0%BD%D0%B0%20%D0%BB%D0%B5%D0%B4%D0%BD%D0%B8%D0%BA%20%D0%91%D0%BE%D0%B3%D0%B4%D0%B0%D0%BD%D0%BE%D0%B2%D0%B8%D1%87%D0%B0." target="_blank" rel="noopener noreferrer">Записаться на ледник в WhatsApp</a>
+        </div>
+      </div>
     </main>
   </div>
 
+  <!-- НИЖНЕЕ МЕНЮ -->
   <nav class="bottom-nav">
-    <button class="nav-item active" id="nav-overview" onclick="switchTab('overview')">Обзор</button>
-    <button class="nav-item" id="nav-routes" onclick="switchTab('routes')">Маршруты</button>
-    <button class="nav-item" id="nav-gear" onclick="switchTab('gear')">Снаряга</button>
-    <button class="nav-item" id="nav-notes" onclick="switchTab('notes')">Заметки</button>
+    <button class="nav-item active" id="nav-crags" onclick="switchMainSection('crags')">Скалы</button>
+    <button class="nav-item" id="nav-schedule" onclick="switchMainSection('schedule')">Расписание</button>
+    <button class="nav-item" id="nav-glacier" onclick="switchMainSection('glacier')">Ледник</button>
   </nav>
 
   <script>
@@ -1713,6 +1870,55 @@
     const nowDate = new Date();
     let calYear = nowDate.getFullYear();
     let calMonth = nowDate.getMonth();
+
+    // Базовое расписание декабря 2026: каждую субботу — скалолазание, каждое воскресенье — ледник Богдановича
+    function getDecember2026DefaultEvents() {
+      const defaults = {};
+      for (let day = 1; day <= 31; day++) {
+        const dt = new Date(2026, 11, day);
+        const dow = dt.getDay(); // 6 = Сб, 0 = Вс
+        const key = formatDateKey(2026, 11, day);
+        if (dow === 6) {
+          defaults[key] = {
+            type: "Скалолазание",
+            note: "Скалолазание (суббота)"
+          };
+        } else if (dow === 0) {
+          defaults[key] = {
+            type: "Восхождение",
+            note: "Ледник Богдановича"
+          };
+        }
+      }
+      return defaults;
+    }
+
+    function getMergedSchedule() {
+      const base = getDecember2026DefaultEvents();
+      return { ...base, ...(scheduleCache || {}) };
+    }
+
+    function formatDateKey(year, month, day) {
+      const m = String(month + 1).padStart(2, '0');
+      const d = String(day).padStart(2, '0');
+      return `${year}-${m}-${d}`;
+    }
+
+    function formatRuDate(dateKey) {
+      const [y, m, d] = dateKey.split('-');
+      return `${d}.${m}.${y}`;
+    }
+
+    function getRuWeekdayShort(dateKey) {
+      const [y, m, d] = dateKey.split('-').map(Number);
+      const names = ['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб'];
+      return names[new Date(y, m - 1, d).getDay()];
+    }
+
+    function getTodayRuDate() {
+      const d = new Date();
+      return formatRuDate(formatDateKey(d.getFullYear(), d.getMonth(), d.getDate()));
+    }
 
     function describeWeatherCode(code) {
       if (code === 0) return "Ясно";
@@ -1749,22 +1955,6 @@
       } catch (e) {}
     }
 
-    function formatDateKey(year, month, day) {
-      const m = String(month + 1).padStart(2, '0');
-      const d = String(day).padStart(2, '0');
-      return `${year}-${m}-${d}`;
-    }
-
-    function formatRuDate(dateKey) {
-      const [y, m, d] = dateKey.split('-');
-      return `${d}.${m}.${y}`;
-    }
-
-    function getTodayRuDate() {
-      const d = new Date();
-      return formatRuDate(formatDateKey(d.getFullYear(), d.getMonth(), d.getDate()));
-    }
-
     function loadLocalSchedule() {
       try {
         return JSON.parse(localStorage.getItem(CALENDAR_STORAGE_KEY) || '{}') || {};
@@ -1779,27 +1969,22 @@
       } catch {}
     }
 
-    function getSchedule() {
-      return scheduleCache || {};
-    }
-
     async function syncScheduleFromCloud() {
       try {
         const res = await fetch(FIREBASE_SCHEDULE_ENDPOINT, { cache: 'no-store' });
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const cloudData = await res.json();
-        const normalized = (cloudData && typeof cloudData === 'object') ? cloudData : {};
-        scheduleCache = normalized;
-        saveLocalSchedule(normalized);
-        renderCalendar();
+        scheduleCache = (cloudData && typeof cloudData === 'object') ? cloudData : {};
+        saveLocalSchedule(scheduleCache);
       } catch (err) {
         scheduleCache = loadLocalSchedule();
-        renderCalendar();
       }
+      renderCalendar();
+      renderDecemberScheduleList();
     }
 
     async function saveSingleDateToCloud(dateKey, eventObjOrNull) {
-      const nextSchedule = { ...getSchedule() };
+      const nextSchedule = { ...(scheduleCache || {}) };
       if (eventObjOrNull) {
         nextSchedule[dateKey] = eventObjOrNull;
       } else {
@@ -1808,6 +1993,7 @@
       scheduleCache = nextSchedule;
       saveLocalSchedule(nextSchedule);
       renderCalendar();
+      renderDecemberScheduleList();
 
       try {
         const targetUrl = `${FIREBASE_DB_URL}/schedule/${dateKey}.json`;
@@ -1820,9 +2006,37 @@
         } else {
           await fetch(targetUrl, { method: 'DELETE' });
         }
-      } catch (err) {
-        console.warn('Ошибка синхронизации с Firebase:', err);
-      }
+      } catch (err) {}
+    }
+
+    function renderDecemberScheduleList() {
+      const container = document.getElementById("decemberScheduleList");
+      if (!container) return;
+      const merged = getMergedSchedule();
+      const decKeys = Object.keys(merged)
+        .filter(k => k.startsWith("2026-12-"))
+        .sort();
+
+      container.innerHTML = decKeys.map(dateKey => {
+        const ev = merged[dateKey];
+        const dayNum = dateKey.split("-")[2];
+        const wd = getRuWeekdayShort(dateKey);
+        const isGlacier = (ev.note || "").toLowerCase().includes("богданов") || ev.type === "Восхождение";
+        const title = ev.note && ev.note.trim() ? ev.note.trim() : ev.type;
+        const subtitle = ev.type === "Скалолазание"
+          ? "Субботний выезд • скалы и техника"
+          : "Воскресный выезд • высокогорье и снег/лёд";
+
+        return `
+          <div class="schedule-item-row" onclick="openWhatsAppForDate('${dateKey}', { type: '${(ev.type || '').replace(/'/g, '')}', note: '${(ev.note || '').replace(/'/g, '')}' })">
+            <div>
+              <div class="schedule-route-name">${title}</div>
+              <div class="schedule-route-sub">${subtitle}</div>
+            </div>
+            <span class="schedule-date-badge ${isGlacier ? 'glacier' : ''}">${dayNum} ${wd}</span>
+          </div>
+        `;
+      }).join("");
     }
 
     function closeEventPreview() {
@@ -1844,10 +2058,9 @@
       const formattedDate = formatRuDate(dateKey);
       const activityTitle = eventObj.type === 'Скалолазание' ? 'Скалолазание' : 'Восхождение';
       badge.textContent = `${activityTitle} • ${formattedDate}`;
-
       locationEl.textContent = eventObj.note && eventObj.note.trim()
         ? `Локация: ${eventObj.note.trim()}`
-        : `Локация: ${activityTitle} (уточняется в WhatsApp)`;
+        : `Локация: ${activityTitle}`;
 
       waBtn.onclick = () => openWhatsAppForDate(dateKey, eventObj);
       card.classList.remove('hidden');
@@ -1908,8 +2121,7 @@
 
     function syncAdminFormWithDate(dateKey) {
       selectedAdminDateKey = dateKey;
-      const schedule = getSchedule();
-      const existing = schedule[dateKey];
+      const existing = getMergedSchedule()[dateKey];
       document.getElementById('adminSelectedDateLabel').textContent = `Дата: ${formatRuDate(dateKey)}`;
       if (existing) {
         selectActivityType(existing.type || 'Восхождение');
@@ -1936,9 +2148,7 @@
 
     function openWhatsAppForDate(dateKey, eventObj) {
       const formattedDate = formatRuDate(dateKey);
-      const activityText = eventObj.type === 'Скалолазание'
-        ? 'скалолазание'
-        : 'восхождение';
+      const activityText = eventObj.type === 'Скалолазание' ? 'скалолазание' : 'восхождение';
       const extraNote = eventObj.note ? ` (${eventObj.note})` : '';
       const message = `Здравствуйте, пишу из приложения Telegram. Хотелось бы пойти с вами на ${activityText}${extraNote} в эту дату — ${formattedDate}.`;
       const url = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(message)}`;
@@ -1950,13 +2160,13 @@
     }
 
     function handleCalendarDayClick(dateKey) {
-      const schedule = getSchedule();
+      const merged = getMergedSchedule();
       if (isAdminUnlocked) {
         closeEventPreview();
         syncAdminFormWithDate(dateKey);
         return;
       }
-      const ev = schedule[dateKey];
+      const ev = merged[dateKey];
       if (ev) {
         if (previewedDateKey === dateKey) {
           closeEventPreview();
@@ -1984,7 +2194,7 @@
 
       const today = new Date();
       const todayKey = formatDateKey(today.getFullYear(), today.getMonth(), today.getDate());
-      const schedule = getSchedule();
+      const merged = getMergedSchedule();
 
       for (let i = 0; i < startOffset; i++) {
         const emptyCell = document.createElement('div');
@@ -1994,7 +2204,7 @@
 
       for (let day = 1; day <= daysInMonth; day++) {
         const dateKey = formatDateKey(calYear, calMonth, day);
-        const ev = schedule[dateKey];
+        const ev = merged[dateKey];
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'cal-day';
@@ -2004,7 +2214,7 @@
         if (previewedDateKey === dateKey) btn.classList.add('preview-selected');
 
         const shortTag = ev
-          ? (ev.type === 'Скалолазание' ? 'Скалы' : 'Горы')
+          ? (((ev.note || '').toLowerCase().includes('богданов')) ? 'Ледник' : (ev.type === 'Скалолазание' ? 'Скалы' : 'Горы'))
           : '';
 
         btn.innerHTML = `
@@ -2016,8 +2226,9 @@
       }
     }
 
-    function dismissSplash() {
+    function dismissSplash(targetSection = 'crags') {
       const splash = document.getElementById('splashScreen');
+      switchMainSection(targetSection);
       splash.classList.remove('dismissed');
       splash.classList.add('slide-out-left');
       setTimeout(() => {
@@ -2033,28 +2244,10 @@
       void splash.offsetWidth;
       splash.classList.remove('slide-out-left');
       renderCalendar();
+      renderDecemberScheduleList();
       syncScheduleFromCloud();
       loadLiveWeather();
     }
-
-    (function setupSplashSwipe() {
-      const splash = document.getElementById('splashScreen');
-      let startX = 0;
-      splash.addEventListener('touchstart', (e) => {
-        if (e.target && e.target.closest('.calendar-card')) return;
-        if (e.touches && e.touches.length === 1) {
-          startX = e.touches[0].clientX;
-        }
-      }, { passive: true });
-      splash.addEventListener('touchend', (e) => {
-        if (e.target && e.target.closest('.calendar-card')) return;
-        if (!e.changedTouches || !e.changedTouches.length) return;
-        const dx = e.changedTouches[0].clientX - startX;
-        if (dx < -55) {
-          dismissSplash();
-        }
-      }, { passive: true });
-    })();
 
     const CRAG_DATA = {
       lesnichestvo: {
@@ -2078,7 +2271,7 @@
         accessTitle: "Учебные скалы «Лесничество» (ул. Горная, 548)",
         accessItems: [
           "<strong>Проезд и автобус:</strong> До района скал можно доехать на городском автобусе №12 (направление Медео, район Лесничества, ул. Горная, 548).",
-          "<strong>Экспозиция и сезон:</strong> Скала обращена на юг — летом на солнце жарко, поэтому лучшее время для лазания — весна, осень и прохладные дни. Весной по выходным здесь многолюдно.",
+          "<strong>Экспозиция и сезон:</strong> Скала обращена на юг — летом на солнце жарко, поэтому лучшее время для лазания — весна, осень и прохладные дни.",
           "<strong>Стоянка, палатки и вода:</strong> Справа от скал есть места под палатки и стоянка; чуть выше небольшого озерца находится труба с питьевой водой."
         ],
         map2gis: "https://2gis.kz/almaty/geo/70030076220851768",
@@ -2095,193 +2288,21 @@
         ],
         tipsTitle: "Что важно знать перед стартом",
         tipsItems: [
-          "<strong>Шевелящаяся ручка (№4 «Орлиное гнездо»):</strong> В верхней четверти трассы в углублении много лет шевелится крупная ручка — не пугайтесь при нагрузке, она держит.",
-          "<strong>Выбор выхода (№5 «Три карниза»):</strong> В верхней части самый эффектный вариант — лезть через последний карниз в лоб (страховка камалотом в щели справа). Более спокойный обход — уйти в угол справа.",
-          "<strong>Трение верёвки (№7 «Утюги»):</strong> Перед выходом на финальное нависающее ребро заложите камалот #3 в щель слева обязательно с длинной оттяжкой, чтобы не заклинило верёвку при возврате на ребро.",
-          "<strong>Не уйти в сторону (№8 «Справа от утюгов»):</strong> В средней части держите линию вверх и не уходите правее в пологий жёлоб (№9), выход — по углу справа от последнего утюга.",
-          "<strong>Опыт с верхней страховкой:</strong> Если вы ещё не успели выучить все зацепки с верхней страховкой, прохождение тех же линий трэдом держит в хорошем тонусе."
+          "<strong>Шевелящаяся ручка (№4 «Орлиное гнездо»):</strong> В верхней четверти трассы в углублении много лет шевелится крупная ручка — держит.",
+          "<strong>Выбор выхода (№5 «Три карниза»):</strong> В верхней части можно лезть через последний карниз в лоб либо уйти в угол справа.",
+          "<strong>Трение верёвки (№7 «Утюги»):</strong> Перед выходом на финальное нависающее ребро заложите камалот #3 с длинной оттяжкой."
         ],
         routes: [
-          {
-            id: 1,
-            name: "Разминочная",
-            grade: "Fr4",
-            level: "easy",
-            color: "#22c55e",
-            height: "15 м",
-            gear: "Штыри / мелкие точки",
-            startDesc: "Крайняя левая часть массива, подход по пологим ступеням к основанию плиты.",
-            climbDesc: "Пологая скала с большими, надёжными зацепками. Идеальна для разминки, постановки ног и знакомства с гранитом Лесничества.",
-            finishDesc: "Выход на верхнюю полку к металлическим штырям для организации станции / спуска.",
-            d: "M 30,192 L 42,160 L 56,128 L 68,96 L 78,66",
-            bolts: [[42, 160], [56, 128], [68, 96]],
-            anchor: [78, 66],
-            start: [30, 205],
-            keyPoint: [56, 128],
-            keyLabel: "Пологая плита, ручки"
-          },
-          {
-            id: 2,
-            name: "Жёлтые пятна",
-            grade: "6b",
-            level: "mid",
-            color: "#eab308",
-            height: "17 м",
-            gear: "Камалот #0.5, средние точки",
-            startDesc: "Правее «Разминочной», старт у заметной вертикальной трещины справа от линии.",
-            climbDesc: "Положите первую точку в трещину справа для спокойного старта. Затем переходите влево-вверх до горизонтальной щели и лезьте вверх до следующей горизонтальной щели под камалот #0,5. Выше — свободный выбор по рельефу.",
-            finishDesc: "Верхний перегиб левой части стены, станция на металлических штырях.",
-            d: "M 58,192 L 74,164 L 58,136 L 74,106 L 90,78 L 96,54",
-            bolts: [[74, 164], [58, 136], [74, 106], [90, 78]],
-            anchor: [96, 54],
-            start: [58, 205],
-            keyPoint: [74, 106],
-            keyLabel: "Щель под #0.5"
-          },
-          {
-            id: 3,
-            name: "Беговая",
-            grade: "6a",
-            level: "mid",
-            color: "#eab308",
-            height: "23 м",
-            gear: "Трэд / верхняя страховка",
-            startDesc: "Центрально-левая часть массива, под серией внутренних углов.",
-            climbDesc: "Нижнюю половину маршрута можно пройти по любому удобному варианту. В верхней половине держите ориентир на второй внутренний угол слева от карниза.",
-            finishDesc: "Выход из второго угла на верхнюю полку массива.",
-            d: "M 86,192 L 94,154 L 106,118 L 114,80 L 122,42",
-            bolts: [[94, 154], [106, 118], [114, 80]],
-            anchor: [122, 42],
-            start: [86, 205],
-            keyPoint: [114, 80],
-            keyLabel: "2-й угол слева от карниза"
-          },
-          {
-            id: 4,
-            name: "Орлиное гнездо",
-            grade: "6a",
-            level: "mid",
-            color: "#eab308",
-            height: "23 м",
-            gear: "Трэд / верхняя страховка",
-            startDesc: "Правее «Беговой», линия идёт прямо по стенке левее системы карнизов.",
-            climbDesc: "Ровное техничное лазание по стенке. Ключевой нюанс: в верхней четверти маршрута в углублении находится большая шевелящаяся ручка — не пугайтесь, она держит нагрузку.",
-            finishDesc: "Выход выше углубления на верхнюю полку к штырям.",
-            d: "M 114,192 L 122,152 L 132,114 L 140,76 L 148,40",
-            bolts: [[122, 152], [132, 114], [140, 76]],
-            anchor: [148, 40],
-            start: [114, 205],
-            keyPoint: [140, 76],
-            keyLabel: "Ручка шевелится (держит)"
-          },
-          {
-            id: 5,
-            name: "Три карниза",
-            grade: "6b",
-            level: "mid",
-            color: "#eab308",
-            height: "25 м",
-            gear: "Камалот в щели справа",
-            startDesc: "Центр массива, под каскадом из трёх нависающих карнизов (отмечено жёлтым на фото).",
-            climbDesc: "Непростое лазанье через карнизы. В верхней части два варианта: отважные и сильные лезут через последний карниз в лоб (страховка — камалот в щели справа), благоразумные уходят в угол справа.",
-            finishDesc: "Выход через верхний карниз либо по правому углу на вершинную полку.",
-            d: "M 146,192 L 154,158 L 150,126 L 164,96 L 158,64 L 176,34",
-            bolts: [[154, 158], [150, 126], [164, 96], [158, 64]],
-            anchor: [176, 34],
-            start: [146, 205],
-            keyPoint: [158, 64],
-            keyLabel: "Карниз / угол справа"
-          },
-          {
-            id: 6,
-            name: "Щель",
-            grade: "6a+",
-            level: "hard",
-            color: "#ef4444",
-            height: "25 м",
-            gear: "Камалоты #3–4",
-            startDesc: "Правее «Трёх карнизов» (отмечено красным на фото), под чёткой вертикальной щелью.",
-            climbDesc: "Подлаз к основанию угла — как удобнее, дальше очевидный угол до самого верха. В верхней части потребуются крупные камалоты #3–4.",
-            finishDesc: "Верхний выход из щели на вершину центральной башни.",
-            d: "M 176,192 L 190,156 L 194,116 L 196,72 L 198,28",
-            bolts: [[190, 156], [194, 116], [196, 72]],
-            anchor: [198, 28],
-            start: [176, 205],
-            keyPoint: [196, 72],
-            keyLabel: "Щель, камалоты #3–4"
-          },
-          {
-            id: 7,
-            name: "Утюги",
-            grade: "6b+",
-            level: "hard",
-            color: "#f97316",
-            height: "25 м",
-            gear: "Камалоты #0.3, #3 + длинная оттяжка",
-            startDesc: "Под основанием первого характерного выступа («утюга») правее «Щели».",
-            climbDesc: "Серия крутых стенок, разделённых полками. Положите камалот #0,3 в основание первого утюга и лезьте вверх по ребру. Изюминка — последнее нависающее ребро: заложите камалот #3 с длинной оттяжкой в щель слева, вернитесь на ребро и решительно лезьте вверх.",
-            finishDesc: "Выход с финального нависающего ребра на верхнюю полку.",
-            d: "M 228,192 L 242,160 L 256,126 L 266,86 L 262,44",
-            bolts: [[242, 160], [256, 126], [266, 86]],
-            anchor: [262, 44],
-            start: [228, 205],
-            keyPoint: [266, 86],
-            keyLabel: "#3 с длинной оттяжкой"
-          },
-          {
-            id: 8,
-            name: "Справа от утюгов",
-            grade: "6a+",
-            level: "mid",
-            color: "#eab308",
-            height: "25 м",
-            gear: "Маленький камалот",
-            startDesc: "Подберитесь под первый утюг и сместитесь на два метра правее его ребра.",
-            climbDesc: "Пристройте маленький камалот в горизонтальную щель в двух метрах справа от ребра. Дальше лезьте вверх по стенке, стараясь не уходить правее в пологий жёлоб.",
-            finishDesc: "Выход наверх по внутреннему углу справа от последнего утюга.",
-            d: "M 258,192 L 278,158 L 284,120 L 292,80 L 288,42",
-            bolts: [[278, 158], [284, 120], [292, 80]],
-            anchor: [288, 42],
-            start: [258, 205],
-            keyPoint: [284, 120],
-            keyLabel: "Не уйти в жёлоб"
-          },
-          {
-            id: 9,
-            name: "Жёлоб справа",
-            grade: "Fr4",
-            level: "easy",
-            color: "#22c55e",
-            height: "25 м",
-            gear: "Трэд / верхняя страховка",
-            startDesc: "Основание широкого пологого жёлоба в правой части основного массива.",
-            climbDesc: "Пологий жёлоб, разделяющий два скальных массива. Хорошо читаемый рельеф без сложных ключей, подходит для новичков и спуска.",
-            finishDesc: "Выход на верхнюю перемычку между массивами.",
-            d: "M 314,192 L 310,154 L 312,116 L 314,80 L 314,56",
-            bolts: [[310, 154], [312, 116], [314, 80]],
-            anchor: [314, 56],
-            start: [314, 205],
-            keyPoint: [312, 116],
-            keyLabel: "Пологий жёлоб"
-          },
-          {
-            id: 10,
-            name: "Щель справа",
-            grade: "6a",
-            level: "hard",
-            color: "#f97316",
-            height: "15 м",
-            gear: "Камалот #4",
-            startDesc: "Правый массив за жёлобом, под широкой нависающей щелью.",
-            climbDesc: "Широкая нависающая щель. Не пугайтесь нависания: кругом хватает хороших зацепок, чтобы спокойно лезть по ним. Технически несложно, но для страховки нужен камалот #4.",
-            finishDesc: "Выход на полку правого массива на высоте 15 м.",
-            d: "M 344,192 L 338,164 L 336,136 L 334,110",
-            bolts: [[338, 164], [336, 136]],
-            anchor: [334, 110],
-            start: [344, 205],
-            keyPoint: [336, 136],
-            keyLabel: "Щель, нужен #4"
-          }
+          { id: 1, name: "Разминочная", grade: "Fr4", level: "easy", color: "#22c55e", height: "15 м", gear: "Штыри / мелкие точки", startDesc: "Крайняя левая часть массива.", climbDesc: "Пологая скала с большими надёжными зацепками для разминки.", finishDesc: "Выход на верхнюю полку к металлическим штырям.", d: "M 30,192 L 42,160 L 56,128 L 68,96 L 78,66", bolts: [[42, 160], [56, 128], [68, 96]], anchor: [78, 66], start: [30, 205], keyPoint: [56, 128], keyLabel: "Пологая плита, ручки" },
+          { id: 2, name: "Жёлтые пятна", grade: "6b", level: "mid", color: "#eab308", height: "17 м", gear: "Камалот #0.5, средние точки", startDesc: "Правее «Разминочной».", climbDesc: "Переход влево-вверх до горизонтальной щели под камалот #0,5.", finishDesc: "Верхний перегиб левой части стены.", d: "M 58,192 L 74,164 L 58,136 L 74,106 L 90,78 L 96,54", bolts: [[74, 164], [58, 136], [74, 106], [90, 78]], anchor: [96, 54], start: [58, 205], keyPoint: [74, 106], keyLabel: "Щель под #0.5" },
+          { id: 3, name: "Беговая", grade: "6a", level: "mid", color: "#eab308", height: "23 м", gear: "Трэд / верхняя страховка", startDesc: "Центрально-левая часть массива.", climbDesc: "В верхней половине ориентир на второй внутренний угол слева от карниза.", finishDesc: "Выход из второго угла на верхнюю полку.", d: "M 86,192 L 94,154 L 106,118 L 114,80 L 122,42", bolts: [[94, 154], [106, 118], [114, 80]], anchor: [122, 42], start: [86, 205], keyPoint: [114, 80], keyLabel: "2-й угол слева от карниза" },
+          { id: 4, name: "Орлиное гнездо", grade: "6a", level: "mid", color: "#eab308", height: "23 м", gear: "Трэд / верхняя страховка", startDesc: "Правее «Беговой».", climbDesc: "В верхней четверти в углублении шевелится крупная ручка — она держит.", finishDesc: "Выход на верхнюю полку к штырям.", d: "M 114,192 L 122,152 L 132,114 L 140,76 L 148,40", bolts: [[122, 152], [132, 114], [140, 76]], anchor: [148, 40], start: [114, 205], keyPoint: [140, 76], keyLabel: "Ручка шевелится (держит)" },
+          { id: 5, name: "Три карниза", grade: "6b", level: "mid", color: "#eab308", height: "25 м", gear: "Камалот в щели справа", startDesc: "Центр массива под карнизами.", climbDesc: "Выход через верхний карниз либо по правому углу.", finishDesc: "Вершинная полка.", d: "M 146,192 L 154,158 L 150,126 L 164,96 L 158,64 L 176,34", bolts: [[154, 158], [150, 126], [164, 96], [158, 64]], anchor: [176, 34], start: [146, 205], keyPoint: [158, 64], keyLabel: "Карниз / угол справа" },
+          { id: 6, name: "Щель", grade: "6a+", level: "hard", color: "#ef4444", height: "25 м", gear: "Камалоты #3–4", startDesc: "Правее «Трёх карнизов».", climbDesc: "Вертикальный угол, вверху нужны камалоты #3–4.", finishDesc: "Вершина центральной башни.", d: "M 176,192 L 190,156 L 194,116 L 196,72 L 198,28", bolts: [[190, 156], [194, 116], [196, 72]], anchor: [198, 28], start: [176, 205], keyPoint: [196, 72], keyLabel: "Щель, камалоты #3–4" },
+          { id: 7, name: "Утюги", grade: "6b+", level: "hard", color: "#f97316", height: "25 м", gear: "Камалоты #0.3, #3 + длинная оттяжка", startDesc: "Под первым выступом правее «Щели».", climbDesc: "Перед финальным ребром заложите #3 с длинной оттяжкой слева.", finishDesc: "Выход с нависающего ребра.", d: "M 228,192 L 242,160 L 256,126 L 266,86 L 262,44", bolts: [[242, 160], [256, 126], [266, 86]], anchor: [262, 44], start: [228, 205], keyPoint: [266, 86], keyLabel: "#3 с длинной оттяжкой" },
+          { id: 8, name: "Справа от утюгов", grade: "6a+", level: "mid", color: "#eab308", height: "25 м", gear: "Маленький камалот", startDesc: "2 м правее первого утюга.", climbDesc: "Держите линию вверх, не уходя в пологий жёлоб.", finishDesc: "По правому углу последнего утюга.", d: "M 258,192 L 278,158 L 284,120 L 292,80 L 288,42", bolts: [[278, 158], [284, 120], [292, 80]], anchor: [288, 42], start: [258, 205], keyPoint: [284, 120], keyLabel: "Не уйти в жёлоб" },
+          { id: 9, name: "Жёлоб справа", grade: "Fr4", level: "easy", color: "#22c55e", height: "25 м", gear: "Трэд / верхняя страховка", startDesc: "Широкий пологий жёлоб справа.", climbDesc: "Понятный рельеф без сложных ключей.", finishDesc: "Верхняя перемычка.", d: "M 314,192 L 310,154 L 312,116 L 314,80 L 314,56", bolts: [[310, 154], [312, 116], [314, 80]], anchor: [314, 56], start: [314, 205], keyPoint: [312, 116], keyLabel: "Пологий жёлоб" },
+          { id: 10, name: "Щель справа", grade: "6a", level: "hard", color: "#f97316", height: "15 м", gear: "Камалот #4", startDesc: "Правый массив за жёлобом.", climbDesc: "Широкая нависающая щель, нужен камалот #4.", finishDesc: "Полка правого массива (15 м).", d: "M 344,192 L 338,164 L 336,136 L 334,110", bolts: [[338, 164], [336, 136]], anchor: [334, 110], start: [344, 205], keyPoint: [336, 136], keyLabel: "Щель, нужен #4" }
         ]
       },
       tuyuksu: {
@@ -2298,141 +2319,48 @@
         `,
         historyTitle: "Учебно-тренировочные линии на «Треугольнике»",
         historyItems: [
-          "<strong>Высокогорный полигон у альплагеря:</strong> Скала «Треугольник» расположена в районе альплагеря Туюк-Су на высоте около 2450 м и используется для отработки многопитчевого лазания, работы с верёвками и станции.",
-          "<strong>Цветовая маркировка анкеров и точек:</strong> На массиве проложено 5 логичных линий с разной цветовой маркировкой — зелёной (№1), голубой (№2 и №5), ярко-оранжевой (№3) и чёрной (№4).",
-          "<strong>Тактика верёвок и спуска:</strong> На маршрутах №1–№3 критично учитывать работу двумя верёвками, тогда как №4 можно пройти с одной верёвкой со спуском пешком."
+          "<strong>Высокогорный полигон у альплагеря:</strong> Скала «Треугольник» расположена у альплагеря Туюк-Су (~2450 м) для отработки многопитчевого лазания.",
+          "<strong>Цветовая маркировка:</strong> 5 линий с зелёной, голубой, ярко-оранжевой и чёрной маркировкой анкеров/точек."
         ],
         accessTitle: "Район Туюк-Су (выше Медео, ~2450 м)",
         accessItems: [
-          "<strong>Подход к массиву:</strong> Путь лежит через верхнюю часть ущелья Малого Алматинского выше Медео и Шымбулака в сторону альплагеря Туюк-Су.",
-          "<strong>Высота и погода:</strong> На ~2450 м даже летом воздух прохладнее, чем в городе, а облачность и ветер меняются быстро — берите ветрозащиту, тёплый слой и воду с запасом.",
-          "<strong>Контроль верёвок:</strong> Заранее проверяйте длину верёвок, станции и цветовую маркировку точек на рельефе, чтобы не перепутать соседние линии."
+          "<strong>Подход:</strong> через ущелье Малого Алматинского выше Медео и Шымбулака.",
+          "<strong>Погода:</strong> на ~2450 м прохладнее и ветренее — берите тёплый слой и ветрозащиту."
         ],
         map2gis: "https://2gis.kz/almaty/search/%D0%A2%D1%83%D1%8E%D0%BA-%D0%A1%D1%83%20%D0%B0%D0%BB%D1%8C%D0%BF%D0%BB%D0%B0%D0%B3%D0%B5%D1%80%D1%8C",
         mapGoogle: "https://www.google.com/maps/search/%D0%A2%D1%83%D1%8E%D0%BA-%D0%A1%D1%83%20%D0%B0%D0%BB%D1%8C%D0%BF%D0%BB%D0%B0%D0%B3%D0%B5%D1%80%D1%8C",
         gearTitle: "Снаряжение и верёвки для «Треугольника»",
-        gearIntro: "Для работы на маршрутах 1–5 в Туюк-Су важно правильно подобрать верёвки, оттяжки и железо под питчи:",
+        gearIntro: "Для работы на маршрутах 1–5 в Туюк-Су важно правильно подобрать верёвки и оттяжки:",
         gearRows: [
-          ["Две верёвки (double / twin)", "Обязательны на №1, №2 и №3 (длина до 1-й станции / разнос анкеров)"],
-          ["Одна верёвка + пеший спуск", "Подходит для №4 (самый сложный маршрут, спуск пешком)"],
-          ["Набор оттяжек + удлинители", "Для разнесённых точек на №2, №5 и общих участков №3/№4"],
-          ["Закладки / камалоты / петли", "Для подстраховки на трэдовых участках между точками"],
-          ["Станционное снаряжение и каски", "Обязательно на многопитчевых линиях и под осыпным рельефом"]
+          ["Две верёвки", "Обязательны на №1, №2 и №3"],
+          ["Одна верёвка + пеший спуск", "Подходит для №4"],
+          ["Набор оттяжек + петли", "Для разнесённых точек и трэда"]
         ],
         tipsTitle: "Важные нюансы маршрутов Туюк-Су",
         tipsItems: [
-          "<strong>№1 (5b, 5c, 5b — зелёные анкера):</strong> Простой маршрут, который легко перепутать с соседним №2. До первой станции около 50 м, использование двух верёвок обязательно.",
-          "<strong>№2 (5c, 6a, 5c — голубые анкера):</strong> Чуть сложнее первого, есть интересный участок на 3-й верёвке. Также нужны 2 верёвки, так как анкера сильно разнесены.",
-          "<strong>№3 (6a, 6a — ярко-оранжевые анкера):</strong> Ещё немного сложнее. Без двух верёвок до первой станции не вылезти; маркировка ярко-оранжевая (пока не выцветет).",
-          "<strong>№4 (6a+, 6b — чёрные точки страховки):</strong> Самый сложный и логичный маршрут. Иногда имеет общие точки и общие станции с маршрутом №3. Можно лезть с одной верёвкой, но спускаться придётся пешком.",
-          "<strong>№5 (6a, 5b — голубые анкера на 2-й верёвке):</strong> Логичный (если не считать начала) несложный маршрут. Анкера на второй верёвке отмечены голубой краской."
+          "<strong>№1 (5b, 5c, 5b — зелёные):</strong> до 1-й станции ~50 м, нужны 2 верёвки.",
+          "<strong>№2 (5c, 6a, 5c — голубые):</strong> анкера разнесены, нужны 2 верёвки.",
+          "<strong>№3 (6a, 6a — оранжевые):</strong> до 1-й станции нужны 2 верёвки.",
+          "<strong>№4 (6a+, 6b — чёрные):</strong> самый сложный, спуск пешком.",
+          "<strong>№5 (6a, 5b — голубые на 2-й верёвке):</strong> логичный несложный выход."
         ],
         routes: [
-          {
-            id: 1,
-            name: "Зелёная линия",
-            grade: "5b, 5c, 5b",
-            level: "easy",
-            color: "#22c55e",
-            height: "3 питча (~50 м до 1-й ст.)",
-            gear: "2 верёвки • Зелёные анкера",
-            startDesc: "Нижняя левая часть скалы «Треугольник» — легко спутать с соседним маршрутом №2.",
-            climbDesc: "Простой маршрут (питчам 5b, 5c, 5b). До первой станции около 50 м, использование двух верёвок обязательно.",
-            finishDesc: "Выход на верхнюю часть массива по 3-му питчу (5b) с маркировкой зелёными анкерами.",
-            d: "M 136,192 L 130,152 L 138,112 L 132,72 L 138,34",
-            bolts: [[130, 152], [138, 112], [132, 72]],
-            anchor: [138, 34],
-            start: [136, 205],
-            keyPoint: [138, 112],
-            keyLabel: "1-я ст. ~50 м, 2 верёвки"
-          },
-          {
-            id: 2,
-            name: "Голубой маршрут",
-            grade: "5c, 6a, 5c",
-            level: "mid",
-            color: "#38bdf8",
-            height: "3 питча",
-            gear: "2 верёвки • Голубые анкера",
-            startDesc: "Рядом с №1 в нижней части стены — внимательно сверяй линию, чтобы не перепутать маршруты.",
-            climbDesc: "Чуть сложнее первого (5c, 6a, 5c), есть интересный момент на 3-й верёвке. Необходимо использовать 2 верёвки, так как анкера сильно разнесены.",
-            finishDesc: "Верхний выход по 3-му питчу (5c) на голубых анкерах.",
-            d: "M 156,192 L 164,150 L 154,108 L 166,68 L 156,34",
-            bolts: [[164, 150], [154, 108], [166, 68]],
-            anchor: [156, 34],
-            start: [156, 205],
-            keyPoint: [166, 68],
-            keyLabel: "3-я верёвка, разнесённые анкера"
-          },
-          {
-            id: 3,
-            name: "Оранжевый маршрут",
-            grade: "6a, 6a",
-            level: "mid",
-            color: "#f97316",
-            height: "2 питча",
-            gear: "2 верёвки • Ярко-оранжевые анкера",
-            startDesc: "Правая часть основного стендового поля, старт у характерного рельефа.",
-            climbDesc: "Ещё немного сложнее (6a, 6a). Без двух верёвок не получится вылезти до первой станции. Анкера отмечены ярко-оранжевой краской (пока не выцветут).",
-            finishDesc: "Выход на верхнюю часть маршрута по 2-му питчу (6a).",
-            d: "M 224,192 L 214,154 L 228,116 L 212,76 L 204,36",
-            bolts: [[214, 154], [228, 116], [212, 76]],
-            anchor: [204, 36],
-            start: [224, 205],
-            keyPoint: [212, 76],
-            keyLabel: "2 верёвки до 1-й станции"
-          },
-          {
-            id: 4,
-            name: "Чёрная линия",
-            grade: "6a+, 6b",
-            level: "hard",
-            color: "#e5e7eb",
-            height: "2 питча",
-            gear: "1 верёвка + пешком • Чёрные точки",
-            startDesc: "Рядом с оранжевым маршрутом №3 в правой части стены.",
-            climbDesc: "Самый сложный и логичный маршрут (6a+, 6b). Иногда имеет общие точки и общие станции с маршрутом №3. Точки страховки отмечены чёрной краской.",
-            finishDesc: "Выход наверх; можно лезть с одной верёвкой, но спускаться придётся пешком.",
-            d: "M 244,192 L 236,152 L 246,112 L 230,72 L 220,36",
-            bolts: [[236, 152], [246, 112], [230, 72]],
-            anchor: [220, 36],
-            start: [244, 205],
-            keyPoint: [230, 72],
-            keyLabel: "Общие точки с №3, спуск пешком"
-          },
-          {
-            id: 5,
-            name: "Правый с голубым верхом",
-            grade: "6a, 5b",
-            level: "mid",
-            color: "#38bdf8",
-            height: "2 питча",
-            gear: "Голубые анкера на 2-й верёвке",
-            startDesc: "Правее чёрного маршрута №4, начало требует внимания по рельефу.",
-            climbDesc: "Логичный (если не считать начала) несложный маршрут (6a, 5b). На второй верёвке анкера отмечены голубой краской.",
-            finishDesc: "Выход на верхнюю полку по 2-й верёвке (5b) на голубых анкерах.",
-            d: "M 284,192 L 292,150 L 274,108 L 252,70 L 234,36",
-            bolts: [[292, 150], [274, 108], [252, 70]],
-            anchor: [234, 36],
-            start: [284, 205],
-            keyPoint: [252, 70],
-            keyLabel: "2-я верёвка — голубые анкера"
-          }
+          { id: 1, name: "Зелёная линия", grade: "5b, 5c, 5b", level: "easy", color: "#22c55e", height: "3 питча (~50 м)", gear: "2 верёвки • Зелёные", startDesc: "Нижняя левая часть «Треугольника».", climbDesc: "До 1-й станции ~50 м, нужны 2 верёвки.", finishDesc: "3-й питч (5b) по зелёным анкерам.", d: "M 136,192 L 130,152 L 138,112 L 132,72 L 138,34", bolts: [[130, 152], [138, 112], [132, 72]], anchor: [138, 34], start: [136, 205], keyPoint: [138, 112], keyLabel: "1-я ст. ~50 м, 2 верёвки" },
+          { id: 2, name: "Голубой маршрут", grade: "5c, 6a, 5c", level: "mid", color: "#38bdf8", height: "3 питча", gear: "2 верёвки • Голубые", startDesc: "Рядом с №1.", climbDesc: "Анкера разнесены, нужны 2 верёвки.", finishDesc: "3-й питч (5c) на голубых анкерах.", d: "M 156,192 L 164,150 L 154,108 L 166,68 L 156,34", bolts: [[164, 150], [154, 108], [166, 68]], anchor: [156, 34], start: [156, 205], keyPoint: [166, 68], keyLabel: "3-я верёвка" },
+          { id: 3, name: "Оранжевый маршрут", grade: "6a, 6a", level: "mid", color: "#f97316", height: "2 питча", gear: "2 верёвки • Оранжевые", startDesc: "Правая часть стены.", climbDesc: "Нужны 2 верёвки до 1-й станции.", finishDesc: "2-й питч (6a).", d: "M 224,192 L 214,154 L 228,116 L 212,76 L 204,36", bolts: [[214, 154], [228, 116], [212, 76]], anchor: [204, 36], start: [224, 205], keyPoint: [212, 76], keyLabel: "2 верёвки" },
+          { id: 4, name: "Чёрная линия", grade: "6a+, 6b", level: "hard", color: "#e5e7eb", height: "2 питча", gear: "1 верёвка + пешком • Чёрные", startDesc: "Рядом с №3.", climbDesc: "Частично общие точки с №3.", finishDesc: "Спуск пешком.", d: "M 244,192 L 236,152 L 246,112 L 230,72 L 220,36", bolts: [[236, 152], [246, 112], [230, 72]], anchor: [220, 36], start: [244, 205], keyPoint: [230, 72], keyLabel: "Спуск пешком" },
+          { id: 5, name: "Правый с голубым верхом", grade: "6a, 5b", level: "mid", color: "#38bdf8", height: "2 питча", gear: "Голубые на 2-й верёвке", startDesc: "Правее №4.", climbDesc: "На 2-й верёвке голубые анкера.", finishDesc: "Выход на верхнюю полку.", d: "M 284,192 L 292,150 L 274,108 L 252,70 L 234,36", bolts: [[292, 150], [274, 108], [252, 70]], anchor: [234, 36], start: [284, 205], keyPoint: [252, 70], keyLabel: "Голубые анкера" }
         ]
       }
     };
 
-    const TAB_ORDER = ['overview', 'routes', 'gear', 'notes'];
+    const MAIN_SECTIONS = ['crags', 'schedule', 'glacier'];
+    let currentMainSection = 'crags';
+    let currentCragSubTab = 'overview';
     let currentCrag = 'lesnichestvo';
-    let currentTab = 'overview';
     let userData = JSON.parse(localStorage.getItem('almaty_topo_journal_v4') || '{}');
     let activeRouteId = 1;
     let isZoomed = false;
-
-    function resetSessionToFirstRoute() {
-      activeRouteId = 1;
-      isZoomed = false;
-    }
 
     function getCragStorage(cragKey) {
       if (!userData[cragKey]) userData[cragKey] = {};
@@ -2451,64 +2379,7 @@
 
     function drawRockBase(parent) {
       const cfg = CRAG_DATA[currentCrag];
-      parent.appendChild(createSvgEl('polygon', {
-        class: 'rock-mass',
-        points: cfg.rockPolygon
-      }));
-
-      if (currentCrag === 'lesnichestvo') {
-        parent.appendChild(createSvgEl('path', {
-          d: 'M 150,156 Q 146,126 160,96 Q 154,66 172,38 L 182,42 L 178,154 Z',
-          fill: 'rgba(234, 179, 8, 0.08)',
-          stroke: 'rgba(234, 179, 8, 0.45)',
-          'stroke-width': '1',
-          'stroke-dasharray': '2.5 2'
-        }));
-        parent.appendChild(createSvgEl('path', {
-          d: 'M 190,156 L 195,28 L 203,28 L 198,156 Z',
-          fill: 'rgba(239, 68, 68, 0.10)',
-          stroke: 'rgba(239, 68, 68, 0.55)',
-          'stroke-width': '1',
-          'stroke-dasharray': '2.5 2'
-        }));
-
-        const ledges = [
-          [22, 146, 112, 132],
-          [44, 98, 152, 86],
-          [148, 118, 288, 104],
-          [176, 74, 318, 66]
-        ];
-        ledges.forEach(([x1, y1, x2, y2]) => {
-          parent.appendChild(createSvgEl('line', { class: 'rock-ledge', x1, y1, x2, y2 }));
-        });
-        parent.appendChild(createSvgEl('polyline', { class: 'rock-feature', points: '196,192 204,116 198,27' }));
-        parent.appendChild(createSvgEl('polyline', { class: 'rock-feature', points: '316,192 310,124 314,52' }));
-
-        const irons = [
-          '222,192 236,154 252,162 240,192',
-          '238,146 254,108 270,118 254,154',
-          '256,100 272,62 288,74 272,108'
-        ];
-        irons.forEach(pts => {
-          parent.appendChild(createSvgEl('polygon', {
-            points: pts,
-            fill: '#1e2531',
-            stroke: '#2c3647',
-            'stroke-width': '1'
-          }));
-        });
-      } else {
-        const tuyukLedges = [
-          [55, 142, 325, 134],
-          [92, 102, 294, 96],
-          [128, 64, 256, 60]
-        ];
-        tuyukLedges.forEach(([x1, y1, x2, y2]) => {
-          parent.appendChild(createSvgEl('line', { class: 'rock-ledge', x1, y1, x2, y2 }));
-        });
-        parent.appendChild(createSvgEl('polyline', { class: 'rock-feature', points: '185,192 190,110 182,25' }));
-        parent.appendChild(createSvgEl('polyline', { class: 'rock-feature', points: '264,192 258,118 242,45' }));
-      }
+      parent.appendChild(createSvgEl('polygon', { class: 'rock-mass', points: cfg.rockPolygon }));
     }
 
     function renderOverviewSvg() {
@@ -2516,13 +2387,8 @@
       group.innerHTML = '';
       drawRockBase(group);
 
-      const routes = getCurrentRoutes();
-      routes.forEach(r => {
-        const path = createSvgEl('path', {
-          d: r.d,
-          stroke: r.color,
-          class: 'route-path'
-        });
+      getCurrentRoutes().forEach(r => {
+        const path = createSvgEl('path', { d: r.d, stroke: r.color, class: 'route-path' });
         path.addEventListener('click', () => {
           document.getElementById('overviewSelectedLabel').textContent = `#${r.id} ${r.name} (${r.grade})`;
           openRouteDetails(r.id, false);
@@ -2530,18 +2396,14 @@
         group.appendChild(path);
 
         r.bolts.forEach(([bx, by]) => {
-          group.appendChild(createSvgEl('circle', {
-            cx: bx, cy: by, r: '2.1', stroke: r.color, class: 'bolt-dot'
-          }));
+          group.appendChild(createSvgEl('circle', { cx: bx, cy: by, r: '2.1', stroke: r.color, class: 'bolt-dot' }));
         });
 
         const [ax, ay] = r.anchor;
         group.appendChild(createSvgEl('circle', { cx: ax, cy: ay, r: '2.7', class: 'anchor-top' }));
 
         const [sx, sy] = r.start;
-        const num = createSvgEl('text', {
-          x: sx, y: sy, fill: r.color, class: 'start-num'
-        });
+        const num = createSvgEl('text', { x: sx, y: sy, fill: r.color, class: 'start-num' });
         num.textContent = r.id;
         num.addEventListener('click', () => openRouteDetails(r.id, false));
         group.appendChild(num);
@@ -2554,38 +2416,18 @@
       const clampX = Math.max(pillW / 2 + 6, Math.min(374 - pillW / 2, x));
       const clampY = Math.max(10, Math.min(182, y));
 
-      g.appendChild(createSvgEl('rect', {
-        x: clampX - pillW / 2,
-        y: clampY - 5.8,
-        width: pillW,
-        height: 11.6,
-        class: 'callout-pill',
-        stroke: strokeColor
-      }));
-
-      const t1 = createSvgEl('text', {
-        x: clampX,
-        y: clampY - 2.1,
-        class: 'callout-sub',
-        fill: strokeColor
-      });
+      g.appendChild(createSvgEl('rect', { x: clampX - pillW / 2, y: clampY - 5.8, width: pillW, height: 11.6, class: 'callout-pill', stroke: strokeColor }));
+      const t1 = createSvgEl('text', { x: clampX, y: clampY - 2.1, class: 'callout-sub', fill: strokeColor });
       t1.textContent = sub;
-
-      const t2 = createSvgEl('text', {
-        x: clampX,
-        y: clampY + 2.5,
-        class: 'callout-label'
-      });
+      const t2 = createSvgEl('text', { x: clampX, y: clampY + 2.5, class: 'callout-label' });
       t2.textContent = label;
-
       g.appendChild(t1);
       g.appendChild(t2);
       parent.appendChild(g);
     }
 
     function computeRouteTransform(selected) {
-      const svgW = 380;
-      const svgH = 215;
+      const svgW = 380, svgH = 215;
       const pts = [selected.start, selected.anchor, selected.keyPoint, ...selected.bolts];
       let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
       pts.forEach(([x, y]) => {
@@ -2594,20 +2436,12 @@
         if (y < minY) minY = y;
         if (y > maxY) maxY = y;
       });
-
-      const padX = 48;
-      const padY = 26;
-      const boxW = Math.max(maxX - minX + padX * 2, 85);
-      const boxH = Math.max(maxY - minY + padY * 2, 120);
+      const boxW = Math.max(maxX - minX + 96, 85);
+      const boxH = Math.max(maxY - minY + 52, 120);
       const cx = (minX + maxX) / 2;
       const cy = Math.min(115, (minY + maxY) / 2 + 4);
-
-      const rawScale = Math.min(svgW / boxW, svgH / boxH);
-      const scale = Math.max(1.32, Math.min(1.62, rawScale));
-      const tx = svgW / 2 - cx * scale;
-      const ty = svgH / 2 - cy * scale;
-
-      return { scale, tx, ty };
+      const scale = Math.max(1.32, Math.min(1.62, Math.min(svgW / boxW, svgH / boxH)));
+      return { scale, tx: svgW / 2 - cx * scale, ty: svgH / 2 - cy * scale };
     }
 
     function renderDetailSvg() {
@@ -2620,11 +2454,7 @@
 
       routes.forEach(r => {
         const isSel = r.id === selected.id;
-        const path = createSvgEl('path', {
-          d: r.d,
-          stroke: r.color,
-          class: `route-path ${isSel ? 'selected' : 'dimmed'}`
-        });
+        const path = createSvgEl('path', { d: r.d, stroke: r.color, class: `route-path ${isSel ? 'selected' : 'dimmed'}` });
         path.addEventListener('click', () => {
           activeRouteId = r.id;
           isZoomed = true;
@@ -2633,33 +2463,12 @@
         zoomGroup.appendChild(path);
 
         r.bolts.forEach(([bx, by]) => {
-          zoomGroup.appendChild(createSvgEl('circle', {
-            cx: bx,
-            cy: by,
-            r: isSel ? '2.2' : '1.8',
-            stroke: r.color,
-            class: 'bolt-dot',
-            opacity: isSel ? '1' : '0.18'
-          }));
+          zoomGroup.appendChild(createSvgEl('circle', { cx: bx, cy: by, r: isSel ? '2.2' : '1.8', stroke: r.color, class: 'bolt-dot', opacity: isSel ? '1' : '0.18' }));
         });
-
         const [ax, ay] = r.anchor;
-        zoomGroup.appendChild(createSvgEl('circle', {
-          cx: ax,
-          cy: ay,
-          r: isSel ? '2.5' : '2.0',
-          class: 'anchor-top',
-          opacity: isSel ? '1' : '0.18'
-        }));
-
+        zoomGroup.appendChild(createSvgEl('circle', { cx: ax, cy: ay, r: isSel ? '2.5' : '2.0', class: 'anchor-top', opacity: isSel ? '1' : '0.18' }));
         const [sx, sy] = r.start;
-        const num = createSvgEl('text', {
-          x: sx,
-          y: sy,
-          fill: isSel ? '#ffffff' : r.color,
-          class: 'start-num',
-          opacity: isSel ? '1' : '0.25'
-        });
+        const num = createSvgEl('text', { x: sx, y: sy, fill: isSel ? '#ffffff' : r.color, class: 'start-num', opacity: isSel ? '1' : '0.25' });
         num.textContent = r.id;
         zoomGroup.appendChild(num);
       });
@@ -2667,7 +2476,6 @@
       const [sx, sy] = selected.start;
       const [kx, ky] = selected.keyPoint;
       const [ax, ay] = selected.anchor;
-
       addCallout(zoomGroup, sx, sy - 14, 'СТАРТ', `#${selected.id} ${selected.name}`, selected.color);
       addCallout(zoomGroup, kx + (kx > 240 ? -22 : 22), ky, 'КЛЮЧ', selected.keyLabel, selected.color);
       addCallout(zoomGroup, ax, ay + 10, 'ФИНИШ', `${selected.height}`, selected.color);
@@ -2712,8 +2520,6 @@
 
     function renderCragStaticSections() {
       const cfg = CRAG_DATA[currentCrag];
-      document.getElementById('cragTitle').textContent = cfg.title;
-      document.getElementById('cragSubtitle').textContent = cfg.subtitle;
       document.getElementById('overviewTopoTitle').textContent = cfg.topoTitle;
       document.getElementById('overviewSelectedLabel').textContent = 'Нажми на линию для перехода';
       document.getElementById('overviewLegend').innerHTML = cfg.legendHtml;
@@ -2726,9 +2532,7 @@
         </div>
         <div class="card">
           <h3>${cfg.historyTitle}</h3>
-          <ul>
-            ${cfg.historyItems.map(item => `<li>${item}</li>`).join('')}
-          </ul>
+          <ul>${cfg.historyItems.map(item => `<li>${item}</li>`).join('')}</ul>
         </div>
 
         <div class="glass-tab-frame">
@@ -2737,9 +2541,7 @@
         </div>
         <div class="card">
           <h3>${cfg.accessTitle}</h3>
-          <ul>
-            ${cfg.accessItems.map(item => `<li>${item}</li>`).join('')}
-          </ul>
+          <ul>${cfg.accessItems.map(item => `<li>${item}</li>`).join('')}</ul>
           <div class="map-links">
             <a class="map-link-btn" href="${cfg.map2gis}" target="_blank" rel="noopener noreferrer">Открыть в 2ГИС</a>
             <a class="map-link-btn" href="${cfg.mapGoogle}" target="_blank" rel="noopener noreferrer">Открыть в Google Картах</a>
@@ -2747,7 +2549,7 @@
         </div>
       `;
 
-      document.getElementById('view-gear').innerHTML = `
+      document.getElementById('crag-sub-gear').innerHTML = `
         <div class="glass-tab-frame">
           <span class="section-label">Верёвки, камалоты и железо</span>
           <span class="glass-move-pill"><span class="glass-move-arrows">↕</span><span>Снаряжение</span></span>
@@ -2765,30 +2567,73 @@
           </div>
         </div>
 
-        <div class="glass-tab-frame">
-          <span class="section-label">Ключевые нюансы маршрутов</span>
-          <span class="glass-move-pill">Советы</span>
-        </div>
         <div class="card">
           <h3>${cfg.tipsTitle}</h3>
-          <ul>
-            ${cfg.tipsItems.map(tip => `<li>${tip}</li>`).join('')}
-          </ul>
+          <ul>${cfg.tipsItems.map(tip => `<li>${tip}</li>`).join('')}</ul>
         </div>
       `;
     }
 
+    function updateHeaderForSection() {
+      const cfg = CRAG_DATA[currentCrag];
+      if (currentMainSection === 'crags') {
+        document.getElementById('headerMainTitle').textContent = cfg.title;
+        document.getElementById('headerMainSubtitle').textContent = cfg.subtitle;
+        document.getElementById('cragSwitcherRow').classList.remove('hidden');
+        document.getElementById('progressPill').classList.remove('hidden');
+      } else if (currentMainSection === 'schedule') {
+        document.getElementById('headerMainTitle').textContent = 'Расписание • Декабрь 2026';
+        document.getElementById('headerMainSubtitle').textContent = 'Каждую субботу — скалолазание, каждое воскресенье — ледник Богдановича';
+        document.getElementById('cragSwitcherRow').classList.add('hidden');
+        document.getElementById('progressPill').classList.add('hidden');
+      } else {
+        document.getElementById('headerMainTitle').textContent = 'Ледник Богдановича';
+        document.getElementById('headerMainSubtitle').textContent = 'Верховья ущелья Туюк-Су • Зимний горный выход';
+        document.getElementById('cragSwitcherRow').classList.add('hidden');
+        document.getElementById('progressPill').classList.add('hidden');
+      }
+    }
+
+    function switchMainSection(sectionName) {
+      if (!MAIN_SECTIONS.includes(sectionName)) return;
+      const prevIdx = MAIN_SECTIONS.indexOf(currentMainSection);
+      const nextIdx = MAIN_SECTIONS.indexOf(sectionName);
+      const animClass = nextIdx >= prevIdx ? 'flip-enter-right' : 'flip-enter-left';
+
+      MAIN_SECTIONS.forEach(s => {
+        const panel = document.getElementById(`view-${s}`);
+        panel.classList.remove('flip-enter-right', 'flip-enter-left');
+        const isTarget = s === sectionName;
+        panel.classList.toggle('hidden', !isTarget);
+        if (isTarget) {
+          void panel.offsetWidth;
+          panel.classList.add(animClass);
+        }
+        document.getElementById(`nav-${s}`).classList.toggle('active', isTarget);
+      });
+
+      currentMainSection = sectionName;
+      updateHeaderForSection();
+      if (sectionName === 'schedule') renderDecemberScheduleList();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function switchCragSubTab(subName) {
+      currentCragSubTab = subName;
+      ['overview', 'routes', 'gear', 'notes'].forEach(t => {
+        document.getElementById(`sub-${t}`).classList.toggle('active', t === subName);
+        document.getElementById(`crag-sub-${t}`).classList.toggle('hidden', t !== subName);
+      });
+      if (subName === 'routes') renderDetailTab();
+      if (subName === 'notes') renderNotesTab();
+    }
+
     function selectCrag(crag) {
       if (crag === 'bao') {
-        if (tg && tg.showAlert) {
-          tg.showAlert('Район БАО / Бутаковка добавим следующим! Сейчас заполнены «Лесничество» и «Туюк-Су».');
-        } else {
-          alert('Район БАО / Бутаковка добавим следующим! Сейчас заполнены «Лесничество» и «Туюк-Су».');
-        }
+        alert('Район БАО добавим следующим! Сейчас заполнены «Лесничество» и «Туюк-Су».');
         return;
       }
       if (!CRAG_DATA[crag] || crag === currentCrag) return;
-
       currentCrag = crag;
       activeRouteId = 1;
       isZoomed = false;
@@ -2796,6 +2641,7 @@
       document.getElementById('crag-lesnichestvo').classList.toggle('active', crag === 'lesnichestvo');
       document.getElementById('crag-tuyuksu').classList.toggle('active', crag === 'tuyuksu');
 
+      updateHeaderForSection();
       updateProgress();
       renderCragStaticSections();
       renderOverviewSvg();
@@ -2803,37 +2649,11 @@
       renderNotesTab();
     }
 
-    function switchTab(tabName) {
-      if (tabName === currentTab) return;
-      const prevIdx = TAB_ORDER.indexOf(currentTab);
-      const nextIdx = TAB_ORDER.indexOf(tabName);
-      const animClass = nextIdx > prevIdx ? 'flip-enter-right' : 'flip-enter-left';
-
-      TAB_ORDER.forEach(t => {
-        const panel = document.getElementById(`view-${t}`);
-        panel.classList.remove('flip-enter-right', 'flip-enter-left');
-        const isTarget = t === tabName;
-        panel.classList.toggle('hidden', !isTarget);
-        if (isTarget) {
-          void panel.offsetWidth;
-          panel.classList.add(animClass);
-        }
-        document.getElementById(`nav-${t}`).classList.toggle('active', isTarget);
-      });
-
-      currentTab = tabName;
-      if (tabName === 'routes') {
-        renderDetailTab();
-      } else if (tabName === 'notes') {
-        renderNotesTab();
-      }
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
     function openRouteDetails(id, zoom = false) {
       activeRouteId = id;
       isZoomed = zoom;
-      switchTab('routes');
+      switchMainSection('crags');
+      switchCragSubTab('routes');
       renderDetailTab();
     }
 
@@ -2847,10 +2667,7 @@
         const btn = document.createElement('button');
         btn.className = `r-pill ${r.id === activeRouteId ? 'active' : ''}`;
         btn.textContent = `#${r.id} ${r.name}`;
-        btn.onclick = () => {
-          activeRouteId = r.id;
-          renderDetailTab();
-        };
+        btn.onclick = () => { activeRouteId = r.id; renderDetailTab(); };
         pills.appendChild(btn);
       });
 
@@ -2859,19 +2676,15 @@
       const statusTxt = getStatusLabel(entry.status);
       const dateTxt = entry.status && entry.updatedAt ? `Дата отметки: ${entry.updatedAt}` : '';
 
-      document.getElementById('detailZoomTitle').textContent = isZoomed
-        ? 'Плавный зум на маршрут'
-        : 'Вся скала • Финиш виден полностью';
+      document.getElementById('detailZoomTitle').textContent = isZoomed ? 'Плавный зум на маршрут' : 'Вся скала • Финиш виден полностью';
       document.getElementById('detailZoomBadge').textContent = `#${r.id} ${r.name} • ${r.grade}`;
-
       const zoomBtn = document.getElementById('zoomToggleBtn');
       zoomBtn.textContent = isZoomed ? 'Вся скала' : 'Приблизить';
       zoomBtn.classList.toggle('active-zoom', isZoomed);
 
       renderDetailSvg();
 
-      const card = document.getElementById('routeDetailCard');
-      card.innerHTML = `
+      document.getElementById('routeDetailCard').innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
           <div>
             <div style="font-size: 18px; font-weight: 800;">#${r.id} ${r.name}</div>
@@ -2893,18 +2706,9 @@
         </div>
 
         <div class="detail-box">
-          <div class="step-row">
-            <div class="step-label">1. Откуда начать (Старт)</div>
-            <div class="step-text">${r.startDesc}</div>
-          </div>
-          <div class="step-row">
-            <div class="step-label">2. Как пролезть, верёвки и страховка</div>
-            <div class="step-text">${r.climbDesc}</div>
-          </div>
-          <div class="step-row">
-            <div class="step-label">3. Где закончить и спуск (Финиш)</div>
-            <div class="step-text">${r.finishDesc}</div>
-          </div>
+          <div class="step-row"><div class="step-label">1. Старт</div><div class="step-text">${r.startDesc}</div></div>
+          <div class="step-row"><div class="step-label">2. Прохождение и страховка</div><div class="step-text">${r.climbDesc}</div></div>
+          <div class="step-row"><div class="step-label">3. Финиш</div><div class="step-text">${r.finishDesc}</div></div>
         </div>
       `;
     }
@@ -2916,10 +2720,7 @@
       store[id].status = nextStatus;
       store[id].updatedAt = nextStatus ? getTodayRuDate() : '';
       saveUserData();
-      if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-      if (currentTab === 'routes') {
-        renderDetailTab();
-      }
+      if (currentCragSubTab === 'routes') renderDetailTab();
       renderNotesTab();
     }
 
@@ -2928,7 +2729,6 @@
       if (!store[id]) store[id] = {};
       store[id].rating = store[id].rating === stars ? 0 : stars;
       saveUserData();
-      if (tg && tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
       renderNotesTab();
     }
 
@@ -2966,35 +2766,29 @@
             </div>
             <span class="grade-badge ${getGradeClass(r.level)}">${r.grade}</span>
           </div>
-
           <div class="route-actions">
             <button class="btn-status ${entry.status === 'os' ? 'done-os' : ''}" onclick="setRouteStatus(${r.id}, 'os')">Onsight</button>
             <button class="btn-status ${entry.status === 'rp' ? 'done-rp' : ''}" onclick="setRouteStatus(${r.id}, 'rp')">Redpoint</button>
             <button class="btn-status ${entry.status === 'proj' ? 'done-proj' : ''}" onclick="setRouteStatus(${r.id}, 'proj')">Проект</button>
           </div>
-
           <div class="rating-row">
             <span class="rating-label">Оценка маршрута:</span>
             <div class="stars">${starsHtml}</div>
           </div>
-
-          <textarea
-            class="note-input"
-            placeholder="Личные заметки: расклад по питчам, верёвки, анкера, впечатления..."
-            oninput="setRouteNote(${r.id}, this.value)"
-          >${entry.note || ''}</textarea>
+          <textarea class="note-input" placeholder="Личные заметки..." oninput="setRouteNote(${r.id}, this.value)">${entry.note || ''}</textarea>
         `;
         list.appendChild(card);
       });
     }
 
     function initApp() {
-      resetSessionToFirstRoute();
       scheduleCache = loadLocalSchedule();
       renderCalendar();
+      renderDecemberScheduleList();
       syncScheduleFromCloud();
       loadLiveWeather();
       updateProgress();
+      updateHeaderForSection();
       renderCragStaticSections();
       renderOverviewSvg();
       renderDetailTab();
@@ -3002,16 +2796,6 @@
     }
 
     initApp();
-    window.addEventListener('pageshow', (e) => {
-      if (e.persisted) {
-        resetSessionToFirstRoute();
-        closeEventPreview();
-        renderCalendar();
-        syncScheduleFromCloud();
-        loadLiveWeather();
-        renderDetailTab();
-      }
-    });
   </script>
 </body>
 </html>
