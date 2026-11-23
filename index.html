@@ -20,7 +20,10 @@
       --orange: #f97316;
       --red: #ef4444;
       --red-dim: rgba(239, 68, 68, 0.24);
-      --radius: 14px;
+      --radius: 16px;
+      --glass-bg: rgba(255, 255, 255, 0.08);
+      --glass-border: rgba(255, 255, 255, 0.22);
+      --ease-page: cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     * {
@@ -35,8 +38,55 @@
       background-color: var(--bg);
       color: var(--text);
       line-height: 1.45;
-      padding-bottom: 88px;
+      padding-bottom: 92px;
       overflow-x: hidden;
+    }
+
+    /* Закруглённая стеклянная рамка-подсказка движения (без острых углов) */
+    .glass-move-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(12px) saturate(150%);
+      -webkit-backdrop-filter: blur(12px) saturate(150%);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 6px 18px rgba(0, 0, 0, 0.28);
+      font-size: 11px;
+      font-weight: 700;
+      color: #e5e7eb;
+      letter-spacing: 0.01em;
+    }
+
+    .glass-move-arrows {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      color: var(--accent);
+      font-weight: 800;
+      animation: gentleSlideHint 2.2s ease-in-out infinite;
+    }
+
+    @keyframes gentleSlideHint {
+      0%, 100% { transform: translateX(0); opacity: 0.8; }
+      50% { transform: translateX(3px); opacity: 1; }
+    }
+
+    .glass-tab-frame {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding: 8px 12px;
+      border-radius: 26px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.03));
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(14px) saturate(150%);
+      -webkit-backdrop-filter: blur(14px) saturate(150%);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 8px 22px rgba(0, 0, 0, 0.3);
     }
 
     /* Главный экран Adventure Club KZ */
@@ -48,17 +98,17 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 18px 16px 20px;
+      padding: 16px 16px 20px;
       overflow-y: auto;
       transform: translate3d(0, 0, 0);
       opacity: 1;
-      transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease;
+      transition: transform 0.72s var(--ease-page), opacity 0.5s ease;
       will-change: transform, opacity;
     }
 
     .splash-screen.slide-out-left {
-      transform: translate3d(-100%, 0, 0);
-      opacity: 0.15;
+      transform: translate3d(-100%, 0, 0) rotateY(-4deg);
+      opacity: 0.12;
       pointer-events: none;
     }
 
@@ -83,7 +133,7 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
-      gap: 12px;
+      gap: 11px;
     }
 
     .splash-top-row {
@@ -95,8 +145,8 @@
     }
 
     .emblem-circle {
-      width: 72px;
-      height: 72px;
+      width: 68px;
+      height: 68px;
       border-radius: 50%;
       background: linear-gradient(165deg, #252d3a 0%, #11151c 100%);
       border: 2px solid rgba(255, 255, 255, 0.18);
@@ -110,8 +160,8 @@
     }
 
     .emblem-peak-svg {
-      width: 34px;
-      height: 22px;
+      width: 32px;
+      height: 20px;
       margin-bottom: 1px;
     }
 
@@ -150,13 +200,69 @@
       margin-top: 2px;
     }
 
+    /* Виджет погоды на главном экране */
+    .weather-glass-card {
+      width: 100%;
+      border-radius: 24px;
+      padding: 11px 14px;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.14), rgba(255, 255, 255, 0.06));
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(14px) saturate(150%);
+      -webkit-backdrop-filter: blur(14px) saturate(150%);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 10px 24px rgba(0, 0, 0, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      text-align: left;
+    }
+
+    .weather-main-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .weather-temp-big {
+      font-size: 22px;
+      font-weight: 900;
+      color: #ffffff;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+
+    .weather-loc-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--accent);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .weather-cond-sub {
+      font-size: 11px;
+      color: #d1d5db;
+    }
+
+    .weather-meta-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 2px;
+      font-size: 11px;
+      color: #e5e7eb;
+      flex-shrink: 0;
+    }
+
     /* Календарь на главном экране с горной панорамой на заднем фоне */
     .calendar-card {
       position: relative;
       width: 100%;
       background: #12161e;
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      border-radius: var(--radius);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 22px;
       padding: 12px;
       overflow: hidden;
       text-align: left;
@@ -221,7 +327,7 @@
       color: var(--text);
       width: 28px;
       height: 28px;
-      border-radius: 8px;
+      border-radius: 999px;
       font-size: 14px;
       font-weight: 700;
       cursor: pointer;
@@ -235,9 +341,9 @@
       background: rgba(20, 24, 31, 0.82);
       border: 1px solid rgba(255, 255, 255, 0.16);
       color: var(--text);
-      padding: 0 8px;
+      padding: 0 10px;
       height: 28px;
-      border-radius: 8px;
+      border-radius: 999px;
       font-size: 11px;
       font-weight: 700;
       cursor: pointer;
@@ -248,8 +354,8 @@
       background: rgba(20, 24, 31, 0.85);
       border: 1px solid rgba(255, 255, 255, 0.18);
       color: var(--text);
-      padding: 6px 10px;
-      border-radius: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
       font-size: 11px;
       font-weight: 700;
       cursor: pointer;
@@ -283,7 +389,7 @@
 
     .cal-day {
       min-height: 44px;
-      border-radius: 9px;
+      border-radius: 12px;
       background: rgba(16, 20, 27, 0.56);
       border: 1px solid rgba(255, 255, 255, 0.14);
       color: var(--text);
@@ -339,8 +445,8 @@
       font-size: 8px;
       font-weight: 800;
       letter-spacing: 0.02em;
-      padding: 1px 4px;
-      border-radius: 5px;
+      padding: 1px 5px;
+      border-radius: 999px;
       background: var(--red);
       color: #ffffff;
       max-width: 100%;
@@ -373,18 +479,17 @@
       box-shadow: 0 0 6px var(--red);
     }
 
-    /* Карточка предпросмотра локации перед переходом в WhatsApp */
     .event-preview-card {
       margin-top: 10px;
       background: rgba(20, 24, 31, 0.94);
       border: 1px solid rgba(239, 68, 68, 0.55);
-      border-radius: 11px;
+      border-radius: 16px;
       padding: 11px 12px;
       display: flex;
       flex-direction: column;
       gap: 8px;
       backdrop-filter: blur(8px);
-      animation: previewFadeIn 0.22s ease forwards;
+      animation: previewFadeIn 0.25s var(--ease-page) forwards;
     }
 
     @keyframes previewFadeIn {
@@ -422,7 +527,7 @@
       color: var(--muted);
       width: 24px;
       height: 24px;
-      border-radius: 7px;
+      border-radius: 999px;
       font-size: 13px;
       font-weight: 700;
       cursor: pointer;
@@ -449,7 +554,7 @@
       border: none;
       color: #07130c;
       padding: 9px 12px;
-      border-radius: 9px;
+      border-radius: 999px;
       font-size: 13px;
       font-weight: 800;
       cursor: pointer;
@@ -467,7 +572,7 @@
       margin-top: 10px;
       background: rgba(20, 24, 31, 0.9);
       border: 1px solid rgba(239, 68, 68, 0.55);
-      border-radius: 11px;
+      border-radius: 16px;
       padding: 10px;
       display: flex;
       flex-direction: column;
@@ -492,7 +597,7 @@
       border: 1px solid var(--border);
       color: var(--muted);
       padding: 8px 6px;
-      border-radius: 8px;
+      border-radius: 999px;
       font-size: 12px;
       font-weight: 700;
       cursor: pointer;
@@ -508,8 +613,8 @@
       width: 100%;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 7px 9px;
+      border-radius: 14px;
+      padding: 7px 12px;
       color: var(--text);
       font-family: inherit;
       font-size: 12px;
@@ -527,7 +632,7 @@
       border: none;
       color: #ffffff;
       padding: 8px 10px;
-      border-radius: 8px;
+      border-radius: 999px;
       font-size: 12px;
       font-weight: 800;
       cursor: pointer;
@@ -537,8 +642,8 @@
       background: var(--surface);
       border: 1px solid var(--border);
       color: var(--muted);
-      padding: 8px 10px;
-      border-radius: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
       font-size: 12px;
       font-weight: 700;
       cursor: pointer;
@@ -549,7 +654,7 @@
       background: var(--text);
       color: var(--bg);
       border: none;
-      border-radius: 12px;
+      border-radius: 999px;
       padding: 12px 20px;
       font-size: 14px;
       font-weight: 800;
@@ -601,7 +706,7 @@
       text-decoration: none;
       background: rgba(20, 24, 31, 0.92);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: 20px;
       padding: 9px 10px;
       color: var(--text);
       transition: border-color 0.2s ease, background 0.2s ease;
@@ -650,7 +755,7 @@
       background: var(--surface-2);
       border: 1px solid var(--border);
       color: var(--accent);
-      padding: 6px 11px;
+      padding: 6px 12px;
       border-radius: 999px;
       font-size: 12px;
       font-weight: 700;
@@ -662,13 +767,13 @@
       background: var(--surface);
       border: 1px solid var(--border);
       color: var(--muted);
-      padding: 6px 12px;
+      padding: 6px 13px;
       border-radius: 999px;
       font-size: 12px;
       font-weight: 700;
       white-space: nowrap;
       cursor: pointer;
-      transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+      transition: background 0.28s ease, color 0.28s ease, border-color 0.28s ease;
     }
 
     .crag-tab.active {
@@ -702,7 +807,7 @@
     .stats-pill {
       background: var(--surface-2);
       border: 1px solid var(--border);
-      padding: 6px 10px;
+      padding: 6px 12px;
       border-radius: 999px;
       font-size: 12px;
       font-weight: 600;
@@ -710,9 +815,11 @@
       white-space: nowrap;
     }
 
+    /* Плавный эффект перелистывания между вкладками */
     .tab-stage {
       position: relative;
       width: 100%;
+      perspective: 1100px;
     }
 
     main.tab-panel {
@@ -720,43 +827,44 @@
       display: flex;
       flex-direction: column;
       gap: 14px;
+      transform-origin: center top;
       will-change: transform, opacity;
     }
 
-    main.tab-panel.slide-enter-right {
-      animation: smoothSlideRight 0.48s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    main.tab-panel.flip-enter-right {
+      animation: pageTurnRight 0.58s var(--ease-page) forwards;
     }
 
-    main.tab-panel.slide-enter-left {
-      animation: smoothSlideLeft 0.48s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    main.tab-panel.flip-enter-left {
+      animation: pageTurnLeft 0.58s var(--ease-page) forwards;
     }
 
-    @keyframes smoothSlideRight {
+    @keyframes pageTurnRight {
       0% {
         opacity: 0;
-        transform: translate3d(12px, 0, 0);
+        transform: translate3d(26px, 6px, 0) rotateY(4.5deg) scale(0.985);
       }
       100% {
         opacity: 1;
-        transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0) rotateY(0deg) scale(1);
       }
     }
 
-    @keyframes smoothSlideLeft {
+    @keyframes pageTurnLeft {
       0% {
         opacity: 0;
-        transform: translate3d(-12px, 0, 0);
+        transform: translate3d(-26px, 6px, 0) rotateY(-4.5deg) scale(0.985);
       }
       100% {
         opacity: 1;
-        transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0) rotateY(0deg) scale(1);
       }
     }
 
     .topo-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: var(--radius);
+      border-radius: 20px;
       overflow: hidden;
     }
 
@@ -801,8 +909,8 @@
       color: var(--accent);
       font-size: 11px;
       font-weight: 700;
-      padding: 6px 10px;
-      border-radius: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
       cursor: pointer;
       white-space: nowrap;
       flex-shrink: 0;
@@ -834,7 +942,7 @@
     #zoomGroup {
       transform-box: view-box;
       transform-origin: 0 0;
-      transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: transform 0.75s var(--ease-page);
       will-change: transform;
     }
 
@@ -957,13 +1065,12 @@
       text-transform: uppercase;
       letter-spacing: 0.06em;
       color: var(--muted);
-      margin-top: 2px;
     }
 
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: var(--radius);
+      border-radius: 20px;
       padding: 14px;
     }
 
@@ -1003,8 +1110,8 @@
       text-decoration: none;
       font-size: 12px;
       font-weight: 700;
-      padding: 8px 12px;
-      border-radius: 10px;
+      padding: 8px 14px;
+      border-radius: 999px;
       transition: border-color 0.25s ease, background 0.25s ease;
     }
 
@@ -1014,8 +1121,8 @@
     }
 
     .grade-badge {
-      padding: 4px 10px;
-      border-radius: 8px;
+      padding: 4px 11px;
+      border-radius: 999px;
       font-size: 13px;
       font-weight: 800;
       white-space: nowrap;
@@ -1041,8 +1148,8 @@
       background: var(--surface);
       border: 1px solid var(--border);
       color: var(--muted);
-      padding: 7px 11px;
-      border-radius: 10px;
+      padding: 7px 13px;
+      border-radius: 999px;
       font-size: 12px;
       font-weight: 700;
       white-space: nowrap;
@@ -1090,7 +1197,7 @@
     .step-row {
       background: var(--surface-2);
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 14px;
       padding: 10px 12px;
     }
 
@@ -1122,7 +1229,7 @@
       gap: 10px;
       background: var(--surface-2);
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 14px;
       padding: 9px 12px;
       font-size: 13px;
     }
@@ -1141,7 +1248,7 @@
     .log-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: var(--radius);
+      border-radius: 20px;
       padding: 13px 14px;
       display: flex;
       flex-direction: column;
@@ -1166,8 +1273,8 @@
       justify-content: center;
       min-width: 24px;
       height: 24px;
-      padding: 0 5px;
-      border-radius: 7px;
+      padding: 0 6px;
+      border-radius: 999px;
       background: var(--surface-2);
       border: 1px solid var(--border);
       font-size: 12px;
@@ -1186,8 +1293,8 @@
       background: var(--surface-2);
       border: 1px solid var(--border);
       color: var(--muted);
-      padding: 7px 6px;
-      border-radius: 8px;
+      padding: 7px 8px;
+      border-radius: 999px;
       font-size: 12px;
       font-weight: 600;
       cursor: pointer;
@@ -1222,7 +1329,7 @@
       color: var(--muted);
       width: 30px;
       height: 28px;
-      border-radius: 7px;
+      border-radius: 999px;
       font-size: 14px;
       cursor: pointer;
       transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
@@ -1238,8 +1345,8 @@
       width: 100%;
       background: var(--surface-2);
       border: 1px solid var(--border);
-      border-radius: 9px;
-      padding: 8px 10px;
+      border-radius: 16px;
+      padding: 9px 12px;
       color: var(--text);
       font-family: inherit;
       font-size: 13px;
@@ -1263,8 +1370,8 @@
       border-top: 1px solid var(--border);
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      padding: 7px 8px 16px;
-      gap: 4px;
+      padding: 7px 10px 16px;
+      gap: 5px;
       z-index: 40;
     }
 
@@ -1274,8 +1381,8 @@
       color: var(--muted);
       font-size: 11px;
       font-weight: 600;
-      padding: 7px 4px;
-      border-radius: 9px;
+      padding: 7px 6px;
+      border-radius: 999px;
       cursor: pointer;
       text-align: center;
       transition: color 0.28s ease, background 0.28s ease, transform 0.18s ease;
@@ -1331,6 +1438,21 @@
         <div class="splash-heading-block">
           <div class="splash-title">ADVENTURE CLUB KZ</div>
           <p class="splash-desc">Красные даты — запись на восхождение и скалолазание</p>
+        </div>
+      </div>
+
+      <!-- ПОГОДА НА ГЛАВНОМ ЭКРАНЕ -->
+      <div class="weather-glass-card" id="homeWeatherWidget">
+        <div class="weather-main-left">
+          <div class="weather-temp-big" id="weatherTempText">6°C</div>
+          <div>
+            <div class="weather-loc-title" id="weatherLocText">Медео / Лесничество</div>
+            <div class="weather-cond-sub" id="weatherCondText">Преимущественно облачно</div>
+          </div>
+        </div>
+        <div class="weather-meta-right">
+          <span id="weatherWindText">Ветер: 4 mph ЮВ</span>
+          <span id="weatherHumText">Влажность: 38%</span>
         </div>
       </div>
 
@@ -1415,7 +1537,6 @@
             <span id="adminStatusHint">Только просмотр</span>
           </div>
 
-          <!-- ПРЕДПРОСМОТР ЛОКАЦИИ ПЕРЕД ПЕРЕХОДОМ В WHATSAPP -->
           <div class="event-preview-card hidden" id="eventPreviewCard">
             <div class="event-preview-top">
               <span class="event-preview-badge" id="previewTypeBadge">Скалолазание • 28.11.2026</span>
@@ -1491,12 +1612,21 @@
 
   <div class="tab-stage">
     <main id="view-overview" class="tab-panel">
+      <div class="glass-tab-frame">
+        <span class="section-label" id="overviewSectionLabel">Обзор района</span>
+        <span class="glass-move-pill">
+          <span class="glass-move-arrows">↔</span>
+          <span>Листай вкладки или свайпай</span>
+        </span>
+      </div>
+
       <div class="topo-card">
         <div class="topo-header">
           <div class="topo-info-col">
             <span class="topo-title" id="overviewTopoTitle">Массив Лесничества • 1–10</span>
             <span class="topo-active" id="overviewSelectedLabel">Нажми на линию для перехода</span>
           </div>
+          <span class="glass-move-pill">Тап по линии</span>
         </div>
         <div class="topo-svg-wrap">
           <svg class="topo-scheme" viewBox="0 0 380 215">
@@ -1510,7 +1640,14 @@
     </main>
 
     <main id="view-routes" class="tab-panel hidden">
-      <div class="section-label" id="routesSectionLabel">Выбери трассу</div>
+      <div class="glass-tab-frame">
+        <span class="section-label" id="routesSectionLabel">Выбери трассу (1–10)</span>
+        <span class="glass-move-pill">
+          <span class="glass-move-arrows">⇄</span>
+          <span>Двигай список трасс</span>
+        </span>
+      </div>
+
       <div class="route-pills" id="detailPills"></div>
 
       <div class="topo-card">
@@ -1534,7 +1671,13 @@
     <main id="view-gear" class="tab-panel hidden"></main>
 
     <main id="view-notes" class="tab-panel hidden">
-      <div class="section-label" id="notesSectionLabel">Твой журнал пролазов, оценки и заметки</div>
+      <div class="glass-tab-frame">
+        <span class="section-label" id="notesSectionLabel">Журнал пролазов и заметок</span>
+        <span class="glass-move-pill">
+          <span class="glass-move-arrows">↕</span>
+          <span>Листай карточки трасс</span>
+        </span>
+      </div>
       <div id="notesList" style="display: flex; flex-direction: column; gap: 12px;"></div>
     </main>
   </div>
@@ -1570,6 +1713,41 @@
     const nowDate = new Date();
     let calYear = nowDate.getFullYear();
     let calMonth = nowDate.getMonth();
+
+    function describeWeatherCode(code) {
+      if (code === 0) return "Ясно";
+      if (code === 1 || code === 2) return "Переменная облачность";
+      if (code === 3) return "Преимущественно облачно";
+      if (code >= 45 && code <= 48) return "Туман";
+      if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) return "Дождь";
+      if ((code >= 71 && code <= 77) || (code >= 85 && code <= 86)) return "Снег";
+      if (code >= 95) return "Гроза";
+      return "Облачно";
+    }
+
+    async function loadLiveWeather() {
+      try {
+        const url = "https://api.open-meteo.com/v1/forecast?latitude=43.156&longitude=77.058&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&wind_speed_unit=mph";
+        const res = await fetch(url, { cache: "no-store" });
+        if (!res.ok) return;
+        const data = await res.json();
+        const cur = data && data.current;
+        if (!cur) return;
+
+        if (typeof cur.temperature_2m === "number") {
+          document.getElementById("weatherTempText").textContent = `${Math.round(cur.temperature_2m)}°C`;
+        }
+        if (typeof cur.weather_code === "number") {
+          document.getElementById("weatherCondText").textContent = describeWeatherCode(cur.weather_code);
+        }
+        if (typeof cur.wind_speed_10m === "number") {
+          document.getElementById("weatherWindText").textContent = `Ветер: ${Math.round(cur.wind_speed_10m)} mph`;
+        }
+        if (typeof cur.relative_humidity_2m === "number") {
+          document.getElementById("weatherHumText").textContent = `Влажность: ${Math.round(cur.relative_humidity_2m)}%`;
+        }
+      } catch (e) {}
+    }
 
     function formatDateKey(year, month, day) {
       const m = String(month + 1).padStart(2, '0');
@@ -1620,16 +1798,28 @@
       }
     }
 
-    async function pushScheduleToCloud(nextSchedule) {
+    async function saveSingleDateToCloud(dateKey, eventObjOrNull) {
+      const nextSchedule = { ...getSchedule() };
+      if (eventObjOrNull) {
+        nextSchedule[dateKey] = eventObjOrNull;
+      } else {
+        delete nextSchedule[dateKey];
+      }
       scheduleCache = nextSchedule;
       saveLocalSchedule(nextSchedule);
       renderCalendar();
+
       try {
-        await fetch(FIREBASE_SCHEDULE_ENDPOINT, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(nextSchedule)
-        });
+        const targetUrl = `${FIREBASE_DB_URL}/schedule/${dateKey}.json`;
+        if (eventObjOrNull) {
+          await fetch(targetUrl, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(eventObjOrNull)
+          });
+        } else {
+          await fetch(targetUrl, { method: 'DELETE' });
+        }
       } catch (err) {
         console.warn('Ошибка синхронизации с Firebase:', err);
       }
@@ -1731,21 +1921,17 @@
 
     async function saveAdminDate() {
       if (!isAdminUnlocked || !selectedAdminDateKey) return;
-      const nextSchedule = { ...getSchedule() };
       const note = document.getElementById('adminEventNote').value.trim();
-      nextSchedule[selectedAdminDateKey] = {
+      await saveSingleDateToCloud(selectedAdminDateKey, {
         type: selectedActivityType,
         note
-      };
-      await pushScheduleToCloud(nextSchedule);
+      });
     }
 
     async function clearAdminDate() {
       if (!isAdminUnlocked || !selectedAdminDateKey) return;
-      const nextSchedule = { ...getSchedule() };
-      delete nextSchedule[selectedAdminDateKey];
       document.getElementById('adminEventNote').value = '';
-      await pushScheduleToCloud(nextSchedule);
+      await saveSingleDateToCloud(selectedAdminDateKey, null);
     }
 
     function openWhatsAppForDate(dateKey, eventObj) {
@@ -1838,7 +2024,7 @@
         if (splash.classList.contains('slide-out-left')) {
           splash.classList.add('dismissed');
         }
-      }, 660);
+      }, 720);
     }
 
     function openSplash() {
@@ -1848,6 +2034,7 @@
       splash.classList.remove('slide-out-left');
       renderCalendar();
       syncScheduleFromCloud();
+      loadLiveWeather();
     }
 
     (function setupSplashSwipe() {
@@ -2533,7 +2720,10 @@
       document.getElementById('routesSectionLabel').textContent = cfg.routeSelectLabel;
 
       document.getElementById('overviewDynamicCards').innerHTML = `
-        <div class="section-label">История скалы</div>
+        <div class="glass-tab-frame">
+          <span class="section-label">История скалы</span>
+          <span class="glass-move-pill"><span class="glass-move-arrows">↕</span><span>Скролль обзора</span></span>
+        </div>
         <div class="card">
           <h3>${cfg.historyTitle}</h3>
           <ul>
@@ -2541,7 +2731,10 @@
           </ul>
         </div>
 
-        <div class="section-label">Как доехать и стоянка</div>
+        <div class="glass-tab-frame">
+          <span class="section-label">Как доехать и стоянка</span>
+          <span class="glass-move-pill">Карты</span>
+        </div>
         <div class="card">
           <h3>${cfg.accessTitle}</h3>
           <ul>
@@ -2555,7 +2748,10 @@
       `;
 
       document.getElementById('view-gear').innerHTML = `
-        <div class="section-label">Необходимые верёвки, камалоты и железо</div>
+        <div class="glass-tab-frame">
+          <span class="section-label">Верёвки, камалоты и железо</span>
+          <span class="glass-move-pill"><span class="glass-move-arrows">↕</span><span>Снаряжение</span></span>
+        </div>
         <div class="card">
           <h3>${cfg.gearTitle}</h3>
           <p style="margin-bottom: 8px;">${cfg.gearIntro}</p>
@@ -2569,7 +2765,10 @@
           </div>
         </div>
 
-        <div class="section-label">Ключевые нюансы маршрутов</div>
+        <div class="glass-tab-frame">
+          <span class="section-label">Ключевые нюансы маршрутов</span>
+          <span class="glass-move-pill">Советы</span>
+        </div>
         <div class="card">
           <h3>${cfg.tipsTitle}</h3>
           <ul>
@@ -2608,11 +2807,11 @@
       if (tabName === currentTab) return;
       const prevIdx = TAB_ORDER.indexOf(currentTab);
       const nextIdx = TAB_ORDER.indexOf(tabName);
-      const animClass = nextIdx > prevIdx ? 'slide-enter-right' : 'slide-enter-left';
+      const animClass = nextIdx > prevIdx ? 'flip-enter-right' : 'flip-enter-left';
 
       TAB_ORDER.forEach(t => {
         const panel = document.getElementById(`view-${t}`);
-        panel.classList.remove('slide-enter-right', 'slide-enter-left');
+        panel.classList.remove('flip-enter-right', 'flip-enter-left');
         const isTarget = t === tabName;
         panel.classList.toggle('hidden', !isTarget);
         if (isTarget) {
@@ -2794,6 +2993,7 @@
       scheduleCache = loadLocalSchedule();
       renderCalendar();
       syncScheduleFromCloud();
+      loadLiveWeather();
       updateProgress();
       renderCragStaticSections();
       renderOverviewSvg();
@@ -2808,6 +3008,7 @@
         closeEventPreview();
         renderCalendar();
         syncScheduleFromCloud();
+        loadLiveWeather();
         renderDetailTab();
       }
     });
