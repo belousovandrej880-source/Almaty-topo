@@ -39,7 +39,7 @@
       overflow-x: hidden;
     }
 
-    /* Главный экран Adventure Club KZ — уезжает слайдом справа налево */
+    /* Главный экран Adventure Club KZ */
     .splash-screen {
       position: fixed;
       inset: 0;
@@ -170,8 +170,7 @@
       height: 100%;
       object-fit: cover;
       object-position: center 42%;
-      opacity: 0.34;
-      filter: saturate(0.95) contrast(1.06);
+      opacity: 0.42;
       z-index: 0;
       pointer-events: none;
     }
@@ -181,9 +180,9 @@
       inset: 0;
       background: linear-gradient(
         180deg,
-        rgba(12, 14, 19, 0.72) 0%,
-        rgba(12, 14, 19, 0.54) 48%,
-        rgba(10, 12, 16, 0.84) 100%
+        rgba(12, 14, 19, 0.68) 0%,
+        rgba(12, 14, 19, 0.48) 50%,
+        rgba(10, 12, 16, 0.82) 100%
       );
       z-index: 1;
       pointer-events: none;
@@ -1175,7 +1174,7 @@
 </head>
 <body>
 
-  <!-- ГЛАВНЫЙ ЭКРАН ADVENTURE CLUB KZ (уезжает слайдом справа налево) -->
+  <!-- ГЛАВНЫЙ ЭКРАН ADVENTURE CLUB KZ -->
   <section class="splash-screen" id="splashScreen">
     <svg class="splash-bg-mountain" viewBox="0 0 400 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <defs>
@@ -1212,14 +1211,57 @@
         </div>
       </div>
 
-      <!-- КАЛЕНДАРЬ РАСПИСАНИЯ С ЗАДНИМ ФОНОМ ГОР -->
+      <!-- КАЛЕНДАРЬ РАСПИСАНИЯ С ГОРНОЙ ПАНОРАМОЙ НА ЗАДНЕМ ФОНЕ -->
       <div class="calendar-card">
-        <img
+        <svg
           class="calendar-bg-photo"
-          src="./calendar-bg.jpg"
-          alt="Заснеженные горные вершины на фоне календаря"
-          loading="eager"
-        />
+          viewBox="0 0 900 360"
+          preserveAspectRatio="xMidYMid slice"
+          aria-hidden="true"
+        >
+          <defs>
+            <linearGradient id="calMountainSky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#4b6b8e" />
+              <stop offset="52%" stop-color="#28374b" />
+              <stop offset="100%" stop-color="#10151d" />
+            </linearGradient>
+            <linearGradient id="calSnowPeak" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#f8fafc" />
+              <stop offset="65%" stop-color="#cbd5e1" />
+              <stop offset="100%" stop-color="#475569" />
+            </linearGradient>
+            <linearGradient id="calWarmRidge" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#fed7aa" stop-opacity="0.85" />
+              <stop offset="100%" stop-color="#64748b" stop-opacity="0.5" />
+            </linearGradient>
+          </defs>
+
+          <rect width="900" height="360" fill="url(#calMountainSky)" />
+          <ellipse cx="180" cy="76" rx="130" ry="26" fill="#e2e8f0" opacity="0.24" />
+          <ellipse cx="440" cy="62" rx="170" ry="32" fill="#f1f5f9" opacity="0.26" />
+          <ellipse cx="715" cy="80" rx="145" ry="25" fill="#e2e8f0" opacity="0.22" />
+
+          <polygon
+            points="0,255 110,155 215,195 345,128 485,172 630,92 775,152 900,118 900,360 0,360"
+            fill="#334155"
+            opacity="0.75"
+          />
+          <polygon
+            points="0,285 135,168 255,222 415,142 565,198 765,62 900,175 900,360 0,360"
+            fill="url(#calSnowPeak)"
+            opacity="0.68"
+          />
+          <polygon
+            points="40,310 175,192 295,245 455,168 615,220 765,62 695,210 520,255 340,285 160,330"
+            fill="url(#calWarmRidge)"
+            opacity="0.48"
+          />
+          <polygon
+            points="0,330 95,235 190,275 320,210 470,265 655,155 815,245 900,215 900,360 0,360"
+            fill="#0f141c"
+            opacity="0.78"
+          />
+        </svg>
         <div class="calendar-bg-scrim"></div>
 
         <div class="calendar-inner">
@@ -1336,7 +1378,7 @@
         <div class="topo-header">
           <div class="topo-info-col">
             <span class="topo-title" id="detailZoomTitle">Вся скала • Финиш виден полностью</span>
-            <span class="topo-active" id="detailZoomBadge">#5 Три карниза • 6b</span>
+            <span class="topo-active" id="detailZoomBadge">#1 Разминочная • Fr4</span>
           </div>
           <button class="zoom-toggle-btn" id="zoomToggleBtn" onclick="toggleZoomMode()">Приблизить</button>
         </div>
@@ -1970,8 +2012,13 @@
     let currentCrag = 'lesnichestvo';
     let currentTab = 'overview';
     let userData = JSON.parse(localStorage.getItem('almaty_topo_journal_v4') || '{}');
-    let activeRouteId = 5;
+    let activeRouteId = 1;
     let isZoomed = false;
+
+    function resetSessionToFirstRoute() {
+      activeRouteId = 1;
+      isZoomed = false;
+    }
 
     function getCragStorage(cragKey) {
       if (!userData[cragKey]) userData[cragKey] = {};
@@ -2310,7 +2357,7 @@
       if (!CRAG_DATA[crag] || crag === currentCrag) return;
 
       currentCrag = crag;
-      activeRouteId = CRAG_DATA[crag].routes[0].id;
+      activeRouteId = 1;
       isZoomed = false;
 
       document.getElementById('crag-lesnichestvo').classList.toggle('active', crag === 'lesnichestvo');
@@ -2482,12 +2529,24 @@
       });
     }
 
-    renderCalendar();
-    updateProgress();
-    renderCragStaticSections();
-    renderOverviewSvg();
-    renderDetailTab();
-    renderNotesTab();
+    function initApp() {
+      resetSessionToFirstRoute();
+      renderCalendar();
+      updateProgress();
+      renderCragStaticSections();
+      renderOverviewSvg();
+      renderDetailTab();
+      renderNotesTab();
+    }
+
+    initApp();
+    window.addEventListener('pageshow', (e) => {
+      if (e.persisted) {
+        resetSessionToFirstRoute();
+        renderCalendar();
+        renderDetailTab();
+      }
+    });
   </script>
 </body>
 </html>
